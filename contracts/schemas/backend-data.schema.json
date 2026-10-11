@@ -1,0 +1,1193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/backend-data.schema.json",
+  "title": "Golem backend call data",
+  "description": "§18.4 data shapes of the backend interface that types/backend.d.ts (hand-written) uses: primitive names, per-primitive argument objects (derived from the §17.1 table), start mode, and connect result.",
+  "$defs": {
+    "PrimitiveName": {
+      "description": "§17.1 the 34 primitives by backend name (PD-34): the declaration's simple name, with the parameter-type signature for the overloaded interact.",
+      "enum": [
+        "pathfind",
+        "pathfind_build",
+        "sneak",
+        "sprint",
+        "hold_jump",
+        "steer",
+        "dismount",
+        "look_at",
+        "dig",
+        "interact(BlockPos,Face)",
+        "place_block",
+        "edit_sign",
+        "interact(Entity)",
+        "attack",
+        "use_item",
+        "hold_use",
+        "swap_hands",
+        "select_hotbar",
+        "pick_up",
+        "put",
+        "quick_move",
+        "swap_hotbar",
+        "throw",
+        "throw_cursor",
+        "click_button",
+        "select_trade",
+        "rename",
+        "close",
+        "write_book",
+        "sign_book",
+        "respawn",
+        "leave_bed",
+        "chat",
+        "command"
+      ]
+    },
+    "NoPrimitiveArgs": {
+      "description": "§17.1 Arguments of primitives without parameters.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "PathfindArgs": {
+      "description": "§17.1 arguments of pathfind(goal, limit, opts). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal",
+        "limit",
+        "opts"
+      ],
+      "properties": {
+        "goal": {
+          "$ref": "wire.schema.json#/$defs/Goal"
+        },
+        "limit": {
+          "$ref": "wire.schema.json#/$defs/Duration"
+        },
+        "opts": {
+          "$ref": "wire.schema.json#/$defs/PathOpts"
+        }
+      }
+    },
+    "PathfindBuildArgs": {
+      "description": "§17.1 arguments of pathfind_build(goal, limit, opts). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goal",
+        "limit",
+        "opts"
+      ],
+      "properties": {
+        "goal": {
+          "$ref": "wire.schema.json#/$defs/Goal"
+        },
+        "limit": {
+          "$ref": "wire.schema.json#/$defs/Duration"
+        },
+        "opts": {
+          "$ref": "wire.schema.json#/$defs/BuildOpts"
+        }
+      }
+    },
+    "SteerArgs": {
+      "description": "§17.1 arguments of steer(forward, sideways). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "forward",
+        "sideways"
+      ],
+      "properties": {
+        "forward": {
+          "$ref": "wire.schema.json#/$defs/Float"
+        },
+        "sideways": {
+          "$ref": "wire.schema.json#/$defs/Float"
+        }
+      }
+    },
+    "LookAtArgs": {
+      "description": "§17.1 arguments of look_at(target). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "wire.schema.json#/$defs/Vec3"
+        }
+      }
+    },
+    "DigArgs": {
+      "description": "§17.1 arguments of dig(pos). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pos"
+      ],
+      "properties": {
+        "pos": {
+          "$ref": "wire.schema.json#/$defs/BlockPos"
+        }
+      }
+    },
+    "InteractBlockArgs": {
+      "description": "§17.1 arguments of interact(pos, face). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pos",
+        "face"
+      ],
+      "properties": {
+        "pos": {
+          "$ref": "wire.schema.json#/$defs/BlockPos"
+        },
+        "face": {
+          "$ref": "wire.schema.json#/$defs/Face"
+        }
+      }
+    },
+    "PlaceBlockArgs": {
+      "description": "§17.1 arguments of place_block(support, face). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "support",
+        "face"
+      ],
+      "properties": {
+        "support": {
+          "$ref": "wire.schema.json#/$defs/BlockPos"
+        },
+        "face": {
+          "$ref": "wire.schema.json#/$defs/Face"
+        }
+      }
+    },
+    "EditSignArgs": {
+      "description": "§17.1 arguments of edit_sign(pos, front, lines). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pos",
+        "front",
+        "lines"
+      ],
+      "properties": {
+        "pos": {
+          "$ref": "wire.schema.json#/$defs/BlockPos"
+        },
+        "front": {
+          "$ref": "wire.schema.json#/$defs/Bool"
+        },
+        "lines": {
+          "$ref": "world.schema.json#/$defs/SignLines"
+        }
+      }
+    },
+    "EntityTargetArgs": {
+      "description": "§17.1 arguments of interact(target) and attack(target). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "wire.schema.json#/$defs/EntityHandle"
+        }
+      }
+    },
+    "HandArgs": {
+      "description": "§17.1 arguments of use_item(hand) and hold_use(hand). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hand"
+      ],
+      "properties": {
+        "hand": {
+          "$ref": "wire.schema.json#/$defs/Hand"
+        }
+      }
+    },
+    "SelectHotbarArgs": {
+      "description": "§17.1 arguments of select_hotbar(slot). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot"
+      ],
+      "properties": {
+        "slot": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        }
+      }
+    },
+    "PickUpArgs": {
+      "description": "§17.1 arguments of pick_up(w, slot, half). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "slot",
+        "half"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "slot": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "half": {
+          "$ref": "wire.schema.json#/$defs/Bool"
+        }
+      }
+    },
+    "PutArgs": {
+      "description": "§17.1 arguments of put(w, slot, one). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "slot",
+        "one"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "slot": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "one": {
+          "$ref": "wire.schema.json#/$defs/Bool"
+        }
+      }
+    },
+    "WindowSlotArgs": {
+      "description": "§17.1 arguments of quick_move(w, slot). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "slot"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "slot": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        }
+      }
+    },
+    "SwapHotbarArgs": {
+      "description": "§17.1 arguments of swap_hotbar(w, slot, hotbar). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "slot",
+        "hotbar"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "slot": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "hotbar": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        }
+      }
+    },
+    "ThrowArgs": {
+      "description": "§17.1 arguments of throw(w, slot, all). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "slot",
+        "all"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "slot": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "all": {
+          "$ref": "wire.schema.json#/$defs/Bool"
+        }
+      }
+    },
+    "WindowArgs": {
+      "description": "§17.1 arguments of throw_cursor(w) and close(w). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        }
+      }
+    },
+    "ClickButtonArgs": {
+      "description": "§17.1 arguments of click_button(w, id). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "id"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "id": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        }
+      }
+    },
+    "SelectTradeArgs": {
+      "description": "§17.1 arguments of select_trade(w, index). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "index"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "index": {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        }
+      }
+    },
+    "RenameArgs": {
+      "description": "§17.1 arguments of rename(w, name). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "w",
+        "name"
+      ],
+      "properties": {
+        "w": {
+          "$ref": "wire.schema.json#/$defs/WindowHandle"
+        },
+        "name": {
+          "$ref": "wire.schema.json#/$defs/String"
+        }
+      }
+    },
+    "WriteBookArgs": {
+      "description": "§17.1 arguments of write_book(slot, pages). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot",
+        "pages"
+      ],
+      "properties": {
+        "slot": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "wire.schema.json#/$defs/String"
+          }
+        }
+      }
+    },
+    "SignBookArgs": {
+      "description": "§17.1 arguments of sign_book(slot, title, pages). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot",
+        "title",
+        "pages"
+      ],
+      "properties": {
+        "slot": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "title": {
+          "$ref": "wire.schema.json#/$defs/String"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "wire.schema.json#/$defs/String"
+          }
+        }
+      }
+    },
+    "TextArgs": {
+      "description": "§17.1 arguments of chat(text) and command(text). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "wire.schema.json#/$defs/String"
+        }
+      }
+    },
+    "PathfindCall": {
+      "description": "§17.1 pathfind (durative).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "pathfind"
+        },
+        "args": {
+          "$ref": "#/$defs/PathfindArgs"
+        }
+      }
+    },
+    "PathfindBuildCall": {
+      "description": "§17.1 pathfind_build (durative).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "pathfind_build"
+        },
+        "args": {
+          "$ref": "#/$defs/PathfindBuildArgs"
+        }
+      }
+    },
+    "SneakCall": {
+      "description": "§17.1 sneak (ongoing).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "sneak"
+        },
+        "args": {
+          "$ref": "#/$defs/NoPrimitiveArgs"
+        }
+      }
+    },
+    "SprintCall": {
+      "description": "§17.1 sprint (ongoing).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "sprint"
+        },
+        "args": {
+          "$ref": "#/$defs/NoPrimitiveArgs"
+        }
+      }
+    },
+    "HoldJumpCall": {
+      "description": "§17.1 hold_jump (ongoing).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "hold_jump"
+        },
+        "args": {
+          "$ref": "#/$defs/NoPrimitiveArgs"
+        }
+      }
+    },
+    "SteerCall": {
+      "description": "§17.1 steer (ongoing).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "steer"
+        },
+        "args": {
+          "$ref": "#/$defs/SteerArgs"
+        }
+      }
+    },
+    "DismountCall": {
+      "description": "§17.1 dismount (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "dismount"
+        },
+        "args": {
+          "$ref": "#/$defs/NoPrimitiveArgs"
+        }
+      }
+    },
+    "LookAtCall": {
+      "description": "§17.1 look_at (durative).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "look_at"
+        },
+        "args": {
+          "$ref": "#/$defs/LookAtArgs"
+        }
+      }
+    },
+    "DigCall": {
+      "description": "§17.1 dig (durative).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "dig"
+        },
+        "args": {
+          "$ref": "#/$defs/DigArgs"
+        }
+      }
+    },
+    "InteractBlockCall": {
+      "description": "§17.1 interact(BlockPos,Face) (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "interact(BlockPos,Face)"
+        },
+        "args": {
+          "$ref": "#/$defs/InteractBlockArgs"
+        }
+      }
+    },
+    "PlaceBlockCall": {
+      "description": "§17.1 place_block (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "place_block"
+        },
+        "args": {
+          "$ref": "#/$defs/PlaceBlockArgs"
+        }
+      }
+    },
+    "EditSignCall": {
+      "description": "§17.1 edit_sign (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "edit_sign"
+        },
+        "args": {
+          "$ref": "#/$defs/EditSignArgs"
+        }
+      }
+    },
+    "InteractEntityCall": {
+      "description": "§17.1 interact(Entity) (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "interact(Entity)"
+        },
+        "args": {
+          "$ref": "#/$defs/EntityTargetArgs"
+        }
+      }
+    },
+    "AttackCall": {
+      "description": "§17.1 attack (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "attack"
+        },
+        "args": {
+          "$ref": "#/$defs/EntityTargetArgs"
+        }
+      }
+    },
+    "UseItemCall": {
+      "description": "§17.1 use_item (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "use_item"
+        },
+        "args": {
+          "$ref": "#/$defs/HandArgs"
+        }
+      }
+    },
+    "HoldUseCall": {
+      "description": "§17.1 hold_use (ongoing).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "hold_use"
+        },
+        "args": {
+          "$ref": "#/$defs/HandArgs"
+        }
+      }
+    },
+    "SwapHandsCall": {
+      "description": "§17.1 swap_hands (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "swap_hands"
+        },
+        "args": {
+          "$ref": "#/$defs/NoPrimitiveArgs"
+        }
+      }
+    },
+    "SelectHotbarCall": {
+      "description": "§17.1 select_hotbar (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "select_hotbar"
+        },
+        "args": {
+          "$ref": "#/$defs/SelectHotbarArgs"
+        }
+      }
+    },
+    "PickUpCall": {
+      "description": "§17.1 pick_up (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "pick_up"
+        },
+        "args": {
+          "$ref": "#/$defs/PickUpArgs"
+        }
+      }
+    },
+    "PutCall": {
+      "description": "§17.1 put (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "put"
+        },
+        "args": {
+          "$ref": "#/$defs/PutArgs"
+        }
+      }
+    },
+    "QuickMoveCall": {
+      "description": "§17.1 quick_move (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "quick_move"
+        },
+        "args": {
+          "$ref": "#/$defs/WindowSlotArgs"
+        }
+      }
+    },
+    "SwapHotbarCall": {
+      "description": "§17.1 swap_hotbar (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "swap_hotbar"
+        },
+        "args": {
+          "$ref": "#/$defs/SwapHotbarArgs"
+        }
+      }
+    },
+    "ThrowCall": {
+      "description": "§17.1 throw (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "throw"
+        },
+        "args": {
+          "$ref": "#/$defs/ThrowArgs"
+        }
+      }
+    },
+    "ThrowCursorCall": {
+      "description": "§17.1 throw_cursor (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "throw_cursor"
+        },
+        "args": {
+          "$ref": "#/$defs/WindowArgs"
+        }
+      }
+    },
+    "ClickButtonCall": {
+      "description": "§17.1 click_button (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "click_button"
+        },
+        "args": {
+          "$ref": "#/$defs/ClickButtonArgs"
+        }
+      }
+    },
+    "SelectTradeCall": {
+      "description": "§17.1 select_trade (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "select_trade"
+        },
+        "args": {
+          "$ref": "#/$defs/SelectTradeArgs"
+        }
+      }
+    },
+    "RenameCall": {
+      "description": "§17.1 rename (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "rename"
+        },
+        "args": {
+          "$ref": "#/$defs/RenameArgs"
+        }
+      }
+    },
+    "CloseCall": {
+      "description": "§17.1 close (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "close"
+        },
+        "args": {
+          "$ref": "#/$defs/WindowArgs"
+        }
+      }
+    },
+    "WriteBookCall": {
+      "description": "§17.1 write_book (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "write_book"
+        },
+        "args": {
+          "$ref": "#/$defs/WriteBookArgs"
+        }
+      }
+    },
+    "SignBookCall": {
+      "description": "§17.1 sign_book (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "sign_book"
+        },
+        "args": {
+          "$ref": "#/$defs/SignBookArgs"
+        }
+      }
+    },
+    "RespawnCall": {
+      "description": "§17.1 respawn (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "respawn"
+        },
+        "args": {
+          "$ref": "#/$defs/NoPrimitiveArgs"
+        }
+      }
+    },
+    "LeaveBedCall": {
+      "description": "§17.1 leave_bed (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "leave_bed"
+        },
+        "args": {
+          "$ref": "#/$defs/NoPrimitiveArgs"
+        }
+      }
+    },
+    "ChatCall": {
+      "description": "§17.1 chat (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "chat"
+        },
+        "args": {
+          "$ref": "#/$defs/TextArgs"
+        }
+      }
+    },
+    "CommandCall": {
+      "description": "§17.1 command (instant).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primitive",
+        "args"
+      ],
+      "properties": {
+        "primitive": {
+          "const": "command"
+        },
+        "args": {
+          "$ref": "#/$defs/TextArgs"
+        }
+      }
+    },
+    "PrimitiveCall": {
+      "description": "§18.4 a primitive with its arguments, discriminated by primitive (PrimitiveArgs keyed by name).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/PathfindCall"
+        },
+        {
+          "$ref": "#/$defs/PathfindBuildCall"
+        },
+        {
+          "$ref": "#/$defs/SneakCall"
+        },
+        {
+          "$ref": "#/$defs/SprintCall"
+        },
+        {
+          "$ref": "#/$defs/HoldJumpCall"
+        },
+        {
+          "$ref": "#/$defs/SteerCall"
+        },
+        {
+          "$ref": "#/$defs/DismountCall"
+        },
+        {
+          "$ref": "#/$defs/LookAtCall"
+        },
+        {
+          "$ref": "#/$defs/DigCall"
+        },
+        {
+          "$ref": "#/$defs/InteractBlockCall"
+        },
+        {
+          "$ref": "#/$defs/PlaceBlockCall"
+        },
+        {
+          "$ref": "#/$defs/EditSignCall"
+        },
+        {
+          "$ref": "#/$defs/InteractEntityCall"
+        },
+        {
+          "$ref": "#/$defs/AttackCall"
+        },
+        {
+          "$ref": "#/$defs/UseItemCall"
+        },
+        {
+          "$ref": "#/$defs/HoldUseCall"
+        },
+        {
+          "$ref": "#/$defs/SwapHandsCall"
+        },
+        {
+          "$ref": "#/$defs/SelectHotbarCall"
+        },
+        {
+          "$ref": "#/$defs/PickUpCall"
+        },
+        {
+          "$ref": "#/$defs/PutCall"
+        },
+        {
+          "$ref": "#/$defs/QuickMoveCall"
+        },
+        {
+          "$ref": "#/$defs/SwapHotbarCall"
+        },
+        {
+          "$ref": "#/$defs/ThrowCall"
+        },
+        {
+          "$ref": "#/$defs/ThrowCursorCall"
+        },
+        {
+          "$ref": "#/$defs/ClickButtonCall"
+        },
+        {
+          "$ref": "#/$defs/SelectTradeCall"
+        },
+        {
+          "$ref": "#/$defs/RenameCall"
+        },
+        {
+          "$ref": "#/$defs/CloseCall"
+        },
+        {
+          "$ref": "#/$defs/WriteBookCall"
+        },
+        {
+          "$ref": "#/$defs/SignBookCall"
+        },
+        {
+          "$ref": "#/$defs/RespawnCall"
+        },
+        {
+          "$ref": "#/$defs/LeaveBedCall"
+        },
+        {
+          "$ref": "#/$defs/ChatCall"
+        },
+        {
+          "$ref": "#/$defs/CommandCall"
+        }
+      ]
+    },
+    "StartMode": {
+      "description": "§18.4, §14.3 start mode: sync, or async inside confirm async (then start returns the predicted Delta).",
+      "enum": [
+        "sync",
+        "async"
+      ]
+    },
+    "StartRequest": {
+      "description": "§18.4 one start(action, primitive, args, mode) call as data, for recordings, simulators and conformance tests.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "call",
+        "mode"
+      ],
+      "properties": {
+        "action": {
+          "$ref": "tick-input.schema.json#/$defs/ActionId"
+        },
+        "call": {
+          "$ref": "#/$defs/PrimitiveCall"
+        },
+        "mode": {
+          "$ref": "#/$defs/StartMode"
+        }
+      }
+    },
+    "ConnectResult": {
+      "description": "§18.4 what connect(launch, clock) resolves with once the login succeeded: server version and protocol, and the backend's provisional capabilities (S-1, S-2).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minecraft",
+        "protocol",
+        "capabilities"
+      ],
+      "properties": {
+        "minecraft": {
+          "type": "string"
+        },
+        "protocol": {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        },
+        "capabilities": {
+          "$ref": "provisional.schema.json#/$defs/BackendCapabilities"
+        }
+      }
+    }
+  }
+}

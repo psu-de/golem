@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/reply.schema.json",
+  "title": "Golem command replies",
+  "description": "§6.9, §16.3 replies: accepted or refused with a reason, and the snapshot reply.",
+  "$ref": "#/$defs/Reply",
+  "$defs": {
+    "Reply": {
+      "description": "§6.9, §16.3 one command reply (one JSON object per line on stdout, interleaved with reports; replies carry reply where reports carry type).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/JobAccepted"
+        },
+        {
+          "$ref": "#/$defs/SnapshotAccepted"
+        },
+        {
+          "$ref": "#/$defs/Refused"
+        }
+      ]
+    },
+    "JobAccepted": {
+      "description": "§6.9 {\"reply\": \"accepted\", \"job_id\": ...} for assign, cancel, pause and resume; command echoes the command name (PD-27).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reply",
+        "command",
+        "job_id"
+      ],
+      "properties": {
+        "reply": {
+          "const": "accepted"
+        },
+        "command": {
+          "enum": [
+            "assign",
+            "cancel",
+            "pause",
+            "resume"
+          ]
+        },
+        "job_id": {
+          "$ref": "report.schema.json#/$defs/JobId"
+        },
+        "id": {
+          "$ref": "command.schema.json#/$defs/CorrelationId"
+        }
+      }
+    },
+    "SnapshotAccepted": {
+      "description": "§16.3 the reply to snapshot: accepted, with the machine state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reply",
+        "command",
+        "snapshot"
+      ],
+      "properties": {
+        "reply": {
+          "const": "accepted"
+        },
+        "command": {
+          "const": "snapshot"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/MachineSnapshot"
+        },
+        "id": {
+          "$ref": "command.schema.json#/$defs/CorrelationId"
+        }
+      }
+    },
+    "Refused": {
+      "description": "§6.9, §16.3 {\"reply\": \"refused\", \"job_id\": ..., \"reason\": ...}; job_id is absent when the command had none; detail is optional human-readable text (PD-27).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reply",
+        "command",
+        "reason"
+      ],
+      "properties": {
+        "reply": {
+          "const": "refused"
+        },
+        "command": {
+          "type": "string"
+        },
+        "job_id": {
+          "$ref": "report.schema.json#/$defs/JobId"
+        },
+        "reason": {
+          "$ref": "#/$defs/RefusalReason"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "id": {
+          "$ref": "command.schema.json#/$defs/CorrelationId"
+        }
+      }
+    },
+    "RefusalReason": {
+      "description": "§16.3 refusal reasons: Busy, UnknownJob, BadArgs, NotReady (assign); NoJob (cancel, pause, resume); NotPaused (resume). BadCommand is escalation E-3 (provisional): a line that is not a valid command.",
+      "enum": [
+        "Busy",
+        "UnknownJob",
+        "BadArgs",
+        "NotReady",
+        "NoJob",
+        "NotPaused",
+        "BadCommand"
+      ]
+    },
+    "MachineSnapshot": {
+      "description": "§16.3 read-only machine state at the end of the supervisor phase of tick: threads with their strands and frames, and activity instances with handler states and vars (PD-28).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tick",
+        "threads",
+        "instances"
+      ],
+      "properties": {
+        "tick": {
+          "$ref": "report.schema.json#/$defs/Tick"
+        },
+        "threads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ThreadSnapshot"
+          }
+        },
+        "instances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InstanceSnapshot"
+          }
+        }
+      }
+    },
+    "ThreadSnapshot": {
+      "description": "§15.1 one thread: id, kind, priority, state, pinned flag, origin (job_id, or instance and handler) and strands in creation order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "thread",
+        "kind",
+        "priority",
+        "state",
+        "pinned",
+        "strands"
+      ],
+      "properties": {
+        "thread": {
+          "$ref": "report.schema.json#/$defs/ThreadId"
+        },
+        "kind": {
+          "enum": [
+            "job",
+            "handler"
+          ]
+        },
+        "priority": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "state": {
+          "enum": [
+            "Waiting",
+            "Running",
+            "Frozen",
+            "Paused",
+            "Ended"
+          ]
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "job_id": {
+          "$ref": "report.schema.json#/$defs/JobId"
+        },
+        "instance": {
+          "$ref": "report.schema.json#/$defs/InstanceName"
+        },
+        "handler": {
+          "$ref": "report.schema.json#/$defs/HandlerIndex"
+        },
+        "strands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StrandSnapshot"
+          }
+        }
+      }
+    },
+    "StrandSnapshot": {
+      "description": "§2 one strand: id within the thread, parent strand (null for the thread's first), and frames outermost first.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strand",
+        "parent",
+        "frames"
+      ],
+      "properties": {
+        "strand": {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/NonNegInt"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FrameSnapshot"
+          }
+        }
+      }
+    },
+    "FrameSnapshot": {
+      "description": "§16.3 one frame: id, task, the statechart state id the frame is in (§18.3), active elapsed ticks (§9.3), and its wire-typed arguments by name (non-wire arguments such as Entity and Window handles are omitted).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frame",
+        "task",
+        "state",
+        "elapsed",
+        "args"
+      ],
+      "properties": {
+        "frame": {
+          "$ref": "report.schema.json#/$defs/FrameId"
+        },
+        "task": {
+          "type": "string"
+        },
+        "state": {
+          "$ref": "ir/statechart.schema.json#/$defs/StateId"
+        },
+        "elapsed": {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        },
+        "args": {
+          "$ref": "wire.schema.json#/$defs/WireObject"
+        }
+      }
+    },
+    "InstanceSnapshot": {
+      "description": "PD-28 one activity instance: its vars and each handler's state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instance",
+        "vars",
+        "handlers"
+      ],
+      "properties": {
+        "instance": {
+          "$ref": "report.schema.json#/$defs/InstanceName"
+        },
+        "vars": {
+          "$ref": "wire.schema.json#/$defs/WireObject"
+        },
+        "handlers": {
+          "type": "array",
+          "items": {
+            "description": "One handler's §11.4 state; failures is the consecutive failed-run count k, backoff_until the tick its Backoff ends (null unless in backoff).",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "handler",
+              "state",
+              "failures",
+              "backoff_until"
+            ],
+            "properties": {
+              "handler": {
+                "$ref": "report.schema.json#/$defs/HandlerIndex"
+              },
+              "state": {
+                "$ref": "ir/handlers.schema.json#/$defs/HandlerState"
+              },
+              "failures": {
+                "$ref": "wire.schema.json#/$defs/NonNegInt"
+              },
+              "backoff_until": {
+                "anyOf": [
+                  {
+                    "$ref": "wire.schema.json#/$defs/NonNegInt"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

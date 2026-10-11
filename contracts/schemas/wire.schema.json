@@ -1,0 +1,1467 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/wire.schema.json",
+  "title": "Golem wire values",
+  "description": "§6.9 normative JSON forms of wire types, §8.4 filter trees, built-in failure values (§16.1), and the backend-only encodings of handles and goals that cross the backend interface but never the supervisor boundary (§6.1, §17.3). Sets and non-string-keyed maps must be ascending and duplicate-free; JSON Schema cannot express that, so scripts/validate-all.mjs and scripts/check-ir.mjs enforce it.",
+  "$defs": {
+    "Unit": {
+      "description": "§6.9 Unit: null.",
+      "type": "null"
+    },
+    "Bool": {
+      "description": "§6.9 Bool: a JSON boolean.",
+      "type": "boolean"
+    },
+    "Int": {
+      "description": "§6.1, §6.9 Int: an integer with |n| <= 2^53 - 1 (decision 65).",
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "NonNegInt": {
+      "description": "§6.9 Int restricted to n >= 0, for counts, ids and indices that cannot be negative.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "PosInt": {
+      "description": "§6.9 Int restricted to n >= 1.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "Float": {
+      "description": "§6.1, §6.9 Float: a finite IEEE 754 binary64 number (JSON cannot carry NaN or infinities).",
+      "type": "number"
+    },
+    "String": {
+      "description": "§6.9 String: Unicode text.",
+      "type": "string"
+    },
+    "Duration": {
+      "description": "§6.9 Duration: whole ticks as an Int, 20 per second; may be negative (§6.1).",
+      "$ref": "#/$defs/Int"
+    },
+    "Angle": {
+      "description": "§6.9 Angle: radians as a Float.",
+      "$ref": "#/$defs/Float"
+    },
+    "BlockPos": {
+      "description": "§6.9 BlockPos: [x, y, z] of Int.",
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/Int"
+        },
+        {
+          "$ref": "#/$defs/Int"
+        },
+        {
+          "$ref": "#/$defs/Int"
+        }
+      ],
+      "minItems": 3,
+      "items": false
+    },
+    "Vec3": {
+      "description": "§6.9 Vec3: [x, y, z] of Float.",
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/Float"
+        },
+        {
+          "$ref": "#/$defs/Float"
+        },
+        {
+          "$ref": "#/$defs/Float"
+        }
+      ],
+      "minItems": 3,
+      "items": false
+    },
+    "Region": {
+      "description": "§6.9 Region: inclusive box, an object with min and max.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max"
+      ],
+      "properties": {
+        "min": {
+          "$ref": "#/$defs/BlockPos"
+        },
+        "max": {
+          "$ref": "#/$defs/BlockPos"
+        }
+      }
+    },
+    "Range": {
+      "description": "§6.9 Range: [start, end], half-open.",
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/Int"
+        },
+        {
+          "$ref": "#/$defs/Int"
+        }
+      ],
+      "minItems": 2,
+      "items": false
+    },
+    "SlotRange": {
+      "description": "§6.9, §17.4 SlotRange: type alias of Range.",
+      "$ref": "#/$defs/Range"
+    },
+    "ResourceId": {
+      "description": "§3.4 RESOURCE text ns:path, the §6.9 form of ItemType, BlockType and EntityType and of other registry ids.",
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+    },
+    "ItemType": {
+      "description": "§6.9 ItemType: full registry id.",
+      "$ref": "#/$defs/ResourceId"
+    },
+    "BlockType": {
+      "description": "§6.9 BlockType: full registry id.",
+      "$ref": "#/$defs/ResourceId"
+    },
+    "EntityType": {
+      "description": "§6.9 EntityType: full registry id.",
+      "$ref": "#/$defs/ResourceId"
+    },
+    "Tag": {
+      "description": "§6.9 Tag<T>: id string with a leading '#'.",
+      "type": "string",
+      "pattern": "^#[a-z0-9_.-]+:[a-z0-9_./-]+$"
+    },
+    "BlockState": {
+      "description": "§6.9 BlockState: the BLOCKSTATE literal text. Proposed decision PD-3: the runtime emits every property in ascending key order; it accepts any listed subset in any order, unlisted properties taking their default values, and refuses a repeated key with BadArgs.",
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+(\\[[a-z0-9_]+=[a-z0-9_]+(,[a-z0-9_]+=[a-z0-9_]+)*\\])?$"
+    },
+    "ItemStack": {
+      "description": "§6.9 ItemStack: object with item, count (>= 1) and components. Proposed decision PD-4: components maps each data-component id to that component's JSON as vanilla's component codec writes it; an absent key means the component is absent.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item",
+        "count",
+        "components"
+      ],
+      "properties": {
+        "item": {
+          "$ref": "#/$defs/ItemType"
+        },
+        "count": {
+          "$ref": "#/$defs/PosInt"
+        },
+        "components": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/ResourceId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        }
+      }
+    },
+    "Face": {
+      "description": "§6.1, §6.9 enum Face; variants without fields are written by name.",
+      "enum": [
+        "Down",
+        "Up",
+        "North",
+        "South",
+        "West",
+        "East"
+      ]
+    },
+    "Hand": {
+      "description": "§6.1, §6.9 enum Hand.",
+      "enum": [
+        "Main",
+        "Off"
+      ]
+    },
+    "StructValue": {
+      "description": "§6.9 struct (including Entry): an object keyed by field name; fields are always written by name. The field set is fixed by the IR's types section.",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      }
+    },
+    "EnumValue": {
+      "description": "§6.9 enum value: a variant without fields is its name; a variant with fields is {\"Variant\": {fields}}.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/VariantName"
+        },
+        {
+          "type": "object",
+          "minProperties": 1,
+          "maxProperties": 1,
+          "propertyNames": {
+            "$ref": "#/$defs/VariantName"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/StructValue"
+          }
+        }
+      ]
+    },
+    "VariantName": {
+      "description": "§3.2 TYPE_IDENT naming an enum variant, failure or notice.",
+      "type": "string",
+      "pattern": "^[A-Z][A-Za-z0-9_]*$"
+    },
+    "ListValue": {
+      "description": "§6.9 List<T>: a JSON array.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/JsonValue"
+      }
+    },
+    "SetValue": {
+      "description": "§6.9 Set<T>: a JSON array in ascending order without duplicates (order and uniqueness enforced by validate-all and check-ir, not by this schema).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/JsonValue"
+      }
+    },
+    "StringKeyedMapValue": {
+      "description": "§6.9 Map<String, V>: a JSON object.",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      }
+    },
+    "PairMapValue": {
+      "description": "§6.9 other Map<K, V>: an array of [key, value] pairs, ascending by key, without duplicate keys (enforced by validate-all and check-ir).",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          {
+            "$ref": "#/$defs/JsonValue"
+          },
+          {
+            "$ref": "#/$defs/JsonValue"
+          }
+        ],
+        "minItems": 2,
+        "items": false
+      }
+    },
+    "OptionalValue": {
+      "description": "§6.9 T?: null for none, else the form of T. Because the form of Unit is also null, Unit? is not distinguishable on the wire; no wire-relevant signature in the spec uses it.",
+      "$ref": "#/$defs/JsonValue"
+    },
+    "JsonValue": {
+      "description": "Any JSON value: the carrier for wire values whose static type is given elsewhere (by an IR TypeRef or a job signature).",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        }
+      ]
+    },
+    "WireObject": {
+      "description": "A JSON object of named wire values: job arguments, failure fields, notice fields (§6.9: fields are always written by name).",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      }
+    },
+    "NoArgs": {
+      "description": "§8.4 argument object of a filter leaf without parameters. Proposed decision PD-5: zero-argument leaves are written {\"air\": {}}, the multi-argument form of §8.4 with no arguments.",
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    },
+    "TagLeafId": {
+      "description": "§8.4 tag leaf: the tag id without '#', as in {\"tag\": \"minecraft:logs\"}.",
+      "$ref": "#/$defs/ResourceId"
+    },
+    "ItemFilter": {
+      "description": "§8.1, §8.4 ItemFilter tree. ItemFilter.ANY is {\"all\": []} and ItemFilter.NOTHING is {\"any\": []} (PD-5); ItemFilter.of(t) is the literal leaf {\"item\": t}.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "any"
+          ],
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ItemFilter"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "all"
+          ],
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ItemFilter"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "not"
+          ],
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/ItemFilter"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "item"
+          ],
+          "properties": {
+            "item": {
+              "$ref": "#/$defs/ItemType"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "$ref": "#/$defs/TagLeafId"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "damaged"
+          ],
+          "properties": {
+            "damaged": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "durability_at_least"
+          ],
+          "properties": {
+            "durability_at_least": {
+              "$ref": "#/$defs/Int"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "named"
+          ],
+          "properties": {
+            "named": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "has_component"
+          ],
+          "properties": {
+            "has_component": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "edible"
+          ],
+          "properties": {
+            "edible": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        }
+      ]
+    },
+    "BlockFilter": {
+      "description": "§8.1, §8.4 BlockFilter tree. A block-state leaf matches the listed properties only (§8.3); BlockFilter.of(s) is a state leaf listing every property of s. ANY and NOTHING as for ItemFilter (PD-5). The key names block and state are proposed decision PD-6.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "any"
+          ],
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/BlockFilter"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "all"
+          ],
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/BlockFilter"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "not"
+          ],
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/BlockFilter"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "block"
+          ],
+          "properties": {
+            "block": {
+              "$ref": "#/$defs/BlockType"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state"
+          ],
+          "properties": {
+            "state": {
+              "$ref": "#/$defs/BlockState"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "$ref": "#/$defs/TagLeafId"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "air"
+          ],
+          "properties": {
+            "air": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "liquid"
+          ],
+          "properties": {
+            "liquid": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "solid"
+          ],
+          "properties": {
+            "solid": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "replaceable"
+          ],
+          "properties": {
+            "replaceable": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "breakable"
+          ],
+          "properties": {
+            "breakable": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prop"
+          ],
+          "properties": {
+            "prop": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "$ref": "#/$defs/String"
+                },
+                "value": {
+                  "$ref": "#/$defs/String"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "placed"
+          ],
+          "properties": {
+            "placed": {
+              "$ref": "#/$defs/BlockState"
+            }
+          }
+        }
+      ]
+    },
+    "EntityFilter": {
+      "description": "§8.1, §8.4, §8.5 EntityFilter tree. A selector @e[...] serialises as {\"all\": [leaves]} of its arguments (§8.5). The key name entity is PD-6; the box and team leaves carry the selector arguments x/y/z/dx/dy/dz and team, which have no §8.1 leaf (escalation E-4).",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "any"
+          ],
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityFilter"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "all"
+          ],
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/EntityFilter"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "not"
+          ],
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/EntityFilter"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "entity"
+          ],
+          "properties": {
+            "entity": {
+              "$ref": "#/$defs/EntityType"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "$ref": "#/$defs/TagLeafId"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "within"
+          ],
+          "properties": {
+            "within": {
+              "$ref": "#/$defs/Float"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "named"
+          ],
+          "properties": {
+            "named": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "is_player"
+          ],
+          "properties": {
+            "is_player": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "hostile_type"
+          ],
+          "properties": {
+            "hostile_type": {
+              "$ref": "#/$defs/NoArgs"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "in_region"
+          ],
+          "properties": {
+            "in_region": {
+              "$ref": "#/$defs/Region"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "near"
+          ],
+          "properties": {
+            "near": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "center",
+                "d"
+              ],
+              "properties": {
+                "center": {
+                  "$ref": "#/$defs/Vec3"
+                },
+                "d": {
+                  "$ref": "#/$defs/Float"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "box"
+          ],
+          "properties": {
+            "box": {
+              "$ref": "#/$defs/SelectorBox"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "team"
+          ],
+          "properties": {
+            "team": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        }
+      ]
+    },
+    "SelectorBox": {
+      "description": "§8.5 selector box x= y= z= dx= dy= dz=, all six given together, with vanilla's meaning. Provisional pending escalation E-4.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "z",
+        "dx",
+        "dy",
+        "dz"
+      ],
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/Float"
+        },
+        "y": {
+          "$ref": "#/$defs/Float"
+        },
+        "z": {
+          "$ref": "#/$defs/Float"
+        },
+        "dx": {
+          "$ref": "#/$defs/Float"
+        },
+        "dy": {
+          "$ref": "#/$defs/Float"
+        },
+        "dz": {
+          "$ref": "#/$defs/Float"
+        }
+      }
+    },
+    "FailureName": {
+      "description": "§16.2 failure type as it appears on the wire: the declared simple name (TYPE_IDENT), as in {\"type\": \"NoPath\"}. Uniqueness of simple names per bot is escalation E-5.",
+      "$ref": "#/$defs/VariantName"
+    },
+    "DefectKind": {
+      "description": "§7.1 kinds of Defect.",
+      "enum": [
+        "Overflow",
+        "DivisionByZero",
+        "NonFinite",
+        "IndexOutOfRange",
+        "InvalidArgument",
+        "VariantViolated",
+        "QueryTooLarge"
+      ]
+    },
+    "TaskFieldFailure": {
+      "description": "§16.1 built-in failures whose only field is task: Stalled, Timeout, Unconfirmed, WindowClosed. task is the task's qualified name (§9.3; CONTRACTS.md 'Names'). Open at the top level so report.schema.json can add trace; closed by FailureValue and Failure.",
+      "type": "object",
+      "required": [
+        "type",
+        "fields"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "Stalled",
+            "Timeout",
+            "Unconfirmed",
+            "WindowClosed"
+          ]
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "task"
+          ],
+          "properties": {
+            "task": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        }
+      }
+    },
+    "ClauseFailure": {
+      "description": "§16.1 built-in failures with fields task and clause: Unmet, Broken, ContractViolation. clause is the clause's source text, or \"alive\" for the implicit requires !bot.dead (§9.6). Open at the top level so report.schema.json can add trace; closed by FailureValue and Failure.",
+      "type": "object",
+      "required": [
+        "type",
+        "fields"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "Unmet",
+            "Broken",
+            "ContractViolation"
+          ]
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "task",
+            "clause"
+          ],
+          "properties": {
+            "task": {
+              "$ref": "#/$defs/String"
+            },
+            "clause": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        }
+      }
+    },
+    "RejectedFailure": {
+      "description": "§16.1 Rejected(task, detail): the server reverted an action; detail is the backend's Rejected(detail) text (§9.6). Open at the top level so report.schema.json can add trace; closed by FailureValue and Failure.",
+      "type": "object",
+      "required": [
+        "type",
+        "fields"
+      ],
+      "properties": {
+        "type": {
+          "const": "Rejected"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "task",
+            "detail"
+          ],
+          "properties": {
+            "task": {
+              "$ref": "#/$defs/String"
+            },
+            "detail": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        }
+      }
+    },
+    "InterferedFailure": {
+      "description": "§16.1, §9.8 Interfered(task, key): key is a canonical world-key string (world.schema.json WorldKey). Open at the top level so report.schema.json can add trace; closed by FailureValue and Failure.",
+      "type": "object",
+      "required": [
+        "type",
+        "fields"
+      ],
+      "properties": {
+        "type": {
+          "const": "Interfered"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "task",
+            "key"
+          ],
+          "properties": {
+            "task": {
+              "$ref": "#/$defs/String"
+            },
+            "key": {
+              "$ref": "world.schema.json#/$defs/WorldKey"
+            }
+          }
+        }
+      }
+    },
+    "DefectFailure": {
+      "description": "§16.1, §7.1 Defect(kind, at): kind from §7.1; at is the faulting expression's source position written path:line:column (proposed decision PD-7). Open at the top level so report.schema.json can add trace; closed by FailureValue and Failure.",
+      "type": "object",
+      "required": [
+        "type",
+        "fields"
+      ],
+      "properties": {
+        "type": {
+          "const": "Defect"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "at"
+          ],
+          "properties": {
+            "kind": {
+              "$ref": "#/$defs/DefectKind"
+            },
+            "at": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        }
+      }
+    },
+    "InfrastructureFailure": {
+      "description": "§16.1, §12.3 Disconnected, Kicked, Died with field reason. Open at the top level so report.schema.json can add trace; closed by FailureValue and Failure.",
+      "type": "object",
+      "required": [
+        "type",
+        "fields"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "Disconnected",
+            "Kicked",
+            "Died"
+          ]
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reason"
+          ],
+          "properties": {
+            "reason": {
+              "$ref": "#/$defs/String"
+            }
+          }
+        }
+      }
+    },
+    "BuiltinFailure": {
+      "description": "§16.1 every built-in failure with its fields.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ClauseFailure"
+        },
+        {
+          "$ref": "#/$defs/TaskFieldFailure"
+        },
+        {
+          "$ref": "#/$defs/RejectedFailure"
+        },
+        {
+          "$ref": "#/$defs/InterferedFailure"
+        },
+        {
+          "$ref": "#/$defs/DefectFailure"
+        },
+        {
+          "$ref": "#/$defs/InfrastructureFailure"
+        }
+      ]
+    },
+    "UserFailure": {
+      "description": "§16.1 user-declared failure (failure Name(fields)); fields are wire values by name, typed by the IR failures section. Open at the top level so report.schema.json can add trace; closed by FailureValue and Failure.",
+      "type": "object",
+      "required": [
+        "type",
+        "fields"
+      ],
+      "properties": {
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/FailureName"
+            },
+            {
+              "not": {
+                "enum": [
+                  "Unmet",
+                  "Broken",
+                  "Stalled",
+                  "Timeout",
+                  "Rejected",
+                  "Unconfirmed",
+                  "Interfered",
+                  "WindowClosed",
+                  "ContractViolation",
+                  "Defect",
+                  "Disconnected",
+                  "Kicked",
+                  "Died"
+                ]
+              }
+            }
+          ]
+        },
+        "fields": {
+          "$ref": "#/$defs/WireObject"
+        }
+      }
+    },
+    "FailureValue": {
+      "description": "§16.2 a failure as data, without trace: {type, fields}. Used in backend Failed(f) reports (§9.6); report.schema.json Failure adds the trace.",
+      "allOf": [
+        {
+          "$ref": "#/$defs/FailureBody"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "type": "object"
+    },
+    "EntityHandle": {
+      "description": "Backend-only encoding of an Entity handle (§6.1: not a wire type): the protocol entity id. A handle to an entity no longer tracked is stale; a primitive given one fails as its requires clauses say (EntityGone).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity"
+      ],
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/Int"
+        }
+      }
+    },
+    "WindowHandle": {
+      "description": "Backend-only encoding of a Window<K> handle (§6.1, §17.4): the protocol window id plus the opening generation the backend assigned when the window opened (proposed decision PD-8). A handle whose generation is not the current opening's is stale (decision 32); window 0 with generation 0 is the player inventory and never stale.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "window",
+        "generation"
+      ],
+      "properties": {
+        "window": {
+          "$ref": "#/$defs/NonNegInt"
+        },
+        "generation": {
+          "$ref": "#/$defs/NonNegInt"
+        }
+      }
+    },
+    "Goal": {
+      "description": "§17.3 enum Goal in the §6.9 enum form, for backend arguments only (Goal is not a wire type); NearEntity carries an EntityHandle.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/GoalAt"
+        },
+        {
+          "$ref": "#/$defs/GoalNear"
+        },
+        {
+          "$ref": "#/$defs/GoalXZ"
+        },
+        {
+          "$ref": "#/$defs/GoalY"
+        },
+        {
+          "$ref": "#/$defs/GoalInReach"
+        },
+        {
+          "$ref": "#/$defs/GoalNearEntity"
+        },
+        {
+          "$ref": "#/$defs/GoalAway"
+        },
+        {
+          "$ref": "#/$defs/GoalAnyOf"
+        },
+        {
+          "$ref": "#/$defs/GoalAllOf"
+        },
+        {
+          "$ref": "#/$defs/GoalClear"
+        }
+      ]
+    },
+    "GoalAt": {
+      "description": "§17.3 Goal.At(pos): bot.feet == pos.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "At"
+      ],
+      "properties": {
+        "At": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pos"
+          ],
+          "properties": {
+            "pos": {
+              "$ref": "#/$defs/BlockPos"
+            }
+          }
+        }
+      }
+    },
+    "GoalNear": {
+      "description": "§17.3 Goal.Near(pos, radius).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Near"
+      ],
+      "properties": {
+        "Near": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pos",
+            "radius"
+          ],
+          "properties": {
+            "pos": {
+              "$ref": "#/$defs/BlockPos"
+            },
+            "radius": {
+              "$ref": "#/$defs/Float"
+            }
+          }
+        }
+      }
+    },
+    "GoalXZ": {
+      "description": "§17.3 Goal.XZ(x, z).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "XZ"
+      ],
+      "properties": {
+        "XZ": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x",
+            "z"
+          ],
+          "properties": {
+            "x": {
+              "$ref": "#/$defs/Int"
+            },
+            "z": {
+              "$ref": "#/$defs/Int"
+            }
+          }
+        }
+      }
+    },
+    "GoalY": {
+      "description": "§17.3 Goal.Y(y).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Y"
+      ],
+      "properties": {
+        "Y": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "y"
+          ],
+          "properties": {
+            "y": {
+              "$ref": "#/$defs/Int"
+            }
+          }
+        }
+      }
+    },
+    "GoalInReach": {
+      "description": "§17.3 Goal.InReach(pos): bot.in_reach(pos).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "InReach"
+      ],
+      "properties": {
+        "InReach": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pos"
+          ],
+          "properties": {
+            "pos": {
+              "$ref": "#/$defs/BlockPos"
+            }
+          }
+        }
+      }
+    },
+    "GoalNearEntity": {
+      "description": "§17.3 Goal.NearEntity(target, radius) with the target as an EntityHandle.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "NearEntity"
+      ],
+      "properties": {
+        "NearEntity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "target",
+            "radius"
+          ],
+          "properties": {
+            "target": {
+              "$ref": "#/$defs/EntityHandle"
+            },
+            "radius": {
+              "$ref": "#/$defs/Float"
+            }
+          }
+        }
+      }
+    },
+    "GoalAway": {
+      "description": "§17.3 Goal.Away(center, radius).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Away"
+      ],
+      "properties": {
+        "Away": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "center",
+            "radius"
+          ],
+          "properties": {
+            "center": {
+              "$ref": "#/$defs/Vec3"
+            },
+            "radius": {
+              "$ref": "#/$defs/Float"
+            }
+          }
+        }
+      }
+    },
+    "GoalAnyOf": {
+      "description": "§17.3 Goal.AnyOf(goals).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "AnyOf"
+      ],
+      "properties": {
+        "AnyOf": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "goals"
+          ],
+          "properties": {
+            "goals": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Goal"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GoalAllOf": {
+      "description": "§17.3 Goal.AllOf(goals), decision 92.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "AllOf"
+      ],
+      "properties": {
+        "AllOf": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "goals"
+          ],
+          "properties": {
+            "goals": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Goal"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GoalClear": {
+      "description": "§17.3 Goal.Clear(pos), decision 92.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Clear"
+      ],
+      "properties": {
+        "Clear": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pos"
+          ],
+          "properties": {
+            "pos": {
+              "$ref": "#/$defs/BlockPos"
+            }
+          }
+        }
+      }
+    },
+    "PathOpts": {
+      "description": "§17.3 struct PathOpts(avoid: Region? = none), decision 93.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "avoid"
+      ],
+      "properties": {
+        "avoid": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Region"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "BuildOpts": {
+      "description": "§17.3 struct BuildOpts(dig, scaffold, avoid), decision 93.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dig",
+        "scaffold",
+        "avoid"
+      ],
+      "properties": {
+        "dig": {
+          "$ref": "#/$defs/Bool"
+        },
+        "scaffold": {
+          "$ref": "#/$defs/ItemFilter"
+        },
+        "avoid": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Region"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "FailureBody": {
+      "description": "§16.1-§16.2 the {type, fields} part of a failure, open for extension with trace (report.schema.json Failure).",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BuiltinFailure"
+        },
+        {
+          "$ref": "#/$defs/UserFailure"
+        }
+      ]
+    }
+  }
+}

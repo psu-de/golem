@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/persistence.schema.json",
+  "title": "Golem per-bot state file",
+  "description": "§18.5 persistence store, question 7 default: one JSON file per bot.",
+  "$ref": "#/$defs/PersistedState",
+  "$defs": {
+    "PersistedState": {
+      "description": "§18.5, question 7 one JSON file per bot, rewritten after every tick in which a var or a handler's backoff state changed. Only use instances are stored; attached instances and jobs are never persisted (§11.7, §18.5).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "bot",
+        "ir_hash",
+        "instances"
+      ],
+      "properties": {
+        "format": {
+          "const": "golem-state/0.1"
+        },
+        "bot": {
+          "$ref": "wire.schema.json#/$defs/VariantName"
+        },
+        "ir_hash": {
+          "description": "Hash of the IR that wrote the file (informative; restore is by instance, name and type, not by hash).",
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "instances": {
+          "description": "Keyed by instance name, ascending.",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "report.schema.json#/$defs/InstanceName"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/PersistedInstance"
+          }
+        }
+      }
+    },
+    "PersistedInstance": {
+      "description": "§18.5 one instance's persisted state: the activity, each var with its type (restored only when the new IR has the same instance, name and type) and each handler's backoff state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activity",
+        "vars",
+        "handlers"
+      ],
+      "properties": {
+        "activity": {
+          "type": "string"
+        },
+        "vars": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "ir/types.schema.json#/$defs/Ident"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/PersistedVar"
+          }
+        },
+        "handlers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PersistedBackoff"
+          }
+        }
+      }
+    },
+    "PersistedVar": {
+      "description": "§18.5 one var: its TypeRef and wire value.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "$ref": "ir/types.schema.json#/$defs/TypeRef"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/JsonValue"
+        }
+      }
+    },
+    "PersistedBackoff": {
+      "description": "§18.5 one handler's backoff state: consecutive failed runs k and the backoff ticks still to wait (relative, because tick numbers restart with a new session). Disabled handlers are not persisted: disabling lasts for the session (§11.4).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "handler",
+        "failures",
+        "remaining"
+      ],
+      "properties": {
+        "handler": {
+          "$ref": "report.schema.json#/$defs/HandlerIndex"
+        },
+        "failures": {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        },
+        "remaining": {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/delta.schema.json",
+  "title": "Golem predicted Delta",
+  "description": "§14.3 the predicted delta start() returns in async mode: the values the backend expects for the keys the action affects. Keys are unique within a delta (enforced by validate-all).",
+  "$ref": "#/$defs/Delta",
+  "$defs": {
+    "Delta": {
+      "description": "§14.3 predicted key values, applied in order on top of the confirmed view for the issuing strand only (§14.2).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DeltaEntry"
+      }
+    },
+    "DeltaEntry": {
+      "description": "§14.3 one predicted key value.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "world.schema.json#/$defs/KeyValue"
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}
