@@ -320,7 +320,7 @@ export type ExprIndex = {
 };
 
 /**
- * IR-only (PD-17): the T inside a T? already tested non-none on every path that reaches this node; used to lower let ... else and if let.
+ * §10.1, §10.2 IR-only (PD-17): the T inside a T? already tested non-none on every path that reaches this node; used to lower let ... else and if let.
  */
 export type ExprUnwrap = {
   kind: "unwrap";
@@ -340,7 +340,7 @@ export type ExprIsNone = {
 };
 
 /**
- * IR-only (PD-17): true while the iterator slot created by an iter_init action has elements left; the guard of lowered for loops.
+ * §10.2 IR-only (PD-17): true while the iterator slot created by an iter_init action has elements left; the guard of lowered for loops.
  */
 export type ExprIterMore = {
   kind: "iter_more";

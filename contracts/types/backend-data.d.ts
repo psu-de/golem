@@ -3,7 +3,7 @@
 
 import type { BackendCapabilities } from "./provisional.js";
 import type { ActionId } from "./tick-input.js";
-import type { BlockPos, Bool, BuildOpts, Duration, EntityHandle, Face, Float, Goal, Hand, Int, NonNegInt, PathOpts, String, Vec3, WindowHandle } from "./wire.js";
+import type { BlockPos, Bool, BuildOpts, Duration, EntityHandle, Face, Float, Goal, Hand, Int, NonNegInt, PathOpts, Vec3, WindowHandle, WireString } from "./wire.js";
 import type { SignLines } from "./world.js";
 /**
  * §17.1 the 34 primitives by backend name (PD-34): the declaration's simple name, with the parameter-type signature for the overloaded interact.
@@ -173,7 +173,7 @@ export type SelectTradeArgs = {
  */
 export type RenameArgs = {
   w: WindowHandle;
-  name: String;
+  name: WireString;
 };
 
 /**
@@ -181,7 +181,7 @@ export type RenameArgs = {
  */
 export type WriteBookArgs = {
   slot: Int;
-  pages: String[];
+  pages: WireString[];
 };
 
 /**
@@ -189,15 +189,15 @@ export type WriteBookArgs = {
  */
 export type SignBookArgs = {
   slot: Int;
-  title: String;
-  pages: String[];
+  title: WireString;
+  pages: WireString[];
 };
 
 /**
  * §17.1 arguments of chat(text) and command(text). Every parameter is present, defaults filled by the runtime; handles use the backend-only encodings of wire.schema.json.
  */
 export type TextArgs = {
-  text: String;
+  text: WireString;
 };
 
 /**

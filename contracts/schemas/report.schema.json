@@ -126,7 +126,7 @@
       "pattern": "^[a-z_][A-Za-z0-9_]*(\\.[a-z_][A-Za-z0-9_]*)?$"
     },
     "HandlerIndex": {
-      "description": "PD-21 a handler's index in its activity's declaration order (handlers have no names; escalation E-9).",
+      "description": "§11.6, §16.2 PD-21 a handler's index in its activity's declaration order (handlers have no names; escalation E-9).",
       "$ref": "wire.schema.json#/$defs/NonNegInt"
     },
     "TraceFrame": {

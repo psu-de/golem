@@ -3,12 +3,12 @@
 
 import type { JsonValue, ResourceId } from "../wire.js";
 /**
- * PD-14 fully qualified name of a task, fn, const, type, failure, notice or activity after monomorphization: module path, optional receiver type for members, simple name, type arguments for instances of generic declarations (open<golem.windows.Container>), and a parameter-type signature when the name's overload set has more than one member (golem.core.goto(Goal,Int,PathOpts)). Prelude and built-in names have no module (Bot.food, min(Int,Int), Goal). Grammar in CONTRACTS.md 'Names'.
+ * §6.4, §6.7, §18.2 PD-14 fully qualified name of a task, fn, const, type, failure, notice or activity after monomorphization: module path, optional receiver type for members, simple name, type arguments for instances of generic declarations (open<golem.windows.Container>), and a parameter-type signature when the name's overload set has more than one member (golem.core.goto(Goal,Int,PathOpts)). Prelude and built-in names have no module (Bot.food, min(Int,Int), Goal). Grammar in CONTRACTS.md 'Names'.
  */
 export type QualifiedName = string;
 
 /**
- * PD-15 type reference as a canonical string: a built-in or qualified declared type name, type arguments in <...> separated by ',' without spaces, and a trailing '?' for optionals, as in List<BlockPos>, Window<golem.windows.Container>?, Map<ItemType,Int>. Aliases are resolved (SlotRange is written Range). Grammar in CONTRACTS.md 'Type references'.
+ * §6.1-§6.4, §18.2 PD-15 type reference as a canonical string: a built-in or qualified declared type name, type arguments in <...> separated by ',' without spaces, and a trailing '?' for optionals, as in List<BlockPos>, Window<golem.windows.Container>?, Map<ItemType,Int>. Aliases are resolved (SlotRange is written Range). Grammar in CONTRACTS.md 'Type references'.
  */
 export type TypeRef = string;
 
@@ -23,7 +23,7 @@ export type Ident = string;
 export type TypeIdent = string;
 
 /**
- * PD-17 frame-local slot name: a source IDENT, renamed name~n when it shadows an earlier local of the same frame, or a compiler temporary $kind<n> ($t0 temporary, $i0 iterator, $c0 counter, $o0 optional binder, $v0 variant).
+ * §10.1 PD-17 frame-local slot name: a source IDENT, renamed name~n when it shadows an earlier local of the same frame, or a compiler temporary $kind<n> ($t0 temporary, $i0 iterator, $c0 counter, $o0 optional binder, $v0 variant).
  */
 export type LocalName = string;
 
@@ -38,7 +38,7 @@ export type Resource = "legs" | "head" | "hands" | "stance" | "inventory" | "scr
 export type ResourceSet = Resource[];
 
 /**
- * PD-16 compact source span of an IR node: [file, line, column, end_line, end_column], with file an index into header.sources, lines and columns 1-based, columns in Unicode code points, end exclusive.
+ * §18.2 PD-16 compact source span of an IR node: [file, line, column, end_line, end_column], with file an index into header.sources, lines and columns 1-based, columns in Unicode code points, end exclusive.
  */
 export type Span = [number, number, number, number, number];
 

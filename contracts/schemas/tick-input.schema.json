@@ -212,10 +212,10 @@
           "const": "chat"
         },
         "sender": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         },
         "text": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -233,10 +233,10 @@
           "const": "whisper"
         },
         "sender": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         },
         "text": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -253,7 +253,7 @@
           "const": "system"
         },
         "text": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -325,7 +325,7 @@
           "const": "window_opened"
         },
         "menu_type": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -430,7 +430,7 @@
           "const": "Rejected"
         },
         "detail": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -516,7 +516,7 @@
           "const": "connect_failed"
         },
         "reason": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -533,7 +533,7 @@
           "const": "disconnected"
         },
         "reason": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -550,7 +550,7 @@
           "const": "kicked"
         },
         "reason": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -567,7 +567,7 @@
           "const": "died"
         },
         "reason": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },

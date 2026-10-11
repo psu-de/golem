@@ -21,7 +21,7 @@ export type RoundTripTime = NonNegInt | null;
 export type FlushMode = "deferred" | "immediate";
 
 /**
- * S-1, S-2: what the connected backend guarantees, returned by connect() (backend-data.schema.json ConnectResult).
+ * §15.2, §18.4 S-1, S-2: what the connected backend guarantees, returned by connect() (backend-data.schema.json ConnectResult).
  */
 export type BackendCapabilities = {
   flush: FlushMode;

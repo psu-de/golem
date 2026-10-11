@@ -33,7 +33,7 @@ export type Launch = {
 };
 
 /**
- * Server address.
+ * §12.2 Server address.
  */
 export type Server = {
   host: string;
@@ -41,7 +41,7 @@ export type Server = {
 };
 
 /**
- * Account and authentication, by reference only.
+ * §12.2 Account and authentication, by reference only.
  */
 export type Auth = {
   mode: "offline";

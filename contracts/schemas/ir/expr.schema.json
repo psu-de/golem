@@ -1000,7 +1000,7 @@
       }
     },
     "ExprUnwrap": {
-      "description": "IR-only (PD-17): the T inside a T? already tested non-none on every path that reaches this node; used to lower let ... else and if let.",
+      "description": "§10.1, §10.2 IR-only (PD-17): the T inside a T? already tested non-none on every path that reaches this node; used to lower let ... else and if let.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -1050,7 +1050,7 @@
       }
     },
     "ExprIterMore": {
-      "description": "IR-only (PD-17): true while the iterator slot created by an iter_init action has elements left; the guard of lowered for loops.",
+      "description": "§10.2 IR-only (PD-17): true while the iterator slot created by an iter_init action has elements left; the guard of lowered for loops.",
       "type": "object",
       "additionalProperties": false,
       "required": [

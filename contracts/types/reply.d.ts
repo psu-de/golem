@@ -93,7 +93,7 @@ export type FrameSnapshot = {
 };
 
 /**
- * PD-28 one activity instance: its vars and each handler's state.
+ * §11.4, §16.3 PD-28 one activity instance: its vars and each handler's state.
  */
 export type InstanceSnapshot = {
   instance: InstanceName;

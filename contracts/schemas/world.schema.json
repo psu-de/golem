@@ -132,7 +132,7 @@
       }
     },
     "LightKeyValue": {
-      "description": "E-1, decision 81: light.block(x,y,z) and light.sky(x,y,z), 0-15, null if unloaded (world.block_light, world.sky_light).",
+      "description": "§17.2 E-1, decision 81: light.block(x,y,z) and light.sky(x,y,z), 0-15, null if unloaded (world.block_light, world.sky_light).",
       "type": "object",
       "required": [
         "key",
@@ -158,7 +158,7 @@
       }
     },
     "SignKeyValue": {
-      "description": "E-1: sign(x,y,z), the text of a sign's two sides (world.sign_text, edit_sign); null when the block holds no sign.",
+      "description": "§17.2 E-1: sign(x,y,z), the text of a sign's two sides (world.sign_text, edit_sign); null when the block holds no sign.",
       "type": "object",
       "required": [
         "key",
@@ -335,7 +335,7 @@
       }
     },
     "Effect": {
-      "description": "One active status effect: registry id, amplifier (0 = level I) and remaining duration in ticks, -1 for infinite.",
+      "description": "§14.1 One active status effect: registry id, amplifier (0 = level I) and remaining duration in ticks, -1 for infinite.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -372,7 +372,7 @@
       }
     },
     "PlayerVehicleKeyValue": {
-      "description": "E-1: player.vehicle, the entity id the bot rides or null (bot.riding, steer, dismount).",
+      "description": "§17.1, §17.2 E-1: player.vehicle, the entity id the bot rides or null (bot.riding, steer, dismount).",
       "type": "object",
       "required": [
         "key",
@@ -571,7 +571,7 @@
         "value": {
           "anyOf": [
             {
-              "$ref": "wire.schema.json#/$defs/String"
+              "$ref": "wire.schema.json#/$defs/WireString"
             },
             {
               "type": "null"
@@ -622,7 +622,7 @@
       }
     },
     "Equipment": {
-      "description": "An entity's six equipment slots.",
+      "description": "§14.1 An entity's six equipment slots.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -703,7 +703,7 @@
       }
     },
     "EntityBitingKeyValue": {
-      "description": "E-1, decision 75: entity(id).biting, the bite flag of a fishing hook, null for other entity types.",
+      "description": "§17.2 E-1, decision 75: entity(id).biting, the bite flag of a fishing hook, null for other entity types.",
       "type": "object",
       "required": [
         "key",
@@ -727,7 +727,7 @@
       }
     },
     "EntityItemKeyValue": {
-      "description": "E-1, decision 123: entity(id).item, the stack of an item entity, null for other entities.",
+      "description": "§17.2 E-1, decision 123: entity(id).item, the stack of an item entity, null for other entities.",
       "type": "object",
       "required": [
         "key",
@@ -744,7 +744,7 @@
       }
     },
     "EntityOwnerKeyValue": {
-      "description": "E-1, decision 75: entity(id).owner, the owning entity id of a projectile or fishing hook (bot.bobber), else null.",
+      "description": "§17.2 E-1, decision 75: entity(id).owner, the owning entity id of a projectile or fishing hook (bot.bobber), else null.",
       "type": "object",
       "required": [
         "key",
@@ -854,7 +854,7 @@
       }
     },
     "ChunkLoad": {
-      "description": "Proposed decision PD-10: bulk form of the block(...) key changes of one loaded chunk column, always attributed Outside. Expands to exactly the per-key changes it abbreviates: positions in order y (min_y upward), then z (0-15), then x (0-15), each taking palette[run.index] for run.count consecutive positions. Light runs (E-1) are optional and follow the same order.",
+      "description": "§14.1, §15.2 Proposed decision PD-10: bulk form of the block(...) key changes of one loaded chunk column, always attributed Outside. Expands to exactly the per-key changes it abbreviates: positions in order y (min_y upward), then z (0-15), then x (0-15), each taking palette[run.index] for run.count consecutive positions. Light runs (E-1) are optional and follow the same order.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -919,7 +919,7 @@
       }
     },
     "Run": {
-      "description": "PD-10 run-length entry [index, count]: index into the palette (or the light level 0-15), repeated count times.",
+      "description": "§14.1 PD-10 run-length entry [index, count]: index into the palette (or the light level 0-15), repeated count times.",
       "type": "array",
       "prefixItems": [
         {
@@ -933,7 +933,7 @@
       "items": false
     },
     "ChunkUnload": {
-      "description": "PD-10: bulk form setting every block(...) key of one chunk column (and its E-1 light and sign keys) to null, attributed Outside.",
+      "description": "§14.1, §15.2 PD-10: bulk form setting every block(...) key of one chunk column (and its E-1 light and sign keys) to null, attributed Outside.",
       "type": "object",
       "additionalProperties": false,
       "required": [

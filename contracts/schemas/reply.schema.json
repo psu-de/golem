@@ -256,7 +256,7 @@
       }
     },
     "InstanceSnapshot": {
-      "description": "PD-28 one activity instance: its vars and each handler's state.",
+      "description": "§11.4, §16.3 PD-28 one activity instance: its vars and each handler's state.",
       "type": "object",
       "additionalProperties": false,
       "required": [

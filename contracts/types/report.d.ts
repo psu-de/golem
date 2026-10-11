@@ -45,7 +45,7 @@ export type FrameId = PosInt;
 export type InstanceName = string;
 
 /**
- * PD-21 a handler's index in its activity's declaration order (handlers have no names; escalation E-9).
+ * §11.6, §16.2 PD-21 a handler's index in its activity's declaration order (handlers have no names; escalation E-9).
  */
 export type HandlerIndex = NonNegInt;
 

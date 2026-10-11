@@ -33,9 +33,9 @@ export type PosInt = number;
 export type Float = number;
 
 /**
- * §6.9 String: Unicode text.
+ * §6.9 String: Unicode text (named WireString so the generated type does not shadow TypeScript's global String).
  */
-export type String = string;
+export type WireString = string;
 
 /**
  * §6.9 Duration: whole ticks as an Int, 20 per second; may be negative (§6.1).
@@ -173,7 +173,7 @@ export type PairMapValue = [JsonValue, JsonValue][];
 export type OptionalValue = JsonValue;
 
 /**
- * Any JSON value: the carrier for wire values whose static type is given elsewhere (by an IR TypeRef or a job signature).
+ * §6.9 Any JSON value: the carrier for wire values whose static type is given elsewhere (by an IR TypeRef or a job signature).
  */
 export type JsonValue = null | boolean | number | string | JsonValue[] | {
   [k: string]: JsonValue;
@@ -214,9 +214,9 @@ export type ItemFilter = {
 } | {
   durability_at_least: Int;
 } | {
-  named: String;
+  named: WireString;
 } | {
-  has_component: String;
+  has_component: WireString;
 } | {
   edible: NoArgs;
 };
@@ -248,8 +248,8 @@ export type BlockFilter = {
   breakable: NoArgs;
 } | {
   prop: {
-    name: String;
-    value: String;
+    name: WireString;
+    value: WireString;
   };
 } | {
   placed: BlockState;
@@ -271,7 +271,7 @@ export type EntityFilter = {
 } | {
   within: Float;
 } | {
-  named: String;
+  named: WireString;
 } | {
   is_player: NoArgs;
 } | {
@@ -286,7 +286,7 @@ export type EntityFilter = {
 } | {
   box: SelectorBox;
 } | {
-  team: String;
+  team: WireString;
 };
 
 /**
@@ -317,7 +317,7 @@ export type DefectKind = "Overflow" | "DivisionByZero" | "NonFinite" | "IndexOut
 export type TaskFieldFailure = {
   type: "Stalled" | "Timeout" | "Unconfirmed" | "WindowClosed";
   fields: {
-    task: String;
+    task: WireString;
   };
 };
 
@@ -327,8 +327,8 @@ export type TaskFieldFailure = {
 export type ClauseFailure = {
   type: "Unmet" | "Broken" | "ContractViolation";
   fields: {
-    task: String;
-    clause: String;
+    task: WireString;
+    clause: WireString;
   };
 };
 
@@ -338,8 +338,8 @@ export type ClauseFailure = {
 export type RejectedFailure = {
   type: "Rejected";
   fields: {
-    task: String;
-    detail: String;
+    task: WireString;
+    detail: WireString;
   };
 };
 
@@ -349,7 +349,7 @@ export type RejectedFailure = {
 export type InterferedFailure = {
   type: "Interfered";
   fields: {
-    task: String;
+    task: WireString;
     key: WorldKey;
   };
 };
@@ -361,7 +361,7 @@ export type DefectFailure = {
   type: "Defect";
   fields: {
     kind: DefectKind;
-    at: String;
+    at: WireString;
   };
 };
 
@@ -371,7 +371,7 @@ export type DefectFailure = {
 export type InfrastructureFailure = {
   type: "Disconnected" | "Kicked" | "Died";
   fields: {
-    reason: String;
+    reason: WireString;
   };
 };
 

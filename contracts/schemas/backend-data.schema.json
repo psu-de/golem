@@ -394,7 +394,7 @@
           "$ref": "wire.schema.json#/$defs/WindowHandle"
         },
         "name": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },
@@ -413,7 +413,7 @@
         "pages": {
           "type": "array",
           "items": {
-            "$ref": "wire.schema.json#/$defs/String"
+            "$ref": "wire.schema.json#/$defs/WireString"
           }
         }
       }
@@ -432,12 +432,12 @@
           "$ref": "wire.schema.json#/$defs/Int"
         },
         "title": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         },
         "pages": {
           "type": "array",
           "items": {
-            "$ref": "wire.schema.json#/$defs/String"
+            "$ref": "wire.schema.json#/$defs/WireString"
           }
         }
       }
@@ -451,7 +451,7 @@
       ],
       "properties": {
         "text": {
-          "$ref": "wire.schema.json#/$defs/String"
+          "$ref": "wire.schema.json#/$defs/WireString"
         }
       }
     },

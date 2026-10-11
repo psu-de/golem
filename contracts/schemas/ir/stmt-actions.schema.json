@@ -825,7 +825,7 @@
       }
     },
     "ACounterStep": {
-      "description": "Decrement a counter slot by one (one repeat iteration or one retry attempt used).",
+      "description": "§10.2, §10.5 Decrement a counter slot by one (one repeat iteration or one retry attempt used).",
       "type": "object",
       "additionalProperties": false,
       "required": [

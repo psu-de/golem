@@ -3,7 +3,7 @@
 
 import type { Command } from "./command.js";
 import type { KeyCause, RoundTripTime } from "./provisional.js";
-import type { EntityHandle, EntityType, FailureValue, Float, Int, ItemStack, NonNegInt, PosInt, String } from "./wire.js";
+import type { EntityHandle, EntityType, FailureValue, Float, Int, ItemStack, NonNegInt, PosInt, WireString } from "./wire.js";
 import type { ChunkLoad, ChunkUnload, KeyValue } from "./world.js";
 /**
  * §15.2 phase 1, §18.4 everything the backend hands over for one tick, fully JSON-serialisable so that recording it replays a session exactly (§15.5). Processing order (PD-11): a connected infra event first (it resets the confirmed view), then changes in list order, then events, then action reports, then the remaining infra events.
@@ -70,8 +70,8 @@ export type EntityHurt = {
  */
 export type Chat = {
   event: "chat";
-  sender: String;
-  text: String;
+  sender: WireString;
+  text: WireString;
 };
 
 /**
@@ -79,8 +79,8 @@ export type Chat = {
  */
 export type Whisper = {
   event: "whisper";
-  sender: String;
-  text: String;
+  sender: WireString;
+  text: WireString;
 };
 
 /**
@@ -88,7 +88,7 @@ export type Whisper = {
  */
 export type SystemMessage = {
   event: "system";
-  text: String;
+  text: WireString;
 };
 
 /**
@@ -121,7 +121,7 @@ export type ItemCollected = {
  */
 export type WindowOpened = {
   event: "window_opened";
-  menu_type: String;
+  menu_type: WireString;
 };
 
 /**
@@ -166,7 +166,7 @@ export type ReportConfirmed = {
 export type ReportRejected = {
   action: ActionId;
   status: "Rejected";
-  detail: String;
+  detail: WireString;
 };
 
 /**
@@ -198,7 +198,7 @@ export type InfraConnected = {
  */
 export type InfraConnectFailed = {
   infra: "connect_failed";
-  reason: String;
+  reason: WireString;
 };
 
 /**
@@ -206,7 +206,7 @@ export type InfraConnectFailed = {
  */
 export type InfraDisconnected = {
   infra: "disconnected";
-  reason: String;
+  reason: WireString;
 };
 
 /**
@@ -214,7 +214,7 @@ export type InfraDisconnected = {
  */
 export type InfraKicked = {
   infra: "kicked";
-  reason: String;
+  reason: WireString;
 };
 
 /**
@@ -222,7 +222,7 @@ export type InfraKicked = {
  */
 export type InfraDied = {
   infra: "died";
-  reason: String;
+  reason: WireString;
 };
 
 /**

@@ -275,7 +275,7 @@ export type ACounterInit = {
 };
 
 /**
- * Decrement a counter slot by one (one repeat iteration or one retry attempt used).
+ * §10.2, §10.5 Decrement a counter slot by one (one repeat iteration or one retry attempt used).
  */
 export type ACounterStep = {
   kind: "counter_step";

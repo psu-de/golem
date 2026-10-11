@@ -6,19 +6,38 @@
   "$ref": "#/$defs/Diagnostic",
   "$defs": {
     "Diagnostic": {
-      "description": "Finding 15 diagnostic: code, severity, message, primary span, violated § reference and optional related spans.",
+      "description": "§13.1, finding 15 diagnostic: code, severity, message, primary span, violated § reference and optional related spans.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["code", "severity", "message", "span", "spec"],
+      "required": [
+        "code",
+        "severity",
+        "message",
+        "span",
+        "spec"
+      ],
       "properties": {
-        "code": { "$ref": "#/$defs/DiagnosticCode" },
-        "severity": { "$ref": "#/$defs/Severity" },
-        "message": { "type": "string", "minLength": 1 },
-        "span": { "$ref": "#/$defs/SourceSpan" },
-        "spec": { "$ref": "#/$defs/SpecRef" },
+        "code": {
+          "$ref": "#/$defs/DiagnosticCode"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "span": {
+          "$ref": "#/$defs/SourceSpan"
+        },
+        "spec": {
+          "$ref": "#/$defs/SpecRef"
+        },
         "related": {
           "type": "array",
-          "items": { "$ref": "#/$defs/RelatedSpan" }
+          "items": {
+            "$ref": "#/$defs/RelatedSpan"
+          }
         }
       }
     },
@@ -29,7 +48,10 @@
     },
     "Severity": {
       "description": "§13.1: every check is an error; the three warnings are catch arms for failures that cannot occur (C08), unused imports (C01) and requires clauses implied by a callee's own requires (C07).",
-      "enum": ["error", "warning"]
+      "enum": [
+        "error",
+        "warning"
+      ]
     },
     "SpecRef": {
       "description": "The violated section, written § followed by its number, e.g. §9.5.",
@@ -40,32 +62,64 @@
       "description": "PD-16: line and column are 1-based, the column counted in Unicode code points; offset is the 0-based UTF-8 byte offset into the file (§3: source is UTF-8).",
       "type": "object",
       "additionalProperties": false,
-      "required": ["line", "column", "offset"],
+      "required": [
+        "line",
+        "column",
+        "offset"
+      ],
       "properties": {
-        "line": { "type": "integer", "minimum": 1 },
-        "column": { "type": "integer", "minimum": 1 },
-        "offset": { "type": "integer", "minimum": 0 }
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     },
     "SourceSpan": {
-      "description": "Half-open source range [start, end) in one file; file is the project-relative path (src/...), or std/golem/<module>.golem for the standard library.",
+      "description": "§3, finding 15 Half-open source range [start, end) in one file; file is the project-relative path (src/...), or std/golem/<module>.golem for the standard library.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["file", "start", "end"],
+      "required": [
+        "file",
+        "start",
+        "end"
+      ],
       "properties": {
-        "file": { "type": "string", "minLength": 1 },
-        "start": { "$ref": "#/$defs/SourcePosition" },
-        "end": { "$ref": "#/$defs/SourcePosition" }
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "$ref": "#/$defs/SourcePosition"
+        },
+        "end": {
+          "$ref": "#/$defs/SourcePosition"
+        }
       }
     },
     "RelatedSpan": {
-      "description": "A secondary location, such as the other end of a cycle or the clashing declaration.",
+      "description": "§13.1, finding 15 A secondary location, such as the other end of a cycle or the clashing declaration.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["span", "message"],
+      "required": [
+        "span",
+        "message"
+      ],
       "properties": {
-        "span": { "$ref": "#/$defs/SourceSpan" },
-        "message": { "type": "string", "minLength": 1 }
+        "span": {
+          "$ref": "#/$defs/SourceSpan"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     }
   }

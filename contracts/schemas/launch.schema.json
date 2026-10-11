@@ -71,7 +71,7 @@
       }
     },
     "Server": {
-      "description": "Server address.",
+      "description": "§12.2 Server address.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -91,7 +91,7 @@
       }
     },
     "Auth": {
-      "description": "Account and authentication, by reference only.",
+      "description": "§12.2 Account and authentication, by reference only.",
       "oneOf": [
         {
           "description": "Offline-mode account (no credentials exist).",
