@@ -1,0 +1,168 @@
+// golem.windows: window kinds and capabilities of spec §17.4, listing (decisions 111–128).
+// Window<K> and Inventory are prelude types; their members are built in. They are listed here as
+// `extern fn` in impls bounded the way §17.4 bounds them (decision 118).
+
+// ---------- capability traits ----------
+
+pub trait WindowKind { fn menu_types() -> List<String> }
+pub trait Screen: WindowKind {}
+pub trait HasContainer: Screen {}
+pub trait Smelter: Screen {}
+pub trait HasButtons: Screen {}
+pub trait CraftingStation: WindowKind {
+    fn grid_width() -> Int
+    fn grid_height() -> Int
+}
+
+// ---------- kinds: empty structs ----------
+
+pub struct PlayerInventory()
+pub struct Container()
+pub struct Crafting()
+pub struct Furnace()
+pub struct BlastFurnace()
+pub struct Smoker()
+pub struct Stonecutter()
+pub struct Loom()
+pub struct Enchanting()
+pub struct Anvil()
+pub struct Grindstone()
+pub struct CartographyTable()
+pub struct Brewing()
+pub struct Beacon()
+pub struct Merchant()
+pub struct Smithing()
+pub struct MountInventory()
+pub struct AnyKind()
+
+impl WindowKind for PlayerInventory { fn menu_types() -> List<String> = [] }     // window 0
+impl CraftingStation for PlayerInventory {
+    fn grid_width() -> Int = 2
+    fn grid_height() -> Int = 2
+}
+
+impl WindowKind for Container {
+    fn menu_types() -> List<String> = ["minecraft:generic_9x1", "minecraft:generic_9x2", "minecraft:generic_9x3",
+        "minecraft:generic_9x4", "minecraft:generic_9x5", "minecraft:generic_9x6", "minecraft:generic_3x3",
+        "minecraft:shulker_box", "minecraft:hopper"]
+}
+impl Screen for Container {}
+impl HasContainer for Container {}
+
+impl WindowKind for Crafting { fn menu_types() -> List<String> = ["minecraft:crafting"] }
+impl Screen for Crafting {}
+impl CraftingStation for Crafting {
+    fn grid_width() -> Int = 3
+    fn grid_height() -> Int = 3
+}
+
+impl WindowKind for Furnace { fn menu_types() -> List<String> = ["minecraft:furnace"] }
+impl Screen for Furnace {}
+impl Smelter for Furnace {}
+impl WindowKind for BlastFurnace { fn menu_types() -> List<String> = ["minecraft:blast_furnace"] }
+impl Screen for BlastFurnace {}
+impl Smelter for BlastFurnace {}
+impl WindowKind for Smoker { fn menu_types() -> List<String> = ["minecraft:smoker"] }
+impl Screen for Smoker {}
+impl Smelter for Smoker {}
+
+impl WindowKind for Stonecutter { fn menu_types() -> List<String> = ["minecraft:stonecutter"] }
+impl Screen for Stonecutter {}
+impl HasButtons for Stonecutter {}
+impl WindowKind for Loom { fn menu_types() -> List<String> = ["minecraft:loom"] }
+impl Screen for Loom {}
+impl HasButtons for Loom {}
+impl WindowKind for Enchanting { fn menu_types() -> List<String> = ["minecraft:enchantment"] }
+impl Screen for Enchanting {}
+impl HasButtons for Enchanting {}
+
+impl WindowKind for Anvil { fn menu_types() -> List<String> = ["minecraft:anvil"] }
+impl Screen for Anvil {}
+impl WindowKind for Grindstone { fn menu_types() -> List<String> = ["minecraft:grindstone"] }
+impl Screen for Grindstone {}
+impl WindowKind for CartographyTable { fn menu_types() -> List<String> = ["minecraft:cartography_table"] }
+impl Screen for CartographyTable {}
+impl WindowKind for Brewing { fn menu_types() -> List<String> = ["minecraft:brewing_stand"] }
+impl Screen for Brewing {}
+impl WindowKind for Beacon { fn menu_types() -> List<String> = ["minecraft:beacon"] }
+impl Screen for Beacon {}
+impl WindowKind for Merchant { fn menu_types() -> List<String> = ["minecraft:merchant"] }
+impl Screen for Merchant {}
+impl WindowKind for Smithing { fn menu_types() -> List<String> = ["minecraft:smithing"] }
+impl Screen for Smithing {}
+
+// opened by the horse-screen packet, which has no menu type
+impl WindowKind for MountInventory { fn menu_types() -> List<String> = [] }
+impl Screen for MountInventory {}
+impl HasContainer for MountInventory {}
+
+// every menu type; used only by bot.window (decision 119: the list is the union of the kinds above)
+impl WindowKind for AnyKind {
+    fn menu_types() -> List<String> = ["minecraft:generic_9x1", "minecraft:generic_9x2", "minecraft:generic_9x3",
+        "minecraft:generic_9x4", "minecraft:generic_9x5", "minecraft:generic_9x6", "minecraft:generic_3x3",
+        "minecraft:shulker_box", "minecraft:hopper", "minecraft:crafting", "minecraft:furnace",
+        "minecraft:blast_furnace", "minecraft:smoker", "minecraft:stonecutter", "minecraft:loom",
+        "minecraft:enchantment", "minecraft:anvil", "minecraft:grindstone", "minecraft:cartography_table",
+        "minecraft:brewing_stand", "minecraft:beacon", "minecraft:merchant", "minecraft:smithing"]
+}
+impl Screen for AnyKind {}
+
+// ---------- merchant trades ----------
+
+// decision 120: one villager offer as the merchant-offers packet sends it, without price internals
+pub struct Trade(cost: ItemStack, cost2: ItemStack?, result: ItemStack, uses: Int, max_uses: Int, disabled: Bool)
+
+// ---------- Window<K> members (built in) ----------
+
+pub type SlotRange = Range
+
+impl<K: WindowKind> Window<K> {
+    pub extern fn open(self) -> Bool
+    pub extern fn size(self) -> Int
+    pub extern fn slot(self, i: Int) -> ItemStack?
+    pub extern fn player_slots(self) -> SlotRange                 // decision 121
+    pub extern fn hotbar(self) -> SlotRange
+    pub extern fn property(self, i: Int) -> Int?
+    pub extern fn accepts(self, slot: Int, s: ItemStack) -> Bool
+    pub extern fn can_quick_move(self, slot: Int) -> Bool
+    pub extern fn cast<J: WindowKind>(self) -> Window<J>?
+    pub extern fn find(self, f: ItemFilter) -> Int?             // first matching slot of player_slots (decision 85)
+}
+
+impl<K: HasContainer> Window<K> {
+    pub extern fn container(self) -> SlotRange
+}
+
+impl<K: CraftingStation> Window<K> {
+    pub extern fn grid(self) -> SlotRange
+    pub extern fn result_slot(self) -> Int
+}
+
+impl<K: Smelter> Window<K> {
+    pub extern fn input_slot(self) -> Int
+    pub extern fn fuel_slot(self) -> Int
+    pub extern fn output_slot(self) -> Int
+    pub extern fn cook_progress(self) -> Float                  // 0–1
+    pub extern fn fuel_left(self) -> Float                      // 0–1
+}
+
+impl Window<Merchant> {
+    pub extern fn trades(self) -> List<Trade>
+    pub extern fn selected_trade(self) -> Int?
+}
+
+impl Window<Anvil> {
+    pub extern fn rename_text(self) -> String?
+    pub extern fn repair_cost(self) -> Int?
+}
+
+// ---------- Inventory members (built in, §17.5) ----------
+
+impl Inventory {
+    pub extern fn count(self, f: ItemFilter) -> Int              // slots 9–45
+    pub extern fn slots(self, f: ItemFilter) -> List<Int>        // ascending
+    pub extern fn free_slots(self) -> Int
+    pub extern fn room_for(self, i: ItemType) -> Int
+    pub extern fn satisfies(self, r: CraftingRecipe, times: Int) -> Bool
+    pub extern fn plan(self, r: CraftingRecipe, times: Int) -> List<ItemType?>?
+}

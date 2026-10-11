@@ -9,12 +9,12 @@ import type { JsonValue } from "../wire.js";
 export type Expr = ExprLit | ExprInterp | ExprLocal | ExprParam | ExprActivityParam | ExprActivityVar | ExprConst | ExprSelf | ExprAmbient | ExprOld | ExprResult | ExprField | ExprCall | ExprOpt | ExprCoalesce | ExprUnary | ExprBinary | ExprLogic | ExprIf | ExprMatch | ExprList | ExprSetNew | ExprMapNew | ExprStruct | ExprVariant | ExprCopy | ExprIndex | ExprUnwrap | ExprIsNone | ExprIterMore;
 
 /**
- * §3.4, §6.8 literal with its value in the §6.9 wire form of its resolved type: INT, FLOAT, STRING, DURATION (ticks), ANGLE (radians), RESOURCE (id), TAG (#id), BLOCKSTATE, SELECTOR and RESOURCE/TAG typed as filters (the §8.4 filter tree), true/false, none (null with an optional type), and Goal-typed constants in the backend Goal encoding (PD-37). text keeps the literal's source spelling.
+ * §3.4, §6.8 literal with its value in the §6.9 wire form of its resolved type: INT, FLOAT, STRING, DURATION (ticks), ANGLE (radians), RESOURCE (id), TAG (#id), BLOCKSTATE, SELECTOR and RESOURCE/TAG typed as filters (the §8.4 filter tree), true/false, none (null with an optional type), and Goal-typed constants in the backend Goal encoding (PD-37). form const marks a compile-time-evaluated constant expression that is not a single literal: a filled parameter default such as PathOpts() or 2min, or a folded constant (§7.5). text keeps the source spelling.
  */
 export type ExprLit = {
   kind: "lit";
   type: TypeRef;
-  form: "int" | "float" | "string" | "bool" | "duration" | "angle" | "resource" | "tag" | "blockstate" | "selector" | "none" | "unit";
+  form: "int" | "float" | "string" | "bool" | "duration" | "angle" | "resource" | "tag" | "blockstate" | "selector" | "none" | "unit" | "const";
   value: JsonValue;
   text?: string;
   span: Span;

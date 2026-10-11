@@ -1,0 +1,38 @@
+// golem.filters: filter leaves of spec §8.1 and standard filters of §8.6, listing (decisions 111–128).
+// Leaves are data: a call builds a filter node, so leaf calls are constant expressions.
+// The static members ItemFilter.of/named/ANY/NOTHING, BlockFilter.of/placed/ANY/NOTHING and
+// EntityFilter.named/ANY/NOTHING belong to the prelude filter types and are built in.
+
+// ---------- ItemFilter leaves ----------
+
+pub extern fn damaged() -> ItemFilter
+pub extern fn durability_at_least(n: Int) -> ItemFilter
+pub extern fn has_component(id: String) -> ItemFilter
+pub extern fn edible() -> ItemFilter                  // decision 122: new leaf, items with a food component
+
+// ---------- BlockFilter leaves ----------
+
+pub extern fn air() -> BlockFilter
+pub extern fn liquid() -> BlockFilter
+pub extern fn solid() -> BlockFilter
+pub extern fn replaceable() -> BlockFilter
+pub extern fn breakable() -> BlockFilter
+pub extern fn prop(name: String, value: String) -> BlockFilter
+
+// ---------- EntityFilter leaves ----------
+
+pub extern fn within(d: Float) -> EntityFilter
+pub extern fn is_player() -> EntityFilter
+pub extern fn in_region(r: Region) -> EntityFilter
+pub extern fn near(center: Vec3, d: Float) -> EntityFilter
+pub extern fn hostile_type() -> EntityFilter          // decision 122: new leaf, the version's hostile mob list
+
+// ---------- standard filters (§8.6, decision 97) ----------
+
+pub const FOOD: ItemFilter = edible()
+pub const SAFE_FOOD: ItemFilter = FOOD & !(minecraft:rotten_flesh | minecraft:spider_eye | minecraft:poisonous_potato |
+    minecraft:pufferfish | minecraft:chicken | minecraft:suspicious_stew | minecraft:chorus_fruit |
+    minecraft:golden_apple | minecraft:enchanted_golden_apple)
+pub const HOSTILE: EntityFilter = hostile_type()
+pub const FIGHTABLE: EntityFilter = HOSTILE & !minecraft:creeper & !minecraft:enderman
+pub const CLEARED: BlockFilter = air() | liquid()

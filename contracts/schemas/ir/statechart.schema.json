@@ -763,7 +763,7 @@
       }
     },
     "StateFinal": {
-      "description": "§9.7 completion of the chart (id <owner>#end): the frame's ensures are checked and it returns its result (the local named by the return action, or Unit).",
+      "description": "§9.7 completion of the chart (id <owner>#end): entering it ends the body block, so the root scope's pending deferred calls run (§10.4), then the frame's ensures are checked and it returns the value of the return action that led here (Unit if none). In a handler chart without until, the run ends and the handler returns to Idle (§11.4).",
       "type": "object",
       "additionalProperties": false,
       "required": [

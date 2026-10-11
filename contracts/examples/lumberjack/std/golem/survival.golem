@@ -1,0 +1,66 @@
+from golem.prim import hold_jump, respawn, pathfind
+from golem.core import consume, fight
+from golem.filters import SAFE_FOOD, HOSTILE, FIGHTABLE, within, solid, air
+
+const FIRE: BlockFilter = minecraft:fire | minecraft:soul_fire
+
+fn threat(f: EntityFilter, d: Float) -> Entity? = world.nearest(f & within(d))
+
+fn standable(p: BlockPos) -> Bool =
+    world.block(p.below) matches solid() && world.block(p) matches air() && world.block(p.above) matches air()
+
+fn dry_spot(r: Int) -> BlockPos? {
+    let f = bot.feet
+    for p in world.blocks(air(), Region(f - BlockPos(r, 2, r), f + BlockPos(r, 2, r))) {   // nearest first
+        if standable(p) {
+            return p
+        }
+    }
+    return none
+}
+
+pub activity auto_eat(min_food: Int = 14, full: Int = 18, priority: Int = 50) {
+    @priority priority
+    when bot.food < min_food for 2s until bot.food >= full {
+        consume(SAFE_FOOD)
+    }
+}
+
+pub activity escape_lava(radius: Int = 8, priority: Int = 95) {
+    @priority priority
+    when bot.in_lava || world.block(bot.feet) matches FIRE until !bot.in_lava && !(world.block(bot.feet) matches FIRE) {
+        let spot = dry_spot(radius) else { return }
+        pathfind(Goal.At(spot), limit = 10s)
+    }
+}
+
+pub activity flee_when_hurt(below: Float = 8.0, radius: Float = 12.0, priority: Int = 90) {
+    @priority priority
+    when (bot.health < below && threat(HOSTILE, radius) != none) || threat(minecraft:creeper, 5.0) != none until threat(HOSTILE, radius + 8.0) == none {
+        let t = threat(HOSTILE, radius + 8.0) else { return }
+        pathfind(Goal.Away(t.pos, radius + 8.0), limit = 15s)
+    }
+}
+
+pub activity defend(radius: Float = 6.0, priority: Int = 80) {
+    @priority priority
+    when threat(FIGHTABLE, radius) != none for 5t until threat(FIGHTABLE, radius + 4.0) == none {
+        let t = threat(FIGHTABLE, radius + 4.0) else { return }
+        fight(t)
+    }
+}
+
+pub activity stay_afloat(priority: Int = 70) {
+    @priority priority
+    when bot.in_water && bot.oxygen < 100 until !bot.in_water || bot.oxygen >= 300 {
+        hold_jump()
+    }
+}
+
+pub activity auto_respawn(delay: Duration = 1s, priority: Int = 1000) {
+    @priority priority
+    on died(_) {
+        wait delay
+        respawn()
+    }
+}

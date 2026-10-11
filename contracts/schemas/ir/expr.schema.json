@@ -100,7 +100,7 @@
       ]
     },
     "ExprLit": {
-      "description": "§3.4, §6.8 literal with its value in the §6.9 wire form of its resolved type: INT, FLOAT, STRING, DURATION (ticks), ANGLE (radians), RESOURCE (id), TAG (#id), BLOCKSTATE, SELECTOR and RESOURCE/TAG typed as filters (the §8.4 filter tree), true/false, none (null with an optional type), and Goal-typed constants in the backend Goal encoding (PD-37). text keeps the literal's source spelling.",
+      "description": "§3.4, §6.8 literal with its value in the §6.9 wire form of its resolved type: INT, FLOAT, STRING, DURATION (ticks), ANGLE (radians), RESOURCE (id), TAG (#id), BLOCKSTATE, SELECTOR and RESOURCE/TAG typed as filters (the §8.4 filter tree), true/false, none (null with an optional type), and Goal-typed constants in the backend Goal encoding (PD-37). form const marks a compile-time-evaluated constant expression that is not a single literal: a filled parameter default such as PathOpts() or 2min, or a folded constant (§7.5). text keeps the source spelling.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -130,7 +130,8 @@
             "blockstate",
             "selector",
             "none",
-            "unit"
+            "unit",
+            "const"
           ]
         },
         "value": {
