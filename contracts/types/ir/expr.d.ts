@@ -26,12 +26,12 @@ export type ExprLit = {
 export type ExprInterp = {
   kind: "interp";
   type: TypeRef;
-  parts: {
+  parts: ({
     text: string;
   } | {
     expr: Expr;
     show: QualifiedName;
-  }[];
+  })[];
   span: Span;
 };
 

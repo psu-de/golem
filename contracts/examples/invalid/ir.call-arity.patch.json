@@ -1,0 +1,9 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "remove",
+      "path": "/tasks/woodcutting.stash_logs/chart/states/woodcutting.stash_logs#3/args/3"
+    }
+  ]
+}

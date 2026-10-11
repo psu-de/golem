@@ -1,0 +1,16 @@
+{
+  "tick": 5,
+  "infra": [],
+  "changes": [],
+  "events": [],
+  "reports": [
+    {
+      "action": 3,
+      "status": "Rejected"
+    }
+  ],
+  "measurements": {
+    "path_progress": null,
+    "round_trip_ms": 40
+  }
+}

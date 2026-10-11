@@ -1,0 +1,19 @@
+{
+  "code": "E42",
+  "severity": "error",
+  "message": "m",
+  "span": {
+    "file": "src/a.golem",
+    "start": {
+      "line": 1,
+      "column": 1,
+      "offset": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 2,
+      "offset": 1
+    }
+  },
+  "spec": "§9.5"
+}

@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "add",
+      "path": "/registries",
+      "value": {}
+    }
+  ]
+}

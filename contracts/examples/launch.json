@@ -1,0 +1,15 @@
+{
+  "format": "golem-launch/0.1",
+  "bot": "Lumberjack",
+  "ir": "build/Lumberjack.golem-ir.json",
+  "minecraft": "1.21.4",
+  "server": { "host": "mc.example.internal", "port": 25565 },
+  "auth": { "mode": "microsoft", "profile": "lumberjack-1", "cache": "~/.golem/auth" },
+  "persistence": "state/Lumberjack.state.json",
+  "data": {
+    "registries": { "source": "data-generator", "path": "~/.golem/data/1.21.4/generated" },
+    "physics": { "source": "minecraft-data", "version": "1.21.4" },
+    "placement": { "source": "placement-table", "path": "~/.golem/data/1.21.4/placement.json" }
+  },
+  "log": { "level": "info" }
+}

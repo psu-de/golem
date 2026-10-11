@@ -142,8 +142,17 @@ function union(parts) {
   return uniq.length === 1 ? uniq[0] : uniq.map(paren).join(" | ");
 }
 
+// Parenthesises t when it has a top-level union or intersection.
 function paren(t) {
-  return /^[A-Za-z0-9_".[\]<> ,-]+$/.test(t) || t.startsWith("{") || t.startsWith("[") ? t : `(${t})`;
+  let depth = 0;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if ("{[(<".includes(c)) depth++;
+    else if ("}])>".includes(c)) depth--;
+    else if (c === '"') i = t.indexOf('"', i + 1);
+    else if (depth === 0 && (c === "|" || c === "&")) return `(${t})`;
+  }
+  return t;
 }
 
 function main() {

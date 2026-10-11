@@ -52,7 +52,7 @@ export type FailureTransition = {
  */
 export type FailPattern = {
   failure: "_" | QualifiedName;
-  binders: ((LocalName | null)[]) | null;
+  binders: (LocalName | null)[] | null;
 };
 
 /**

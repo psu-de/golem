@@ -1,0 +1,8 @@
+{
+  "action": 1,
+  "call": {
+    "primitive": "fly",
+    "args": {}
+  },
+  "mode": "sync"
+}

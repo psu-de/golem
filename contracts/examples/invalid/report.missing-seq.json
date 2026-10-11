@@ -1,0 +1,10 @@
+{
+  "tick": 0,
+  "bot": "Lumberjack",
+  "type": "hello",
+  "ir_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "minecraft": "1.21.4",
+  "protocol": "golem-protocol/0.1",
+  "jobs": [],
+  "instances": []
+}

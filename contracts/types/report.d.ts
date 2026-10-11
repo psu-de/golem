@@ -7,7 +7,7 @@ import type { Duration, FailureBody, Int, JsonValue, NonNegInt, PosInt, VariantN
 /**
  * §16.2 one report-stream message (one JSON object per line), discriminated by type; notice and thread_started have one variant per thread kind.
  */
-export type Report = Hello | JobStarted | JobCompleted | JobFailed | JobCancelled | ThreadStartedJob | ThreadStartedHandler | ThreadEnded | Frozen | Resumed | TaskStarted | TaskCompleted | TaskFailed | Progress | Rollback | NoticeFromJob | NoticeFromHandler | HandlerFailed | HandlerBackoff | HandlerDisabled | EventDropped | DeferFailed | Disconnected | Reconnected | Died | Respawned | StateNotRestored;
+export type Report = Hello | JobStarted | JobCompleted | JobFailed | JobCancelled | ThreadStartedJob | ThreadStartedHandler | ThreadEnded | Frozen | Resumed | TaskStarted | TaskCompleted | TaskFailed | TaskCancelled | Progress | Rollback | NoticeFromJob | NoticeFromHandler | HandlerFailed | HandlerBackoff | HandlerDisabled | EventDropped | DeferFailed | Disconnected | Reconnected | Died | Respawned | StateNotRestored;
 
 /**
  * §16.2 per-bot message counter: 1 for the first report of a runtime session, +1 per report, never reset by reconnects (PD-24).
@@ -264,6 +264,19 @@ export type TaskFailed = {
   frame: FrameId;
   task: string;
   failure: Failure;
+};
+
+/**
+ * Escalation E-11 (provisional): task_cancelled for a frame of a pub task that was cancelled by unwinding (abort when, the end of a with body, a cancel command, until cancelling a handler run); §16.2 gives such frames no terminal report.
+ */
+export type TaskCancelled = {
+  seq: Seq;
+  tick: Tick;
+  bot: BotName;
+  type: "task_cancelled";
+  thread: ThreadId;
+  frame: FrameId;
+  task: string;
 };
 
 /**

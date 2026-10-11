@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/tasks/golem.core.mine/chart/locals/t",
+      "value": "BlockType"
+    }
+  ]
+}

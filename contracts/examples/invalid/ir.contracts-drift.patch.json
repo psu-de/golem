@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/contracts/golem.core.mine/ensures/0/text",
+      "value": "world.block(pos) == none"
+    }
+  ]
+}

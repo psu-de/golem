@@ -1,0 +1,12 @@
+{"reply": "accepted", "command": "assign", "job_id": "s-1"}
+{"reply": "refused", "command": "assign", "job_id": "s-2", "reason": "Busy"}
+{"reply": "accepted", "command": "pause", "job_id": "s-1"}
+{"reply": "accepted", "command": "snapshot", "id": "q-7", "snapshot": {"tick": 214, "threads": [{"thread": 3, "kind": "job", "priority": 10, "state": "Paused", "pinned": false, "job_id": "s-1", "strands": [{"strand": 0, "parent": null, "frames": [{"frame": 14, "task": "woodcutting.stash_logs", "state": "woodcutting.stash_logs#3", "elapsed": 13, "args": {"chest": [10, 64, 4]}}, {"frame": 17, "task": "golem.core.deposit<golem.windows.Container>", "state": "golem.core.deposit<golem.windows.Container>#1.for.body.4.if.else.0", "elapsed": 2, "args": {"item": {"tag": "minecraft:logs"}, "n": 2304, "exact": false}}, {"frame": 18, "task": "golem.prim.quick_move<golem.windows.Container>", "state": "golem.prim.quick_move<golem.windows.Container>", "elapsed": 0, "args": {"slot": 37}}]}]}], "instances": [{"instance": "auto_eat", "vars": {}, "handlers": [{"handler": 0, "state": "idle", "failures": 0, "backoff_until": null}]}, {"instance": "defend", "vars": {}, "handlers": [{"handler": 0, "state": "idle", "failures": 0, "backoff_until": null}]}, {"instance": "stay_afloat", "vars": {}, "handlers": [{"handler": 0, "state": "idle", "failures": 0, "backoff_until": null}]}, {"instance": "auto_respawn", "vars": {}, "handlers": [{"handler": 0, "state": "backoff", "failures": 1, "backoff_until": 300}]}]}}
+{"reply": "accepted", "command": "resume", "job_id": "s-1"}
+{"reply": "refused", "command": "resume", "job_id": "s-1", "reason": "NotPaused"}
+{"reply": "accepted", "command": "cancel", "job_id": "s-1"}
+{"reply": "refused", "command": "cancel", "job_id": "s-1", "reason": "NoJob"}
+{"reply": "refused", "command": "assign", "job_id": "s-3", "reason": "BadArgs", "detail": "missing argument target: Int"}
+{"reply": "refused", "command": "assign", "job_id": "s-4", "reason": "UnknownJob"}
+{"reply": "refused", "command": "assign", "job_id": "s-5", "reason": "NotReady", "detail": "the bot is dead", "id": "c-12"}
+{"reply": "refused", "command": "restart", "reason": "BadCommand", "detail": "unknown command restart"}

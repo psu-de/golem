@@ -48,6 +48,9 @@
           "$ref": "#/$defs/TaskFailed"
         },
         {
+          "$ref": "#/$defs/TaskCancelled"
+        },
+        {
           "$ref": "#/$defs/Progress"
         },
         {
@@ -782,6 +785,43 @@
         },
         "failure": {
           "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "TaskCancelled": {
+      "description": "Escalation E-11 (provisional): task_cancelled for a frame of a pub task that was cancelled by unwinding (abort when, the end of a with body, a cancel command, until cancelling a handler run); §16.2 gives such frames no terminal report.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "frame",
+        "task"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "task_cancelled"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "frame": {
+          "$ref": "#/$defs/FrameId"
+        },
+        "task": {
+          "type": "string"
         }
       }
     },
