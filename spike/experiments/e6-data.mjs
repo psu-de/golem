@@ -10,6 +10,7 @@ import { Vec3 } from "vec3";
 import mcDataLoader from "minecraft-data";
 import { SPIKE, MC_VERSION } from "../lib/server.mjs";
 import { save } from "../lib/harness.mjs";
+import { MENUS as BACKEND_MENUS } from "../lib/backend.mjs";
 
 const exp = "e6";
 const GEN = join(SPIKE, "server", MC_VERSION, "generated");
@@ -129,15 +130,14 @@ const coverage = {
   harvest_tools_vs_datagen: { agree: harvestAgree, disagree: harvestDisagree.length, examples: harvestDisagree.slice(0, 15), blocks_with_harvestTools: mcd.blocksArray.filter((b) => b.harvestTools).length },
   collision_shapes: { states_covered: shapeStates, states_total: states, blocks_missing_or_partial: shapeMissing.slice(0, 20), missing_count: shapeMissing.length },
   outline_shapes: { present: false },
-  burn_times: { present: !!mcd.fuels, note: "no fuel data in minecraft-data 3.117.0 for pc 1.21.4 (items.json has id, name, displayName, stackSize only)" },
+  burn_times: { present: !!mcd.fuels, note: `no fuel data in minecraft-data 3.117.0 for pc ${MC_VERSION} (items.json has id, name, displayName, stackSize only)` },
   item_block: { items: itemNames.length, items_named_like_a_block: sameName.length, known_items_placing_another_block: knownDifferent },
   recipes: { minecraft_data_result_items: Object.keys(mcd.recipes).length, datagen_files: recipes.length },
 };
 
 // Menu registry ids used by the spike backend vs the data generator.
-const MENUS = ["generic_9x1", "generic_9x2", "generic_9x3", "generic_9x4", "generic_9x5", "generic_9x6", "generic_3x3", "crafter_3x3", "anvil", "beacon", "blast_furnace", "brewing_stand", "crafting", "enchantment", "furnace", "grindstone", "hopper", "lectern", "loom", "merchant", "shulker_box", "smithing", "smoker", "cartography_table", "stonecutter"];
 const menuIds = Object.fromEntries(Object.entries(registries["minecraft:menu"].entries).map(([k, v]) => [strip(k), v.protocol_id]));
-coverage.menu_registry_matches_backend = MENUS.every((m, i) => menuIds[m] === i);
+coverage.menu_registry_matches_backend = BACKEND_MENUS.every((m, i) => menuIds[m] === i);
 
 coverage.tool_speed_vs_datagen.relevant = speedDisagree.filter((x) => (mcd.blocksByName[x.split("/")[0]]?.hardness ?? 0) > 0);
 coverage.tool_speed_vs_datagen.relevant_count = coverage.tool_speed_vs_datagen.relevant.length;

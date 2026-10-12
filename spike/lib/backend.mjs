@@ -3,6 +3,7 @@
 // Packets are sent directly (one per action step) rather than through bot.dig/bot.placeBlock/
 // bot.clickWindow; see REPORT.md E2 for why. Not the production backend.
 import mineflayer from "mineflayer";
+import { join } from "node:path";
 import pathfinderPkg from "mineflayer-pathfinder";
 import { Vec3 } from "vec3";
 import { ClockDriver } from "./clock.mjs";
@@ -11,10 +12,24 @@ import { FACES, FACE_VEC, blockKey, invSlotKey, winSlotKey, entityKey, offset, r
 import { makeGoal, makeMovements } from "./goals.mjs";
 
 const { pathfinder } = pathfinderPkg;
-const PROTOCOL = { "1.21.4": 769 };
+import mcDataLoader from "minecraft-data";
+import { existsSync, readFileSync } from "node:fs";
+import { GEN } from "./datagen.mjs";
+
+const protocolOf = (v) => mcDataLoader(v)?.version?.version ?? 0;
 const CLEARED = /^minecraft:(air|cave_air|void_air|water|lava)(\[|$)/;
-// minecraft:menu registry ids for 1.21.4 (cross-checked against the data generator's registries.json in E6).
+// minecraft:menu registry ids, from the data generator's registries.json for the version under test;
+// the 1.21.4 list is the fallback when the data generator has not been run.
 const MENUS_1_21_4 = ["generic_9x1", "generic_9x2", "generic_9x3", "generic_9x4", "generic_9x5", "generic_9x6", "generic_3x3", "crafter_3x3", "anvil", "beacon", "blast_furnace", "brewing_stand", "crafting", "enchantment", "furnace", "grindstone", "hopper", "lectern", "loom", "merchant", "shulker_box", "smithing", "smoker", "cartography_table", "stonecutter"];
+
+export const MENUS = (() => {
+  const p = join(GEN, "reports/registries.json");
+  if (!existsSync(p)) return MENUS_1_21_4;
+  const entries = JSON.parse(readFileSync(p, "utf8"))["minecraft:menu"].entries;
+  const out = [];
+  for (const [k, v] of Object.entries(entries)) out[v.protocol_id] = k.replace(/^minecraft:/, "");
+  return out;
+})();
 
 const emptyBuffer = () => ({ infra: [], changes: [], events: [], acks: [], corrections: new Set() });
 
@@ -63,11 +78,11 @@ export class SpikeBackend {
       bot.once("login", () => {
         done = true;
         this.connected = true;
-        this.buf.infra.push({ infra: "connected", minecraft: launch.minecraft, protocol: PROTOCOL[launch.minecraft] ?? bot.protocolVersion ?? 0, entity_id: bot.entity.id });
+        this.buf.infra.push({ infra: "connected", minecraft: launch.minecraft, protocol: protocolOf(launch.minecraft), entity_id: bot.entity.id });
         this.#resetMirror(); // a connected event resets the confirmed view (PD-11): re-emit every key
         this.clockDriver.start(() => this.#tick());
         this.clockDriver.attach(bot);
-        resolve({ minecraft: launch.minecraft, protocol: PROTOCOL[launch.minecraft] ?? 0, capabilities: { flush: this.opts.flushMode, attribution: "backend" } });
+        resolve({ minecraft: launch.minecraft, protocol: protocolOf(launch.minecraft), capabilities: { flush: this.opts.flushMode, attribution: "backend" } });
       });
       const fail = (why) => {
         if (done) return;
@@ -201,7 +216,7 @@ export class SpikeBackend {
     });
     c.on("open_window", (p) => {
       this.generation++;
-      const kind = typeof p.inventoryType === "string" ? p.inventoryType : MENUS_1_21_4[p.inventoryType] ?? `unknown_menu_${p.inventoryType}`;
+      const kind = typeof p.inventoryType === "string" ? p.inventoryType : MENUS[p.inventoryType] ?? `unknown_menu_${p.inventoryType}`;
       const rows = { "minecraft:generic_9x1": 1, "minecraft:generic_9x2": 2, "minecraft:generic_9x3": 3, "minecraft:generic_9x4": 4, "minecraft:generic_9x5": 5, "minecraft:generic_9x6": 6 }[ns(kind)] ?? 3;
       this.win = { id: p.windowId, generation: this.generation, kind: ns(kind), slots: new Array(rows * 9 + 36).fill(null), playerStart: rows * 9 };
       this.buf.events.push({ event: "window_opened", menu_type: ns(kind) });

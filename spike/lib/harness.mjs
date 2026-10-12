@@ -3,7 +3,7 @@
 import mineflayer from "mineflayer";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { Server, SPIKE, PORT, MC_VERSION } from "./server.mjs";
+import { Server, SPIKE, PORT, MC_VERSION, REFERENCE_VERSION } from "./server.mjs";
 import { SpikeBackend } from "./backend.mjs";
 import { StubRuntime } from "./runtime.mjs";
 import { ValidationTally } from "./contracts.mjs";
@@ -20,16 +20,19 @@ export function launchFor(username = "golem") {
     auth: { mode: "offline", username },
     persistence: "state/Spike.state.json",
     data: {
-      registries: { source: "data-generator", path: "server/1.21.4/generated" },
-      physics: { source: "minecraft-data", version: "1.21.4" },
+      registries: { source: "data-generator", path: `server/${MC_VERSION}/generated` },
+      physics: { source: "minecraft-data", version: MC_VERSION },
       placement: { source: "placement-table", path: "results/e6/placement-table.json" },
     },
     log: { level: "info" },
   };
 }
 
+// Results of the reference version go to results/<exp>; other versions to results/<exp>-<version>.
+export const expDir = (exp) => (MC_VERSION === REFERENCE_VERSION ? exp : `${exp}-${MC_VERSION}`);
+
 export function resultsDir(exp) {
-  const d = join(SPIKE, "results", exp);
+  const d = join(SPIKE, "results", expDir(exp));
   mkdirSync(join(d, "raw"), { recursive: true });
   return d;
 }
@@ -42,7 +45,7 @@ export function save(exp, name, data) {
 
 // Starts the server and connects the bot under test. The program drives it through the stub runtime.
 export async function setup(exp, program, { serverOpts = {}, backendOpts = {}, record = true, rival = true } = {}) {
-  const server = new Server({ name: exp, ...serverOpts });
+  const server = new Server({ name: expDir(exp), ...serverOpts });
   await server.start();
   const tally = new ValidationTally();
   const backend = new SpikeBackend(backendOpts);

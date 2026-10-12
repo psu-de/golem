@@ -7,7 +7,10 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const SPIKE = join(dirname(fileURLToPath(import.meta.url)), "..");
-export const MC_VERSION = "1.21.4";
+// The Minecraft version under test. 1.21.4 is the v0.1 reference version; any other version the
+// libraries support can be run with GOLEM_MC_VERSION=<version> (results go to results/<exp>-<version>).
+export const REFERENCE_VERSION = "1.21.4";
+export const MC_VERSION = process.env.GOLEM_MC_VERSION || REFERENCE_VERSION;
 export const PORT = 25599;
 
 // Offline-mode UUID exactly as vanilla derives it: UUID v3 of "OfflinePlayer:<name>".
@@ -84,8 +87,13 @@ export class Server {
     process.once("uncaughtException", (e) => { console.error(e); kill(); process.exit(1); });
     process.once("unhandledRejection", (e) => { console.error(e); kill(); process.exit(1); });
     await this.waitFor(/Done \([0-9.]+s\)!/, 180000);
+    // Game rules were renamed to snake_case in 1.21.11; both spellings are sent and the unknown one is
+    // refused by the server.
     for (const c of ["gamerule doDaylightCycle false", "gamerule doWeatherCycle false", "gamerule randomTickSpeed 0",
-      "gamerule doMobSpawning false", "gamerule announceAdvancements false", "gamerule spawnRadius 0", "time set 1000", "weather clear"]) this.cmd(c);
+      "gamerule doMobSpawning false", "gamerule announceAdvancements false", "gamerule spawnRadius 0",
+      "gamerule advance_time false", "gamerule advance_weather false", "gamerule random_tick_speed 0",
+      "gamerule spawn_mobs false", "gamerule show_advancement_messages false", "gamerule respawn_radius 0",
+      "time set 1000", "weather clear"]) this.cmd(c);
     await this.sync();
   }
 
