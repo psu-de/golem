@@ -6,7 +6,7 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "latency_ticks": 16,
+      "latency_ticks": 17,
       "same_value_block_updates": 0,
       "slot_packets": 1
     },
@@ -35,7 +35,7 @@
       "detail": null,
       "latency_ticks": 61,
       "same_value_block_updates": 0,
-      "slot_packets": 0
+      "slot_packets": 1
     },
     {
       "label": "D3 dig inside spawn protection (non-op)",
@@ -150,7 +150,7 @@
       "expect": "server places wall_torch",
       "verdict": "Rejected",
       "detail": "target cell is minecraft:wall_torch[facing=east] at the acknowledgement",
-      "latency_ticks": 2,
+      "latency_ticks": 1,
       "same_value_block_updates": 2,
       "slot_packets": 1
     },
@@ -447,58 +447,58 @@
   "block_change_vs_ack": [
     {
       "label": "D1.1 dig dirt (success)",
-      "change_tick": 49,
-      "ack_tick": 49,
+      "change_tick": 51,
+      "ack_tick": 51,
       "same_tickinput": true
     },
     {
       "label": "D1.2 dig dirt (success)",
-      "change_tick": 84,
-      "ack_tick": 84,
+      "change_tick": 87,
+      "ack_tick": 87,
       "same_tickinput": true
     },
     {
       "label": "D1.3 dig dirt (success)",
-      "change_tick": 119,
-      "ack_tick": 119,
+      "change_tick": 122,
+      "ack_tick": 122,
       "same_tickinput": true
     },
     {
       "label": "D2 dig oak_log by hand (success)",
-      "change_tick": 199,
-      "ack_tick": 199,
+      "change_tick": 203,
+      "ack_tick": 203,
       "same_tickinput": true
     },
     {
       "label": "D5 dig, then /setblock reverts the block right after the verdict",
-      "change_tick": 305,
-      "ack_tick": 305,
+      "change_tick": 308,
+      "ack_tick": 308,
       "same_tickinput": true
     },
     {
       "label": "D7 dig oak_log while the second player breaks it",
-      "change_tick": 435,
-      "ack_tick": 471,
+      "change_tick": 438,
+      "ack_tick": 474,
       "same_tickinput": false
     },
     {
       "label": "A1 async dig dirt",
-      "change_tick": 2108,
-      "ack_tick": 2108,
+      "change_tick": 2114,
+      "ack_tick": 2114,
       "same_tickinput": true
     },
     {
       "label": "A2 async dig oak_log",
-      "change_tick": 2180,
-      "ack_tick": 2180,
+      "change_tick": 2186,
+      "ack_tick": 2186,
       "same_tickinput": true
     }
   ],
   "races": [
     {
       "verdict": "Confirmed",
-      "server": 0,
-      "mirror": 0
+      "server": 10,
+      "mirror": 10
     },
     {
       "verdict": "Confirmed",
@@ -534,10 +534,10 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 33,
-      "issued_tick": 49,
-      "verdict_tick": 49,
-      "latency_ticks": 16,
+      "start_tick": 34,
+      "issued_tick": 50,
+      "verdict_tick": 51,
+      "latency_ticks": 17,
       "delta": null,
       "view_at_verdict": {
         "block(41,-60,40)": "minecraft:air"
@@ -549,7 +549,7 @@
             -60,
             40
           ],
-          "tick": 49,
+          "tick": 51,
           "value": "minecraft:air"
         }
       ],
@@ -557,11 +557,11 @@
       "acks": [
         {
           "seq": 1,
-          "tick": 34
+          "tick": 36
         },
         {
           "seq": 2,
-          "tick": 49
+          "tick": 51
         }
       ],
       "slot_packets": [
@@ -570,12 +570,12 @@
           "windowId": 0,
           "slot": 39,
           "stateId": 6,
-          "tick": 58
+          "tick": 60
         }
       ],
       "changes_after": [
         {
-          "tick": 49,
+          "tick": 51,
           "key": "block(41,-60,40)",
           "value": "minecraft:air",
           "refined": {
@@ -594,9 +594,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 68,
-      "issued_tick": 84,
-      "verdict_tick": 84,
+      "start_tick": 71,
+      "issued_tick": 87,
+      "verdict_tick": 87,
       "latency_ticks": 16,
       "delta": null,
       "view_at_verdict": {
@@ -609,7 +609,7 @@
             -60,
             41
           ],
-          "tick": 84,
+          "tick": 87,
           "value": "minecraft:air"
         }
       ],
@@ -617,11 +617,11 @@
       "acks": [
         {
           "seq": 3,
-          "tick": 69
+          "tick": 73
         },
         {
           "seq": 4,
-          "tick": 84
+          "tick": 87
         }
       ],
       "slot_packets": [
@@ -630,12 +630,12 @@
           "windowId": 0,
           "slot": 39,
           "stateId": 7,
-          "tick": 93
+          "tick": 96
         }
       ],
       "changes_after": [
         {
-          "tick": 84,
+          "tick": 87,
           "key": "block(41,-60,41)",
           "value": "minecraft:air",
           "refined": {
@@ -654,9 +654,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 103,
-      "issued_tick": 119,
-      "verdict_tick": 119,
+      "start_tick": 106,
+      "issued_tick": 122,
+      "verdict_tick": 122,
       "latency_ticks": 16,
       "delta": null,
       "view_at_verdict": {
@@ -669,7 +669,7 @@
             -60,
             39
           ],
-          "tick": 119,
+          "tick": 122,
           "value": "minecraft:air"
         }
       ],
@@ -677,11 +677,11 @@
       "acks": [
         {
           "seq": 5,
-          "tick": 104
+          "tick": 107
         },
         {
           "seq": 6,
-          "tick": 119
+          "tick": 122
         }
       ],
       "slot_packets": [
@@ -690,12 +690,12 @@
           "windowId": 0,
           "slot": 39,
           "stateId": 8,
-          "tick": 128
+          "tick": 131
         }
       ],
       "changes_after": [
         {
-          "tick": 119,
+          "tick": 122,
           "key": "block(41,-60,39)",
           "value": "minecraft:air",
           "refined": {
@@ -714,9 +714,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 138,
-      "issued_tick": 199,
-      "verdict_tick": 199,
+      "start_tick": 142,
+      "issued_tick": 203,
+      "verdict_tick": 203,
       "latency_ticks": 61,
       "delta": null,
       "view_at_verdict": {
@@ -729,7 +729,7 @@
             -60,
             40
           ],
-          "tick": 199,
+          "tick": 203,
           "value": "minecraft:air"
         }
       ],
@@ -737,17 +737,25 @@
       "acks": [
         {
           "seq": 7,
-          "tick": 139
+          "tick": 143
         },
         {
           "seq": 8,
-          "tick": 199
+          "tick": 203
         }
       ],
-      "slot_packets": [],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 37,
+          "stateId": 9,
+          "tick": 212
+        }
+      ],
       "changes_after": [
         {
-          "tick": 199,
+          "tick": 203,
           "key": "block(42,-60,40)",
           "value": "minecraft:air",
           "refined": {
@@ -766,9 +774,9 @@
       "expect": "Rejected",
       "verdict": "Rejected",
       "detail": "block is minecraft:dirt at the acknowledgement",
-      "start_tick": 219,
-      "issued_tick": 235,
-      "verdict_tick": 235,
+      "start_tick": 222,
+      "issued_tick": 238,
+      "verdict_tick": 238,
       "latency_ticks": 16,
       "delta": null,
       "view_at_verdict": {
@@ -782,18 +790,18 @@
             -60,
             3
           ],
-          "tick": 220,
+          "tick": 223,
           "value": "minecraft:dirt"
         }
       ],
       "acks": [
         {
           "seq": 9,
-          "tick": 221
+          "tick": 223
         },
         {
           "seq": 10,
-          "tick": 235
+          "tick": 238
         }
       ],
       "slot_packets": [],
@@ -806,9 +814,9 @@
       "expect": "Rejected",
       "verdict": "Rejected",
       "detail": "block is minecraft:dirt at the acknowledgement",
-      "start_tick": 254,
-      "issued_tick": 270,
-      "verdict_tick": 270,
+      "start_tick": 257,
+      "issued_tick": 273,
+      "verdict_tick": 273,
       "latency_ticks": 16,
       "delta": null,
       "view_at_verdict": {
@@ -822,18 +830,18 @@
             -60,
             40
           ],
-          "tick": 255,
+          "tick": 258,
           "value": "minecraft:dirt"
         }
       ],
       "acks": [
         {
           "seq": 11,
-          "tick": 255
+          "tick": 258
         },
         {
           "seq": 12,
-          "tick": 270
+          "tick": 273
         }
       ],
       "slot_packets": [],
@@ -846,9 +854,9 @@
       "expect": "Confirmed, then an Outside change",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 289,
-      "issued_tick": 305,
-      "verdict_tick": 305,
+      "start_tick": 292,
+      "issued_tick": 308,
+      "verdict_tick": 308,
       "latency_ticks": 16,
       "delta": null,
       "view_at_verdict": {
@@ -861,7 +869,7 @@
             -60,
             41
           ],
-          "tick": 305,
+          "tick": 308,
           "value": "minecraft:air"
         },
         {
@@ -870,7 +878,7 @@
             -60,
             41
           ],
-          "tick": 307,
+          "tick": 310,
           "value": "minecraft:dirt"
         }
       ],
@@ -878,11 +886,11 @@
       "acks": [
         {
           "seq": 13,
-          "tick": 290
+          "tick": 293
         },
         {
           "seq": 14,
-          "tick": 305
+          "tick": 308
         }
       ],
       "slot_packets": [
@@ -890,13 +898,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 39,
-          "stateId": 9,
-          "tick": 314
+          "stateId": 10,
+          "tick": 317
         }
       ],
       "changes_after": [
         {
-          "tick": 305,
+          "tick": 308,
           "key": "block(41,-60,41)",
           "value": "minecraft:air",
           "refined": {
@@ -907,7 +915,7 @@
           }
         },
         {
-          "tick": 307,
+          "tick": 310,
           "key": "block(41,-60,41)",
           "value": "minecraft:dirt",
           "refined": "outside",
@@ -924,9 +932,9 @@
       "expect": "BlockChanged at the runtime (invariant); verdict per server",
       "verdict": "Rejected",
       "detail": "block is minecraft:stone at the acknowledgement",
-      "start_tick": 330,
-      "issued_tick": 391,
-      "verdict_tick": 391,
+      "start_tick": 333,
+      "issued_tick": 394,
+      "verdict_tick": 394,
       "latency_ticks": 61,
       "delta": null,
       "view_at_verdict": {
@@ -939,7 +947,7 @@
             -60,
             39
           ],
-          "tick": 342,
+          "tick": 345,
           "value": "minecraft:stone"
         }
       ],
@@ -947,17 +955,17 @@
       "acks": [
         {
           "seq": 15,
-          "tick": 331
+          "tick": 334
         },
         {
           "seq": 16,
-          "tick": 391
+          "tick": 394
         }
       ],
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 342,
+          "tick": 345,
           "key": "block(41,-60,39)",
           "value": "minecraft:stone",
           "refined": "outside",
@@ -974,9 +982,9 @@
       "expect": "verdict by state; BlockChanged invariant at the runtime",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 410,
-      "issued_tick": 471,
-      "verdict_tick": 471,
+      "start_tick": 413,
+      "issued_tick": 474,
+      "verdict_tick": 474,
       "latency_ticks": 61,
       "delta": null,
       "view_at_verdict": {
@@ -989,7 +997,7 @@
             -60,
             41
           ],
-          "tick": 435,
+          "tick": 438,
           "value": "minecraft:air"
         },
         {
@@ -998,7 +1006,7 @@
             -60,
             39
           ],
-          "tick": 480,
+          "tick": 482,
           "value": "minecraft:air"
         }
       ],
@@ -1006,17 +1014,17 @@
       "acks": [
         {
           "seq": 17,
-          "tick": 411
+          "tick": 415
         },
         {
           "seq": 18,
-          "tick": 471
+          "tick": 474
         }
       ],
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 435,
+          "tick": 438,
           "key": "block(42,-60,41)",
           "value": "minecraft:air",
           "refined": {
@@ -1035,9 +1043,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 483,
-      "issued_tick": 484,
-      "verdict_tick": 484,
+      "start_tick": 486,
+      "issued_tick": 487,
+      "verdict_tick": 487,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1050,7 +1058,7 @@
             -60,
             41
           ],
-          "tick": 484,
+          "tick": 487,
           "value": "minecraft:dirt"
         }
       ],
@@ -1061,7 +1069,7 @@
             -61,
             41
           ],
-          "tick": 484,
+          "tick": 487,
           "value": "minecraft:grass_block[snowy=false]"
         },
         {
@@ -1070,14 +1078,14 @@
             -60,
             41
           ],
-          "tick": 484,
+          "tick": 487,
           "value": "minecraft:dirt"
         }
       ],
       "acks": [
         {
           "seq": 19,
-          "tick": 484
+          "tick": 487
         }
       ],
       "slot_packets": [
@@ -1085,13 +1093,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 10,
-          "tick": 484
+          "stateId": 11,
+          "tick": 487
         }
       ],
       "changes_after": [
         {
-          "tick": 484,
+          "tick": 487,
           "key": "block(43,-60,41)",
           "value": "minecraft:dirt",
           "refined": {
@@ -1110,9 +1118,9 @@
       "expect": "Rejected",
       "verdict": "Rejected",
       "detail": "target cell is minecraft:air at the acknowledgement",
-      "start_tick": 503,
-      "issued_tick": 504,
-      "verdict_tick": 504,
+      "start_tick": 507,
+      "issued_tick": 508,
+      "verdict_tick": 508,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1126,7 +1134,7 @@
             -61,
             2
           ],
-          "tick": 504,
+          "tick": 508,
           "value": "minecraft:grass_block[snowy=false]"
         },
         {
@@ -1135,14 +1143,14 @@
             -60,
             2
           ],
-          "tick": 504,
+          "tick": 508,
           "value": "minecraft:air"
         }
       ],
       "acks": [
         {
           "seq": 20,
-          "tick": 504
+          "tick": 508
         }
       ],
       "slot_packets": [],
@@ -1155,9 +1163,9 @@
       "expect": "server refuses; state coincides with the prediction",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 515,
-      "issued_tick": 516,
-      "verdict_tick": 516,
+      "start_tick": 519,
+      "issued_tick": 520,
+      "verdict_tick": 520,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1171,7 +1179,7 @@
             -61,
             3
           ],
-          "tick": 516,
+          "tick": 520,
           "value": "minecraft:grass_block[snowy=false]"
         },
         {
@@ -1180,14 +1188,14 @@
             -60,
             3
           ],
-          "tick": 516,
+          "tick": 520,
           "value": "minecraft:dirt"
         }
       ],
       "acks": [
         {
           "seq": 21,
-          "tick": 516
+          "tick": 520
         }
       ],
       "slot_packets": [],
@@ -1200,9 +1208,9 @@
       "expect": "Rejected",
       "verdict": "Rejected",
       "detail": "target cell is minecraft:air at the acknowledgement",
-      "start_tick": 535,
-      "issued_tick": 536,
-      "verdict_tick": 536,
+      "start_tick": 539,
+      "issued_tick": 540,
+      "verdict_tick": 540,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1216,7 +1224,7 @@
             -61,
             39
           ],
-          "tick": 536,
+          "tick": 540,
           "value": "minecraft:grass_block[snowy=false]"
         },
         {
@@ -1225,14 +1233,14 @@
             -60,
             39
           ],
-          "tick": 536,
+          "tick": 540,
           "value": "minecraft:air"
         }
       ],
       "acks": [
         {
           "seq": 22,
-          "tick": 536
+          "tick": 540
         }
       ],
       "slot_packets": [],
@@ -1245,9 +1253,9 @@
       "expect": "Rejected",
       "verdict": "Rejected",
       "detail": "target cell is minecraft:stone at the acknowledgement",
-      "start_tick": 555,
-      "issued_tick": 556,
-      "verdict_tick": 556,
+      "start_tick": 559,
+      "issued_tick": 560,
+      "verdict_tick": 560,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1261,7 +1269,7 @@
             -60,
             39
           ],
-          "tick": 556,
+          "tick": 560,
           "value": "minecraft:stone"
         },
         {
@@ -1270,14 +1278,14 @@
             -59,
             39
           ],
-          "tick": 556,
+          "tick": 560,
           "value": "minecraft:stone"
         }
       ],
       "acks": [
         {
           "seq": 23,
-          "tick": 556
+          "tick": 560
         }
       ],
       "slot_packets": [],
@@ -1290,9 +1298,9 @@
       "expect": "Confirmed, then an Outside change",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 567,
-      "issued_tick": 568,
-      "verdict_tick": 568,
+      "start_tick": 571,
+      "issued_tick": 572,
+      "verdict_tick": 572,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1305,7 +1313,7 @@
             -60,
             40
           ],
-          "tick": 568,
+          "tick": 572,
           "value": "minecraft:dirt"
         },
         {
@@ -1314,7 +1322,7 @@
             -60,
             40
           ],
-          "tick": 570,
+          "tick": 574,
           "value": "minecraft:air"
         }
       ],
@@ -1325,7 +1333,7 @@
             -61,
             40
           ],
-          "tick": 568,
+          "tick": 572,
           "value": "minecraft:grass_block[snowy=false]"
         },
         {
@@ -1334,14 +1342,14 @@
             -60,
             40
           ],
-          "tick": 568,
+          "tick": 572,
           "value": "minecraft:dirt"
         }
       ],
       "acks": [
         {
           "seq": 24,
-          "tick": 568
+          "tick": 572
         }
       ],
       "slot_packets": [
@@ -1349,13 +1357,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 11,
-          "tick": 568
+          "stateId": 12,
+          "tick": 572
         }
       ],
       "changes_after": [
         {
-          "tick": 568,
+          "tick": 572,
           "key": "block(44,-60,40)",
           "value": "minecraft:dirt",
           "refined": {
@@ -1366,7 +1374,7 @@
           }
         },
         {
-          "tick": 570,
+          "tick": 574,
           "key": "block(44,-60,40)",
           "value": "minecraft:air",
           "refined": "outside",
@@ -1383,9 +1391,9 @@
       "expect": "Confirmed by type; state axis=z",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 585,
-      "issued_tick": 586,
-      "verdict_tick": 586,
+      "start_tick": 590,
+      "issued_tick": 591,
+      "verdict_tick": 591,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1398,7 +1406,7 @@
             -60,
             38
           ],
-          "tick": 586,
+          "tick": 591,
           "value": "minecraft:oak_log[axis=z]"
         }
       ],
@@ -1409,7 +1417,7 @@
             -60,
             39
           ],
-          "tick": 586,
+          "tick": 591,
           "value": "minecraft:stone"
         },
         {
@@ -1418,14 +1426,14 @@
             -60,
             38
           ],
-          "tick": 586,
+          "tick": 591,
           "value": "minecraft:oak_log[axis=z]"
         }
       ],
       "acks": [
         {
           "seq": 25,
-          "tick": 586
+          "tick": 591
         }
       ],
       "slot_packets": [
@@ -1433,13 +1441,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 37,
-          "stateId": 12,
-          "tick": 586
+          "stateId": 13,
+          "tick": 591
         }
       ],
       "changes_after": [
         {
-          "tick": 586,
+          "tick": 591,
           "key": "block(42,-60,38)",
           "value": "minecraft:oak_log[axis=z]",
           "refined": {
@@ -1458,10 +1466,10 @@
       "expect": "server places wall_torch",
       "verdict": "Rejected",
       "detail": "target cell is minecraft:wall_torch[facing=east] at the acknowledgement",
-      "start_tick": 598,
-      "issued_tick": 599,
-      "verdict_tick": 600,
-      "latency_ticks": 2,
+      "start_tick": 603,
+      "issued_tick": 604,
+      "verdict_tick": 604,
+      "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
         "block(43,-60,39)": "minecraft:wall_torch[facing=east]"
@@ -1473,7 +1481,7 @@
             -60,
             39
           ],
-          "tick": 599,
+          "tick": 604,
           "value": "minecraft:wall_torch[facing=east]"
         }
       ],
@@ -1484,7 +1492,7 @@
             -60,
             39
           ],
-          "tick": 599,
+          "tick": 604,
           "value": "minecraft:stone"
         },
         {
@@ -1493,14 +1501,14 @@
             -60,
             39
           ],
-          "tick": 600,
+          "tick": 604,
           "value": "minecraft:wall_torch[facing=east]"
         }
       ],
       "acks": [
         {
           "seq": 26,
-          "tick": 600
+          "tick": 604
         }
       ],
       "slot_packets": [
@@ -1508,13 +1516,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 38,
-          "stateId": 13,
-          "tick": 600
+          "stateId": 14,
+          "tick": 604
         }
       ],
       "changes_after": [
         {
-          "tick": 599,
+          "tick": 604,
           "key": "block(43,-60,39)",
           "value": "minecraft:wall_torch[facing=east]",
           "refined": "outside",
@@ -1531,9 +1539,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 611,
-      "issued_tick": 612,
-      "verdict_tick": 612,
+      "start_tick": 615,
+      "issued_tick": 616,
+      "verdict_tick": 616,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -1546,7 +1554,7 @@
             -58,
             39
           ],
-          "tick": 612,
+          "tick": 616,
           "value": "minecraft:torch"
         }
       ],
@@ -1557,7 +1565,7 @@
             -59,
             39
           ],
-          "tick": 612,
+          "tick": 616,
           "value": "minecraft:stone"
         },
         {
@@ -1566,14 +1574,14 @@
             -58,
             39
           ],
-          "tick": 612,
+          "tick": 616,
           "value": "minecraft:torch"
         }
       ],
       "acks": [
         {
           "seq": 27,
-          "tick": 612
+          "tick": 616
         }
       ],
       "slot_packets": [
@@ -1581,13 +1589,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 38,
-          "stateId": 14,
-          "tick": 612
+          "stateId": 15,
+          "tick": 616
         }
       ],
       "changes_after": [
         {
-          "tick": 612,
+          "tick": 616,
           "key": "block(42,-58,39)",
           "value": "minecraft:torch",
           "refined": {
@@ -1606,9 +1614,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 623,
+      "start_tick": 628,
       "issued_tick": null,
-      "verdict_tick": 647,
+      "verdict_tick": 652,
       "latency_ticks": 24,
       "delta": null,
       "view_at_verdict": {
@@ -1623,7 +1631,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 625,
+          "tick": 630,
           "key": "player.rotation",
           "value": {
             "yaw": -1.8842,
@@ -1637,7 +1645,7 @@
           }
         },
         {
-          "tick": 626,
+          "tick": 631,
           "key": "player.rotation",
           "value": {
             "yaw": -1.7342,
@@ -1651,7 +1659,7 @@
           }
         },
         {
-          "tick": 627,
+          "tick": 632,
           "key": "player.rotation",
           "value": {
             "yaw": -1.5842,
@@ -1665,7 +1673,7 @@
           }
         },
         {
-          "tick": 628,
+          "tick": 633,
           "key": "player.rotation",
           "value": {
             "yaw": -1.4342,
@@ -1679,7 +1687,7 @@
           }
         },
         {
-          "tick": 629,
+          "tick": 634,
           "key": "player.rotation",
           "value": {
             "yaw": -1.2842,
@@ -1693,7 +1701,7 @@
           }
         },
         {
-          "tick": 630,
+          "tick": 635,
           "key": "player.rotation",
           "value": {
             "yaw": -1.1342,
@@ -1707,7 +1715,7 @@
           }
         },
         {
-          "tick": 631,
+          "tick": 636,
           "key": "player.rotation",
           "value": {
             "yaw": -0.9842,
@@ -1721,7 +1729,7 @@
           }
         },
         {
-          "tick": 632,
+          "tick": 637,
           "key": "player.rotation",
           "value": {
             "yaw": -0.8342,
@@ -1735,7 +1743,7 @@
           }
         },
         {
-          "tick": 633,
+          "tick": 638,
           "key": "player.rotation",
           "value": {
             "yaw": -0.6842,
@@ -1749,7 +1757,7 @@
           }
         },
         {
-          "tick": 634,
+          "tick": 639,
           "key": "player.rotation",
           "value": {
             "yaw": -0.5342,
@@ -1763,7 +1771,7 @@
           }
         },
         {
-          "tick": 635,
+          "tick": 640,
           "key": "player.rotation",
           "value": {
             "yaw": -0.3842,
@@ -1777,7 +1785,7 @@
           }
         },
         {
-          "tick": 636,
+          "tick": 641,
           "key": "player.rotation",
           "value": {
             "yaw": -0.2342,
@@ -1791,7 +1799,7 @@
           }
         },
         {
-          "tick": 637,
+          "tick": 642,
           "key": "player.rotation",
           "value": {
             "yaw": -0.0842,
@@ -1805,7 +1813,7 @@
           }
         },
         {
-          "tick": 638,
+          "tick": 643,
           "key": "player.rotation",
           "value": {
             "yaw": 0.0658,
@@ -1819,7 +1827,7 @@
           }
         },
         {
-          "tick": 639,
+          "tick": 644,
           "key": "player.rotation",
           "value": {
             "yaw": 0.2158,
@@ -1833,7 +1841,7 @@
           }
         },
         {
-          "tick": 640,
+          "tick": 645,
           "key": "player.rotation",
           "value": {
             "yaw": 0.3658,
@@ -1847,7 +1855,7 @@
           }
         },
         {
-          "tick": 641,
+          "tick": 646,
           "key": "player.rotation",
           "value": {
             "yaw": 0.5158,
@@ -1861,7 +1869,7 @@
           }
         },
         {
-          "tick": 642,
+          "tick": 647,
           "key": "player.rotation",
           "value": {
             "yaw": 0.6658,
@@ -1875,7 +1883,7 @@
           }
         },
         {
-          "tick": 643,
+          "tick": 648,
           "key": "player.rotation",
           "value": {
             "yaw": 0.7854,
@@ -1897,9 +1905,9 @@
       "expect": "Rejected (correction in settle window)",
       "verdict": "Rejected",
       "detail": "server corrected the rotation during the settle window",
-      "start_tick": 658,
+      "start_tick": 663,
       "issued_tick": null,
-      "verdict_tick": 681,
+      "verdict_tick": 686,
       "latency_ticks": 23,
       "delta": null,
       "view_at_verdict": {
@@ -1914,7 +1922,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 660,
+          "tick": 665,
           "key": "player.rotation",
           "value": {
             "yaw": 0.9354,
@@ -1928,7 +1936,7 @@
           }
         },
         {
-          "tick": 661,
+          "tick": 666,
           "key": "player.rotation",
           "value": {
             "yaw": 1.0854,
@@ -1942,7 +1950,7 @@
           }
         },
         {
-          "tick": 662,
+          "tick": 667,
           "key": "player.rotation",
           "value": {
             "yaw": 1.2354,
@@ -1956,7 +1964,7 @@
           }
         },
         {
-          "tick": 663,
+          "tick": 668,
           "key": "player.rotation",
           "value": {
             "yaw": 1.3854,
@@ -1970,7 +1978,7 @@
           }
         },
         {
-          "tick": 664,
+          "tick": 669,
           "key": "player.rotation",
           "value": {
             "yaw": 1.5354,
@@ -1984,7 +1992,7 @@
           }
         },
         {
-          "tick": 665,
+          "tick": 670,
           "key": "player.rotation",
           "value": {
             "yaw": 1.6854,
@@ -1998,7 +2006,7 @@
           }
         },
         {
-          "tick": 666,
+          "tick": 671,
           "key": "player.rotation",
           "value": {
             "yaw": 1.8354,
@@ -2012,7 +2020,7 @@
           }
         },
         {
-          "tick": 667,
+          "tick": 672,
           "key": "player.rotation",
           "value": {
             "yaw": 1.9854,
@@ -2026,7 +2034,7 @@
           }
         },
         {
-          "tick": 668,
+          "tick": 673,
           "key": "player.rotation",
           "value": {
             "yaw": 2.1354,
@@ -2040,7 +2048,7 @@
           }
         },
         {
-          "tick": 669,
+          "tick": 674,
           "key": "player.rotation",
           "value": {
             "yaw": 2.2854,
@@ -2054,7 +2062,7 @@
           }
         },
         {
-          "tick": 670,
+          "tick": 675,
           "key": "player.rotation",
           "value": {
             "yaw": 2.4354,
@@ -2068,7 +2076,7 @@
           }
         },
         {
-          "tick": 671,
+          "tick": 676,
           "key": "player.rotation",
           "value": {
             "yaw": 2.5854,
@@ -2082,7 +2090,7 @@
           }
         },
         {
-          "tick": 672,
+          "tick": 677,
           "key": "player.rotation",
           "value": {
             "yaw": 2.7354,
@@ -2096,7 +2104,7 @@
           }
         },
         {
-          "tick": 673,
+          "tick": 678,
           "key": "player.rotation",
           "value": {
             "yaw": 2.8854,
@@ -2110,7 +2118,7 @@
           }
         },
         {
-          "tick": 674,
+          "tick": 679,
           "key": "player.rotation",
           "value": {
             "yaw": 3.0354,
@@ -2124,7 +2132,7 @@
           }
         },
         {
-          "tick": 675,
+          "tick": 680,
           "key": "player.rotation",
           "value": {
             "yaw": -3.0978,
@@ -2138,7 +2146,7 @@
           }
         },
         {
-          "tick": 676,
+          "tick": 681,
           "key": "player.rotation",
           "value": {
             "yaw": -2.9478,
@@ -2152,7 +2160,7 @@
           }
         },
         {
-          "tick": 677,
+          "tick": 682,
           "key": "player.rotation",
           "value": {
             "yaw": -2.7978,
@@ -2166,7 +2174,7 @@
           }
         },
         {
-          "tick": 678,
+          "tick": 683,
           "key": "player.rotation",
           "value": {
             "yaw": -2.6478,
@@ -2180,7 +2188,7 @@
           }
         },
         {
-          "tick": 679,
+          "tick": 684,
           "key": "player.rotation",
           "value": {
             "yaw": -2.4978,
@@ -2194,7 +2202,7 @@
           }
         },
         {
-          "tick": 680,
+          "tick": 685,
           "key": "player.rotation",
           "value": {
             "yaw": -2.3562,
@@ -2208,7 +2216,7 @@
           }
         },
         {
-          "tick": 681,
+          "tick": 686,
           "key": "player.rotation",
           "value": {
             "yaw": 1.5708,
@@ -2228,9 +2236,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 724,
-      "issued_tick": 725,
-      "verdict_tick": 729,
+      "start_tick": 729,
+      "issued_tick": 730,
+      "verdict_tick": 734,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2247,7 +2255,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 725,
+          "tick": 730,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -2262,7 +2270,7 @@
           }
         },
         {
-          "tick": 725,
+          "tick": 730,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -2304,9 +2312,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 740,
-      "issued_tick": 741,
-      "verdict_tick": 745,
+      "start_tick": 745,
+      "issued_tick": 746,
+      "verdict_tick": 750,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2323,7 +2331,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 741,
+          "tick": 746,
           "key": "inventory.cursor",
           "value": null,
           "refined": {
@@ -2334,7 +2342,7 @@
           }
         },
         {
-          "tick": 741,
+          "tick": 746,
           "key": "window.slot(1)",
           "value": {
             "item": "minecraft:oak_log",
@@ -2380,9 +2388,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 756,
-      "issued_tick": 757,
-      "verdict_tick": 761,
+      "start_tick": 761,
+      "issued_tick": 762,
+      "verdict_tick": 766,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2403,7 +2411,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 757,
+          "tick": 762,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -2418,7 +2426,7 @@
           }
         },
         {
-          "tick": 757,
+          "tick": 762,
           "key": "window.slot(1)",
           "value": {
             "item": "minecraft:oak_log",
@@ -2468,9 +2476,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 772,
-      "issued_tick": 773,
-      "verdict_tick": 777,
+      "start_tick": 777,
+      "issued_tick": 778,
+      "verdict_tick": 782,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2491,7 +2499,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 773,
+          "tick": 778,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -2506,7 +2514,7 @@
           }
         },
         {
-          "tick": 773,
+          "tick": 778,
           "key": "window.slot(0)",
           "value": {
             "item": "minecraft:oak_log",
@@ -2560,9 +2568,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 788,
-      "issued_tick": 789,
-      "verdict_tick": 793,
+      "start_tick": 793,
+      "issued_tick": 794,
+      "verdict_tick": 798,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2579,7 +2587,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 789,
+          "tick": 794,
           "key": "inventory.cursor",
           "value": null,
           "refined": {
@@ -2590,7 +2598,7 @@
           }
         },
         {
-          "tick": 789,
+          "tick": 794,
           "key": "window.slot(0)",
           "value": {
             "item": "minecraft:oak_log",
@@ -2640,9 +2648,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 804,
-      "issued_tick": 805,
-      "verdict_tick": 809,
+      "start_tick": 809,
+      "issued_tick": 810,
+      "verdict_tick": 814,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2666,7 +2674,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 805,
+          "tick": 810,
           "key": "window.slot(2)",
           "value": null,
           "refined": {
@@ -2677,7 +2685,7 @@
           }
         },
         {
-          "tick": 805,
+          "tick": 810,
           "key": "window.slot(62)",
           "value": {
             "item": "minecraft:cobblestone",
@@ -2727,9 +2735,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 820,
-      "issued_tick": 821,
-      "verdict_tick": 825,
+      "start_tick": 825,
+      "issued_tick": 826,
+      "verdict_tick": 830,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2747,7 +2755,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 821,
+          "tick": 826,
           "key": "window.slot(2)",
           "value": {
             "item": "minecraft:dirt",
@@ -2762,7 +2770,7 @@
           }
         },
         {
-          "tick": 821,
+          "tick": 826,
           "key": "window.slot(54)",
           "value": null,
           "refined": {
@@ -2808,9 +2816,9 @@
       "expect": "server applies the click and resyncs",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 836,
-      "issued_tick": 837,
-      "verdict_tick": 841,
+      "start_tick": 841,
+      "issued_tick": 842,
+      "verdict_tick": 846,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2829,12 +2837,12 @@
           "packet": "window_items",
           "windowId": 1,
           "stateId": 2,
-          "tick": 837
+          "tick": 842
         }
       ],
       "changes_after": [
         {
-          "tick": 837,
+          "tick": 842,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -2849,7 +2857,7 @@
           }
         },
         {
-          "tick": 837,
+          "tick": 842,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -2895,9 +2903,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 852,
-      "issued_tick": 853,
-      "verdict_tick": 857,
+      "start_tick": 857,
+      "issued_tick": 858,
+      "verdict_tick": 862,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -2914,7 +2922,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 853,
+          "tick": 858,
           "key": "inventory.cursor",
           "value": null,
           "refined": {
@@ -2925,7 +2933,7 @@
           }
         },
         {
-          "tick": 853,
+          "tick": 858,
           "key": "window.slot(0)",
           "value": {
             "item": "minecraft:oak_log",
@@ -2975,9 +2983,9 @@
       "expect": "Rejected",
       "verdict": "Rejected",
       "detail": "server set inventory.cursor to null",
-      "start_tick": 894,
-      "issued_tick": 895,
-      "verdict_tick": 895,
+      "start_tick": 899,
+      "issued_tick": 900,
+      "verdict_tick": 900,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -2990,7 +2998,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 895,
+          "tick": 900,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3032,9 +3040,9 @@
       "expect": "Rejected",
       "verdict": "Rejected",
       "detail": "server set inventory.cursor to {\"item\":\"minecraft:oak_log\",\"count\":5,\"components\":{}}",
-      "start_tick": 920,
-      "issued_tick": 921,
-      "verdict_tick": 921,
+      "start_tick": 926,
+      "issued_tick": 927,
+      "verdict_tick": 927,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -3051,7 +3059,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 921,
+          "tick": 927,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3064,7 +3072,7 @@
           }
         },
         {
-          "tick": 921,
+          "tick": 927,
           "key": "window.slot(1)",
           "value": null,
           "refined": {
@@ -3106,9 +3114,9 @@
       "expect": "any",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 931,
-      "issued_tick": 932,
-      "verdict_tick": 936,
+      "start_tick": 938,
+      "issued_tick": 939,
+      "verdict_tick": 943,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3125,7 +3133,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 932,
+          "tick": 939,
           "key": "inventory.cursor",
           "value": null,
           "refined": {
@@ -3136,7 +3144,7 @@
           }
         },
         {
-          "tick": 932,
+          "tick": 939,
           "key": "window.slot(4)",
           "value": {
             "item": "minecraft:oak_log",
@@ -3178,9 +3186,9 @@
       "expect": "Confirmed",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 973,
-      "issued_tick": 974,
-      "verdict_tick": 978,
+      "start_tick": 980,
+      "issued_tick": 981,
+      "verdict_tick": 985,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3197,7 +3205,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 974,
+          "tick": 981,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3212,7 +3220,7 @@
           }
         },
         {
-          "tick": 974,
+          "tick": 981,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3231,9 +3239,9 @@
       "expect": "false Confirmed (the server ignores clicks for another window id)",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 989,
-      "issued_tick": 990,
-      "verdict_tick": 994,
+      "start_tick": 996,
+      "issued_tick": 997,
+      "verdict_tick": 1001,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3250,7 +3258,7 @@
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 990,
+          "tick": 997,
           "key": "inventory.cursor",
           "value": null,
           "refined": {
@@ -3261,7 +3269,7 @@
           }
         },
         {
-          "tick": 990,
+          "tick": 997,
           "key": "window.slot(30)",
           "value": {
             "item": "minecraft:oak_log",
@@ -3298,9 +3306,9 @@
       "expect": "Confirmed by state",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 1059,
-      "issued_tick": 1060,
-      "verdict_tick": 1060,
+      "start_tick": 1066,
+      "issued_tick": 1067,
+      "verdict_tick": 1067,
       "latency_ticks": 1,
       "delta": null,
       "view_at_verdict": {
@@ -3319,12 +3327,12 @@
           "packet": "window_items",
           "windowId": 3,
           "stateId": 2,
-          "tick": 1060
+          "tick": 1067
         }
       ],
       "changes_after": [
         {
-          "tick": 1060,
+          "tick": 1067,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3339,7 +3347,7 @@
           }
         },
         {
-          "tick": 1060,
+          "tick": 1067,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3369,9 +3377,9 @@
       "expect": "race",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 1724,
-      "issued_tick": 1725,
-      "verdict_tick": 1729,
+      "start_tick": 1731,
+      "issued_tick": 1732,
+      "verdict_tick": 1736,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3385,7 +3393,7 @@
             -60,
             42
           ],
-          "tick": 1726,
+          "tick": 1733,
           "value": "minecraft:air"
         }
       ],
@@ -3395,21 +3403,21 @@
         {
           "packet": "set_slot",
           "windowId": 4,
-          "slot": 0,
+          "slot": 2,
           "stateId": 2,
-          "tick": 1726
+          "tick": 1733
         },
         {
           "packet": "set_slot",
-          "windowId": 4,
-          "slot": 2,
-          "stateId": 3,
-          "tick": 1726
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 34,
+          "tick": 1734
         }
       ],
       "changes_after": [
         {
-          "tick": 1725,
+          "tick": 1732,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3424,7 +3432,7 @@
           }
         },
         {
-          "tick": 1725,
+          "tick": 1732,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3435,7 +3443,7 @@
           }
         },
         {
-          "tick": 1726,
+          "tick": 1733,
           "key": "inventory.cursor",
           "value": null,
           "refined": "outside",
@@ -3446,8 +3454,8 @@
       ],
       "window_closed_event": true,
       "server_truth": {
-        "oak_log_in_inventory_or_dropped": 0,
-        "mirror_oak_log": 0,
+        "oak_log_in_inventory_or_dropped": 10,
+        "mirror_oak_log": 10,
         "desync": false
       }
     },
@@ -3458,9 +3466,9 @@
       "expect": "race",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 1789,
-      "issued_tick": 1790,
-      "verdict_tick": 1794,
+      "start_tick": 1795,
+      "issued_tick": 1796,
+      "verdict_tick": 1800,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3474,7 +3482,7 @@
             -60,
             42
           ],
-          "tick": 1791,
+          "tick": 1797,
           "value": "minecraft:air"
         }
       ],
@@ -3486,19 +3494,19 @@
           "windowId": 5,
           "slot": 2,
           "stateId": 2,
-          "tick": 1791
+          "tick": 1797
         },
         {
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 35,
-          "tick": 1792
+          "stateId": 38,
+          "tick": 1798
         }
       ],
       "changes_after": [
         {
-          "tick": 1790,
+          "tick": 1796,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3513,7 +3521,7 @@
           }
         },
         {
-          "tick": 1790,
+          "tick": 1796,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3524,7 +3532,7 @@
           }
         },
         {
-          "tick": 1791,
+          "tick": 1797,
           "key": "inventory.cursor",
           "value": null,
           "refined": "outside",
@@ -3547,9 +3555,9 @@
       "expect": "race",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 1853,
-      "issued_tick": 1854,
-      "verdict_tick": 1858,
+      "start_tick": 1859,
+      "issued_tick": 1860,
+      "verdict_tick": 1864,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3563,7 +3571,7 @@
             -60,
             42
           ],
-          "tick": 1855,
+          "tick": 1861,
           "value": "minecraft:air"
         }
       ],
@@ -3575,19 +3583,19 @@
           "windowId": 6,
           "slot": 2,
           "stateId": 2,
-          "tick": 1855
+          "tick": 1861
         },
         {
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 39,
-          "tick": 1856
+          "stateId": 42,
+          "tick": 1862
         }
       ],
       "changes_after": [
         {
-          "tick": 1854,
+          "tick": 1860,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3602,7 +3610,7 @@
           }
         },
         {
-          "tick": 1854,
+          "tick": 1860,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3613,7 +3621,7 @@
           }
         },
         {
-          "tick": 1855,
+          "tick": 1861,
           "key": "inventory.cursor",
           "value": null,
           "refined": "outside",
@@ -3636,9 +3644,9 @@
       "expect": "race",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 1917,
-      "issued_tick": 1918,
-      "verdict_tick": 1922,
+      "start_tick": 1922,
+      "issued_tick": 1923,
+      "verdict_tick": 1927,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3652,7 +3660,7 @@
             -60,
             42
           ],
-          "tick": 1919,
+          "tick": 1924,
           "value": "minecraft:air"
         }
       ],
@@ -3664,19 +3672,19 @@
           "windowId": 7,
           "slot": 2,
           "stateId": 2,
-          "tick": 1919
+          "tick": 1924
         },
         {
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 43,
-          "tick": 1920
+          "stateId": 46,
+          "tick": 1925
         }
       ],
       "changes_after": [
         {
-          "tick": 1918,
+          "tick": 1923,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3691,7 +3699,7 @@
           }
         },
         {
-          "tick": 1918,
+          "tick": 1923,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3702,7 +3710,7 @@
           }
         },
         {
-          "tick": 1919,
+          "tick": 1924,
           "key": "inventory.cursor",
           "value": null,
           "refined": "outside",
@@ -3725,9 +3733,9 @@
       "expect": "race",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 1980,
-      "issued_tick": 1981,
-      "verdict_tick": 1985,
+      "start_tick": 1987,
+      "issued_tick": 1988,
+      "verdict_tick": 1992,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3741,7 +3749,7 @@
             -60,
             42
           ],
-          "tick": 1982,
+          "tick": 1989,
           "value": "minecraft:air"
         }
       ],
@@ -3753,19 +3761,19 @@
           "windowId": 8,
           "slot": 2,
           "stateId": 2,
-          "tick": 1982
+          "tick": 1989
         },
         {
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 47,
-          "tick": 1983
+          "stateId": 50,
+          "tick": 1990
         }
       ],
       "changes_after": [
         {
-          "tick": 1981,
+          "tick": 1988,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3780,7 +3788,7 @@
           }
         },
         {
-          "tick": 1981,
+          "tick": 1988,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3791,7 +3799,7 @@
           }
         },
         {
-          "tick": 1982,
+          "tick": 1989,
           "key": "inventory.cursor",
           "value": null,
           "refined": "outside",
@@ -3814,9 +3822,9 @@
       "expect": "race",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 2044,
-      "issued_tick": 2045,
-      "verdict_tick": 2049,
+      "start_tick": 2051,
+      "issued_tick": 2052,
+      "verdict_tick": 2056,
       "latency_ticks": 5,
       "delta": null,
       "view_at_verdict": {
@@ -3830,7 +3838,7 @@
             -60,
             42
           ],
-          "tick": 2046,
+          "tick": 2053,
           "value": "minecraft:air"
         }
       ],
@@ -3842,19 +3850,19 @@
           "windowId": 9,
           "slot": 2,
           "stateId": 2,
-          "tick": 2046
+          "tick": 2053
         },
         {
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 51,
-          "tick": 2047
+          "stateId": 54,
+          "tick": 2054
         }
       ],
       "changes_after": [
         {
-          "tick": 2045,
+          "tick": 2052,
           "key": "inventory.cursor",
           "value": {
             "item": "minecraft:oak_log",
@@ -3869,7 +3877,7 @@
           }
         },
         {
-          "tick": 2045,
+          "tick": 2052,
           "key": "window.slot(0)",
           "value": null,
           "refined": {
@@ -3880,7 +3888,7 @@
           }
         },
         {
-          "tick": 2046,
+          "tick": 2053,
           "key": "inventory.cursor",
           "value": null,
           "refined": "outside",
@@ -3902,9 +3910,9 @@
       "mode": "async",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 2092,
-      "issued_tick": 2108,
-      "verdict_tick": 2108,
+      "start_tick": 2098,
+      "issued_tick": 2114,
+      "verdict_tick": 2114,
       "latency_ticks": 16,
       "delta": [
         {
@@ -3922,7 +3930,7 @@
             -60,
             40
           ],
-          "tick": 2108,
+          "tick": 2114,
           "value": "minecraft:air"
         }
       ],
@@ -3930,11 +3938,11 @@
       "acks": [
         {
           "seq": 28,
-          "tick": 2093
+          "tick": 2099
         },
         {
           "seq": 29,
-          "tick": 2108
+          "tick": 2114
         }
       ],
       "slot_packets": [
@@ -3942,13 +3950,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 39,
-          "stateId": 58,
-          "tick": 2117
+          "stateId": 61,
+          "tick": 2123
         }
       ],
       "changes_after": [
         {
-          "tick": 2108,
+          "tick": 2114,
           "key": "block(41,-60,40)",
           "value": "minecraft:air",
           "refined": {
@@ -3975,9 +3983,9 @@
       "mode": "async",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 2119,
-      "issued_tick": 2180,
-      "verdict_tick": 2180,
+      "start_tick": 2125,
+      "issued_tick": 2186,
+      "verdict_tick": 2186,
       "latency_ticks": 61,
       "delta": [
         {
@@ -3995,7 +4003,7 @@
             -60,
             41
           ],
-          "tick": 2180,
+          "tick": 2186,
           "value": "minecraft:air"
         }
       ],
@@ -4003,17 +4011,17 @@
       "acks": [
         {
           "seq": 30,
-          "tick": 2120
+          "tick": 2127
         },
         {
           "seq": 31,
-          "tick": 2180
+          "tick": 2186
         }
       ],
       "slot_packets": [],
       "changes_after": [
         {
-          "tick": 2180,
+          "tick": 2186,
           "key": "block(41,-60,41)",
           "value": "minecraft:air",
           "refined": {
@@ -4040,9 +4048,9 @@
       "mode": "async",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 2191,
-      "issued_tick": 2192,
-      "verdict_tick": 2192,
+      "start_tick": 2197,
+      "issued_tick": 2198,
+      "verdict_tick": 2198,
       "latency_ticks": 1,
       "delta": [
         {
@@ -4060,7 +4068,7 @@
             -60,
             42
           ],
-          "tick": 2192,
+          "tick": 2198,
           "value": "minecraft:dirt"
         }
       ],
@@ -4071,7 +4079,7 @@
             -61,
             42
           ],
-          "tick": 2192,
+          "tick": 2198,
           "value": "minecraft:grass_block[snowy=false]"
         },
         {
@@ -4080,14 +4088,14 @@
             -60,
             42
           ],
-          "tick": 2192,
+          "tick": 2198,
           "value": "minecraft:dirt"
         }
       ],
       "acks": [
         {
           "seq": 32,
-          "tick": 2192
+          "tick": 2198
         }
       ],
       "slot_packets": [
@@ -4095,13 +4103,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 36,
-          "stateId": 59,
-          "tick": 2192
+          "stateId": 62,
+          "tick": 2198
         }
       ],
       "changes_after": [
         {
-          "tick": 2192,
+          "tick": 2198,
           "key": "block(43,-60,42)",
           "value": "minecraft:dirt",
           "refined": {
@@ -4128,9 +4136,9 @@
       "mode": "async",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 2204,
-      "issued_tick": 2205,
-      "verdict_tick": 2205,
+      "start_tick": 2210,
+      "issued_tick": 2211,
+      "verdict_tick": 2211,
       "latency_ticks": 1,
       "delta": [
         {
@@ -4148,7 +4156,7 @@
             -60,
             38
           ],
-          "tick": 2205,
+          "tick": 2211,
           "value": "minecraft:oak_log[axis=z]"
         }
       ],
@@ -4159,7 +4167,7 @@
             -60,
             39
           ],
-          "tick": 2205,
+          "tick": 2211,
           "value": "minecraft:stone"
         },
         {
@@ -4168,14 +4176,14 @@
             -60,
             38
           ],
-          "tick": 2205,
+          "tick": 2211,
           "value": "minecraft:oak_log[axis=z]"
         }
       ],
       "acks": [
         {
           "seq": 33,
-          "tick": 2205
+          "tick": 2211
         }
       ],
       "slot_packets": [
@@ -4183,13 +4191,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 37,
-          "stateId": 60,
-          "tick": 2205
+          "stateId": 63,
+          "tick": 2211
         }
       ],
       "changes_after": [
         {
-          "tick": 2205,
+          "tick": 2211,
           "key": "block(42,-60,38)",
           "value": "minecraft:oak_log[axis=z]",
           "refined": {
@@ -4216,9 +4224,9 @@
       "mode": "async",
       "verdict": "Rejected",
       "detail": "target cell is minecraft:wall_torch[facing=east] at the acknowledgement",
-      "start_tick": 2217,
-      "issued_tick": 2218,
-      "verdict_tick": 2218,
+      "start_tick": 2223,
+      "issued_tick": 2224,
+      "verdict_tick": 2224,
       "latency_ticks": 1,
       "delta": [
         {
@@ -4236,7 +4244,7 @@
             -60,
             39
           ],
-          "tick": 2218,
+          "tick": 2224,
           "value": "minecraft:wall_torch[facing=east]"
         }
       ],
@@ -4247,7 +4255,7 @@
             -60,
             39
           ],
-          "tick": 2218,
+          "tick": 2224,
           "value": "minecraft:stone"
         },
         {
@@ -4256,14 +4264,14 @@
             -60,
             39
           ],
-          "tick": 2218,
+          "tick": 2224,
           "value": "minecraft:wall_torch[facing=east]"
         }
       ],
       "acks": [
         {
           "seq": 34,
-          "tick": 2218
+          "tick": 2224
         }
       ],
       "slot_packets": [
@@ -4271,13 +4279,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 38,
-          "stateId": 61,
-          "tick": 2218
+          "stateId": 64,
+          "tick": 2224
         }
       ],
       "changes_after": [
         {
-          "tick": 2218,
+          "tick": 2224,
           "key": "block(43,-60,39)",
           "value": "minecraft:wall_torch[facing=east]",
           "refined": "outside",
@@ -4302,9 +4310,9 @@
       "mode": "async",
       "verdict": "Confirmed",
       "detail": null,
-      "start_tick": 2229,
-      "issued_tick": 2230,
-      "verdict_tick": 2230,
+      "start_tick": 2235,
+      "issued_tick": 2236,
+      "verdict_tick": 2236,
       "latency_ticks": 1,
       "delta": [
         {
@@ -4322,7 +4330,7 @@
             -59,
             39
           ],
-          "tick": 2230,
+          "tick": 2236,
           "value": "minecraft:torch"
         }
       ],
@@ -4333,7 +4341,7 @@
             -60,
             39
           ],
-          "tick": 2230,
+          "tick": 2236,
           "value": "minecraft:stone"
         },
         {
@@ -4342,14 +4350,14 @@
             -59,
             39
           ],
-          "tick": 2230,
+          "tick": 2236,
           "value": "minecraft:torch"
         }
       ],
       "acks": [
         {
           "seq": 35,
-          "tick": 2230
+          "tick": 2236
         }
       ],
       "slot_packets": [
@@ -4357,13 +4365,13 @@
           "packet": "set_slot",
           "windowId": 0,
           "slot": 38,
-          "stateId": 62,
-          "tick": 2230
+          "stateId": 65,
+          "tick": 2236
         }
       ],
       "changes_after": [
         {
-          "tick": 2230,
+          "tick": 2236,
           "key": "block(42,-59,39)",
           "value": "minecraft:torch",
           "refined": {
@@ -4390,9 +4398,9 @@
       "mode": "async",
       "verdict": "Rejected",
       "detail": "block is minecraft:dirt at the acknowledgement",
-      "start_tick": 2250,
-      "issued_tick": 2266,
-      "verdict_tick": 2266,
+      "start_tick": 2257,
+      "issued_tick": 2273,
+      "verdict_tick": 2273,
       "latency_ticks": 16,
       "delta": [
         {
@@ -4411,18 +4419,18 @@
             -60,
             3
           ],
-          "tick": 2251,
+          "tick": 2258,
           "value": "minecraft:dirt"
         }
       ],
       "acks": [
         {
           "seq": 36,
-          "tick": 2251
+          "tick": 2258
         },
         {
           "seq": 37,
-          "tick": 2266
+          "tick": 2273
         }
       ],
       "slot_packets": [],
@@ -4443,9 +4451,9 @@
       "mode": "async",
       "verdict": "Rejected",
       "detail": "target cell is minecraft:air at the acknowledgement",
-      "start_tick": 2276,
-      "issued_tick": 2277,
-      "verdict_tick": 2277,
+      "start_tick": 2284,
+      "issued_tick": 2285,
+      "verdict_tick": 2285,
       "latency_ticks": 1,
       "delta": [
         {
@@ -4464,7 +4472,7 @@
             -61,
             3
           ],
-          "tick": 2277,
+          "tick": 2285,
           "value": "minecraft:grass_block[snowy=false]"
         },
         {
@@ -4473,14 +4481,14 @@
             -60,
             3
           ],
-          "tick": 2277,
+          "tick": 2285,
           "value": "minecraft:air"
         }
       ],
       "acks": [
         {
           "seq": 38,
-          "tick": 2277
+          "tick": 2285
         }
       ],
       "slot_packets": [],
@@ -4507,11 +4515,11 @@
         "invalid": 0
       },
       "tickInput": {
-        "valid": 2296,
+        "valid": 2304,
         "invalid": 0
       },
       "recordedTick": {
-        "valid": 2296,
+        "valid": 2304,
         "invalid": 0
       },
       "startRequest": {

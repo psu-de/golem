@@ -28,9 +28,9 @@ Each entry gives the question, why it matters, the evidence, and the proposed an
 
 **Why it matters.** §9.8: a false Own masks interference, so a failing `ensures` becomes `ContractViolation`. That is uncatchable and disables handlers for the session (§11.4). A false Outside turns a failing `ensures` into `Interfered`, which is catchable. That masks a defect, but only when an `ensures` is already false.
 
-**Evidence.** E4, 14 scenarios × 3 repetitions, 526 labelled key changes (see REPORT.md):
+**Evidence.** E4, 15 scenarios × 3 repetitions, 529 labelled key changes (see REPORT.md):
 
-- The provisional rule (window to verdict + max(4t, 2×RTT)) gave 51 false Own. 30 of them come from scenarios where the window after the verdict swallowed an outside change: S3, S4, S5, S8, S9b.
+- The provisional rule (window to verdict + max(4t, 2×RTT)) gave 54 false Own. The 24 the refined rule avoids are all the harmful kind: outside changes that contradict the action yet fell inside the post-verdict window or the action itself (S2–S6, S8, S9, S9b).
 - The refined rule gave 30 false Own. 21 were knockback (SE-12), 6 were values equal to the prediction (benign), and 3 were same-tick rollback (SE-3).
 - Neither rule produced a false Outside.
 
@@ -135,7 +135,7 @@ The confirmed rotation is the one last sent to the server, or set by a server co
 - from promise continuations: `bot.dig` start after `await bot.lookAt`, `digging.js:130`; `bot.placeBlock`, `generic_place.js:75`;
 - from the physics step after the tick: `physics.js:112/123/138`.
 
-A write gate at `bot._client.write` defers every one of them to `flush()` (0 packets escaped in 30 runs). The cost is one tick of latency for packets produced between ticks.
+A write gate at `bot._client.write` defers every one of them to `flush()` (0 packets escaped in the 15 deferred runs). The cost is one tick of latency for packets produced between ticks.
 
 **Proposed answer.** Both modes are conforming because §15.5 defines determinism at the ingest boundary. Backends SHOULD defer, because deferral buys two things:
 

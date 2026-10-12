@@ -4,8 +4,11 @@
     "runs": [
       {
         "run": 0,
-        "cancel_tick": 49,
-        "controls_before": [],
+        "cancel_tick": 50,
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -13,13 +16,22 @@
         "slide_distance": 0.332,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 1,
-        "cancel_tick": 104,
-        "controls_before": [],
+        "cancel_tick": 105,
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -27,13 +39,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 2,
         "cancel_tick": 162,
-        "controls_before": [],
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -41,13 +62,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 29
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 3,
-        "cancel_tick": 222,
-        "controls_before": [],
+        "cancel_tick": 223,
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -55,13 +85,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 4,
-        "cancel_tick": 285,
-        "controls_before": [],
+        "cancel_tick": 286,
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -69,13 +108,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 5,
         "cancel_tick": 351,
-        "controls_before": [],
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -83,13 +131,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 6,
         "cancel_tick": 419,
-        "controls_before": [],
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -97,13 +154,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 7,
-        "cancel_tick": 490,
-        "controls_before": [],
+        "cancel_tick": 491,
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -111,13 +177,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 8,
-        "cancel_tick": 564,
-        "controls_before": [],
+        "cancel_tick": 565,
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -125,13 +200,22 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       },
       {
         "run": 9,
-        "cancel_tick": 640,
-        "controls_before": [],
+        "cancel_tick": 641,
+        "controls_before": [
+          "forward",
+          "sprint"
+        ],
         "controls_after_cancel_same_tick": [],
         "pathfinder_goal_after_cancel": null,
         "controls_any_later_tick": [],
@@ -139,7 +223,13 @@
         "slide_distance": 0.333,
         "ticks_until_still": 7,
         "movement_packets_next_30_ticks": 9,
-        "last_movement_packet_tick_offset": 28,
+        "movement_packets_while_sliding": 8,
+        "movement_packets_after_still": [
+          {
+            "name": "position",
+            "offset": 28
+          }
+        ],
         "sprint_stop_sent_in_cancel": true
       }
     ],
@@ -165,11 +255,11 @@
   "no_path": {
     "status_after_15s": "Running",
     "path_update_statuses": {
-      "partial": 170,
+      "partial": 171,
       "timeout": 1
     },
-    "final_progress": 60,
-    "longest_progress_stall_ticks": 130,
+    "final_progress": 61,
+    "longest_progress_stall_ticks": 129,
     "progress_clause_would_fail": true,
     "final_pos": [
       54.37,
@@ -213,10 +303,10 @@
   "goal_allof_unsatisfiable": {
     "status_after_10s": "Running",
     "path_update_statuses": {
-      "partial": 100,
+      "partial": 99,
       "timeout": 1
     },
-    "progress": 83
+    "progress": 82
   },
   "avoid": [
     {
@@ -285,11 +375,11 @@
         "invalid": 0
       },
       "tickInput": {
-        "valid": 2166,
+        "valid": 2165,
         "invalid": 0
       },
       "recordedTick": {
-        "valid": 2166,
+        "valid": 2165,
         "invalid": 0
       },
       "startRequest": {
