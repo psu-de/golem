@@ -1,0 +1,15 @@
+import { setup, teardown, scriptedProgram, verdict, sleep } from "../lib/harness.mjs";
+const program = scriptedProgram();
+const ctx = await setup("smoke", program, { rival: false });
+const { server, runtime, tally, backend } = ctx;
+server.cmd("tp golem 40 -60 40"); server.cmd("setblock 41 -60 40 oak_log"); server.cmd("item replace entity golem hotbar.0 with dirt 16");
+await server.sync(); await sleep(1500);
+let id = await program.run((c) => c.start("dig", { pos: [41, -60, 40] }));
+console.log("dig", await verdict(runtime, id));
+id = await program.run((c) => c.start("place_block", { support: [41, -61, 40], face: "Up" }));
+console.log("place", await verdict(runtime, id));
+id = await program.run((c) => c.start("look_at", { target: [30, -55, 50] }));
+console.log("look", await verdict(runtime, id));
+console.log(JSON.stringify(tally.summary(), null, 1).slice(0, 2000));
+console.log("ticks", runtime.ticks, "chunks", runtime.chunks.size, "view keys", runtime.view.size);
+await teardown(ctx); process.exit(0);
