@@ -1,0 +1,26 @@
+{
+  "format": "golem-burn-times/0.1-draft",
+  "minecraft": "1.21.4",
+  "description": "DRAFT hand-authored furnace burn times in ticks (world.burn_time, §17.2) for the v0.1 fuels. Neither the data generator nor minecraft-data 3.117.0 carries burn times for 1.21.4 (vanilla builds them in code, FuelValues). Each entry is validated against the server's furnace lit-duration property by spike/experiments/e6-data.mjs. Tags expand against the data generator's item tags.",
+  "entries": {
+    "#minecraft:logs_that_burn": 300,
+    "#minecraft:planks": 300,
+    "#minecraft:wooden_slabs": 150,
+    "#minecraft:wooden_stairs": 300,
+    "#minecraft:saplings": 100,
+    "minecraft:stick": 100,
+    "minecraft:coal": 1600,
+    "minecraft:charcoal": 1600,
+    "minecraft:coal_block": 16000,
+    "minecraft:lava_bucket": 20000,
+    "minecraft:blaze_rod": 2400,
+    "minecraft:dried_kelp_block": 4001,
+    "minecraft:bamboo": 50,
+    "minecraft:scaffolding": 50,
+    "minecraft:wooden_pickaxe": 200,
+    "minecraft:wooden_axe": 200,
+    "minecraft:wooden_shovel": 200,
+    "minecraft:crafting_table": 300,
+    "minecraft:chest": 300
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "pinned_minecraft": "1.21.4",
+  "protocol": 769,
+  "installed": {
+    "mineflayer": "4.39.0",
+    "mineflayer-pathfinder": "2.4.5",
+    "minecraft-protocol": "1.68.0",
+    "minecraft-data": "3.117.0",
+    "prismarine-physics": "1.11.1",
+    "prismarine-block": "1.23.0",
+    "prismarine-chunk": "1.41.0",
+    "prismarine-windows": "2.10.0",
+    "prismarine-item": "1.18.0"
+  },
+  "latest": {
+    "mineflayer": {
+      "version": "4.39.0",
+      "time.modified": "2026-09-06T16:14:51.190Z"
+    },
+    "mineflayer-pathfinder": {
+      "version": "2.4.5",
+      "time.modified": "2023-09-04T05:26:35.729Z"
+    },
+    "minecraft-protocol": {
+      "version": "1.68.0",
+      "time.modified": "2026-08-27T04:03:19.536Z"
+    },
+    "minecraft-data": {
+      "version": "3.117.0",
+      "time.modified": "2026-09-22T11:11:53.758Z"
+    },
+    "prismarine-physics": {
+      "version": "1.11.1",
+      "time.modified": "2026-07-28T08:16:58.204Z"
+    },
+    "prismarine-block": {
+      "version": "1.23.0",
+      "time.modified": "2026-03-30T01:18:04.857Z"
+    },
+    "prismarine-chunk": {
+      "version": "1.41.0",
+      "time.modified": "2026-07-31T01:33:12.585Z"
+    },
+    "prismarine-windows": {
+      "version": "2.10.0",
+      "time.modified": "2026-03-30T01:18:25.038Z"
+    },
+    "prismarine-item": {
+      "version": "1.18.0",
+      "time.modified": "2026-03-30T01:18:41.484Z"
+    }
+  },
+  "support": {
+    "mineflayer": {
+      "testedVersions": [
+        "1.8.8",
+        "1.9.4",
+        "1.10.2",
+        "1.11.2",
+        "1.12.2",
+        "1.13.2",
+        "1.14.4",
+        "1.15.2",
+        "1.16.5",
+        "1.17.1",
+        "1.18.2",
+        "1.19",
+        "1.19.2",
+        "1.19.3",
+        "1.19.4",
+        "1.20.1",
+        "1.20.2",
+        "1.20.4",
+        "1.20.6",
+        "1.21.1",
+        "1.21.3",
+        "1.21.4",
+        "1.21.5",
+        "1.21.6",
+        "1.21.8",
+        "1.21.9",
+        "1.21.11",
+        "26.1"
+      ],
+      "latestSupported": "26.1",
+      "pinned_listed": true
+    },
+    "minecraft-protocol": {
+      "supportedVersions": [
+        "1.7",
+        "1.8.8",
+        "1.9.4",
+        "1.10.2",
+        "1.11.2",
+        "1.12.2",
+        "1.13.2",
+        "1.14.4",
+        "1.15.2",
+        "1.16.5",
+        "1.17.1",
+        "1.18.2",
+        "1.19",
+        "1.19.2",
+        "1.19.3",
+        "1.19.4",
+        "1.20",
+        "1.20.1",
+        "1.20.2",
+        "1.20.4",
+        "1.20.6",
+        "1.21.1",
+        "1.21.3",
+        "1.21.4",
+        "1.21.5",
+        "1.21.6",
+        "1.21.8",
+        "1.21.9",
+        "1.21.11",
+        "26.1"
+      ],
+      "defaultVersion": "26.1",
+      "pinned_listed": true
+    },
+    "minecraft-data": {
+      "pinned_listed": true,
+      "data_paths_for_pinned": {
+        "attributes": "pc/1.21.3",
+        "blockCollisionShapes": "pc/1.21.4",
+        "blocks": "pc/1.21.4",
+        "blockLoot": "pc/1.20",
+        "biomes": "pc/1.21.4",
+        "commands": "pc/1.20.3",
+        "effects": "pc/1.21.4",
+        "enchantments": "pc/1.21.1",
+        "entities": "pc/1.21.4",
+        "entityLoot": "pc/1.20",
+        "foods": "pc/1.21.1",
+        "instruments": "pc/1.20.5",
+        "items": "pc/1.21.4",
+        "language": "pc/1.21.4",
+        "loginPacket": "pc/1.21.3",
+        "mapIcons": "pc/1.20.2",
+        "materials": "pc/1.21.4",
+        "particles": "pc/1.21.4",
+        "protocol": "pc/1.21.4",
+        "recipes": "pc/1.21.4",
+        "sounds": "pc/1.21.4",
+        "tints": "pc/1.21.4",
+        "version": "pc/1.21.4",
+        "windows": "pc/1.16.1",
+        "proto": "pc/1.21.4"
+      },
+      "files_from_older_versions": {
+        "attributes": "pc/1.21.3",
+        "blockLoot": "pc/1.20",
+        "commands": "pc/1.20.3",
+        "enchantments": "pc/1.21.1",
+        "entityLoot": "pc/1.20",
+        "foods": "pc/1.21.1",
+        "instruments": "pc/1.20.5",
+        "loginPacket": "pc/1.21.3",
+        "mapIcons": "pc/1.20.2",
+        "windows": "pc/1.16.1"
+      }
+    },
+    "mineflayer-pathfinder": {
+      "declares_versions": "none (version-agnostic; uses minecraft-data and prismarine-physics through the bot)",
+      "dependencies": {
+        "minecraft-data": "^3.5.1",
+        "prismarine-block": "^1.16.3",
+        "prismarine-entity": "^2.1.1",
+        "prismarine-item": "^1.11.5",
+        "prismarine-nbt": "^2.2.1",
+        "prismarine-physics": "^1.5.2",
+        "vec3": "^0.1.7"
+      },
+      "last_publish": "2023-09-04T05:26:35.729Z"
+    }
+  },
+  "server": {
+    "id": "1.21.4",
+    "java_major": 21,
+    "server_jar_sha1": "4707d00eb834b446575d89a61a11b5d548d8c001",
+    "release_time": "2024-12-03T10:12:57+00:00"
+  }
+}

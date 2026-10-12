@@ -1,0 +1,626 @@
+{
+  "experiment": "E6 version data",
+  "dig": [
+    {
+      "block": "dirt",
+      "tool": "hand",
+      "hardness": 0.5,
+      "speed": 1,
+      "can_harvest_model": true,
+      "model_server_ticks": 14,
+      "model_client_ticks": 15,
+      "mineflayer_digTime_ticks": 15,
+      "observed_ticks": 16,
+      "observed_minus_model": 2,
+      "drop": "dirt",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "oak_log",
+      "tool": "hand",
+      "hardness": 2,
+      "speed": 1,
+      "can_harvest_model": true,
+      "model_server_ticks": 59,
+      "model_client_ticks": 60,
+      "mineflayer_digTime_ticks": 60,
+      "observed_ticks": 60,
+      "observed_minus_model": 1,
+      "drop": "oak_log",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "oak_log",
+      "tool": "stone_axe",
+      "hardness": 2,
+      "speed": 4,
+      "can_harvest_model": true,
+      "model_server_ticks": 14,
+      "model_client_ticks": 15,
+      "mineflayer_digTime_ticks": 15,
+      "observed_ticks": 15,
+      "observed_minus_model": 1,
+      "drop": "oak_log",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "stone",
+      "tool": "hand",
+      "hardness": 1.5,
+      "speed": 1,
+      "can_harvest_model": false,
+      "model_server_ticks": 149,
+      "model_client_ticks": 150,
+      "mineflayer_digTime_ticks": 150,
+      "observed_ticks": 149,
+      "observed_minus_model": 0,
+      "drop": null,
+      "harvest_observed": false,
+      "harvest_agrees": true
+    },
+    {
+      "block": "stone",
+      "tool": "wooden_pickaxe",
+      "hardness": 1.5,
+      "speed": 2,
+      "can_harvest_model": true,
+      "model_server_ticks": 22,
+      "model_client_ticks": 23,
+      "mineflayer_digTime_ticks": 23,
+      "observed_ticks": 23,
+      "observed_minus_model": 1,
+      "drop": "cobblestone",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "iron_ore",
+      "tool": "wooden_pickaxe",
+      "hardness": 3,
+      "speed": 2,
+      "can_harvest_model": false,
+      "model_server_ticks": 149,
+      "model_client_ticks": 150,
+      "mineflayer_digTime_ticks": 300,
+      "observed_ticks": 151,
+      "observed_minus_model": 2,
+      "drop": null,
+      "harvest_observed": false,
+      "harvest_agrees": true
+    },
+    {
+      "block": "iron_ore",
+      "tool": "stone_pickaxe",
+      "hardness": 3,
+      "speed": 4,
+      "can_harvest_model": true,
+      "model_server_ticks": 22,
+      "model_client_ticks": 23,
+      "mineflayer_digTime_ticks": 91,
+      "observed_ticks": 23,
+      "observed_minus_model": 1,
+      "drop": "raw_iron",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "gold_ore",
+      "tool": "stone_pickaxe",
+      "hardness": 3,
+      "speed": 4,
+      "can_harvest_model": false,
+      "model_server_ticks": 74,
+      "model_client_ticks": 75,
+      "mineflayer_digTime_ticks": 300,
+      "observed_ticks": 74,
+      "observed_minus_model": 0,
+      "drop": null,
+      "harvest_observed": false,
+      "harvest_agrees": true
+    },
+    {
+      "block": "gold_ore",
+      "tool": "iron_pickaxe",
+      "hardness": 3,
+      "speed": 6,
+      "can_harvest_model": true,
+      "model_server_ticks": 14,
+      "model_client_ticks": 15,
+      "mineflayer_digTime_ticks": 91,
+      "observed_ticks": 15,
+      "observed_minus_model": 1,
+      "drop": "raw_gold",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "diamond_ore",
+      "tool": "stone_pickaxe",
+      "hardness": 3,
+      "speed": 4,
+      "can_harvest_model": false,
+      "model_server_ticks": 74,
+      "model_client_ticks": 75,
+      "mineflayer_digTime_ticks": 300,
+      "observed_ticks": 75,
+      "observed_minus_model": 1,
+      "drop": null,
+      "harvest_observed": false,
+      "harvest_agrees": true
+    },
+    {
+      "block": "diamond_ore",
+      "tool": "iron_pickaxe",
+      "hardness": 3,
+      "speed": 6,
+      "can_harvest_model": true,
+      "model_server_ticks": 14,
+      "model_client_ticks": 15,
+      "mineflayer_digTime_ticks": 91,
+      "observed_ticks": 15,
+      "observed_minus_model": 1,
+      "drop": "diamond",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "obsidian",
+      "tool": "diamond_pickaxe",
+      "hardness": 50,
+      "speed": 8,
+      "can_harvest_model": true,
+      "model_server_ticks": 187,
+      "model_client_ticks": 188,
+      "mineflayer_digTime_ticks": 1500,
+      "observed_ticks": 187,
+      "observed_minus_model": 0,
+      "drop": "obsidian",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "oak_leaves",
+      "tool": "iron_hoe",
+      "hardness": 0.2,
+      "speed": 6,
+      "can_harvest_model": true,
+      "model_server_ticks": 0,
+      "model_client_ticks": 0,
+      "mineflayer_digTime_ticks": 6,
+      "observed_ticks": 1,
+      "observed_minus_model": 1,
+      "drop": null,
+      "harvest_observed": false,
+      "harvest_agrees": true
+    },
+    {
+      "block": "oak_leaves",
+      "tool": "hand",
+      "hardness": 0.2,
+      "speed": 1,
+      "can_harvest_model": true,
+      "model_server_ticks": 5,
+      "model_client_ticks": 6,
+      "mineflayer_digTime_ticks": 6,
+      "observed_ticks": 6,
+      "observed_minus_model": 1,
+      "drop": null,
+      "harvest_observed": false,
+      "harvest_agrees": true
+    },
+    {
+      "block": "sand",
+      "tool": "wooden_shovel",
+      "hardness": 0.5,
+      "speed": 2,
+      "can_harvest_model": true,
+      "model_server_ticks": 7,
+      "model_client_ticks": 8,
+      "mineflayer_digTime_ticks": 8,
+      "observed_ticks": 8,
+      "observed_minus_model": 1,
+      "drop": "sand",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    },
+    {
+      "block": "cobweb",
+      "tool": "iron_sword",
+      "hardness": 4,
+      "speed": 15,
+      "can_harvest_model": true,
+      "model_server_ticks": 7,
+      "model_client_ticks": 8,
+      "mineflayer_digTime_ticks": 120,
+      "observed_ticks": 8,
+      "observed_minus_model": 1,
+      "drop": "string",
+      "harvest_observed": true,
+      "harvest_agrees": true
+    }
+  ],
+  "burn": [
+    {
+      "fuel": "oak_log",
+      "expected_table": 300,
+      "observed_lit_duration": 300,
+      "agrees": true
+    },
+    {
+      "fuel": "birch_log",
+      "expected_table": 300,
+      "observed_lit_duration": 300,
+      "agrees": true
+    },
+    {
+      "fuel": "oak_planks",
+      "expected_table": 300,
+      "observed_lit_duration": 300,
+      "agrees": true
+    },
+    {
+      "fuel": "stick",
+      "expected_table": 100,
+      "observed_lit_duration": 100,
+      "agrees": true
+    },
+    {
+      "fuel": "coal",
+      "expected_table": 1600,
+      "observed_lit_duration": 1600,
+      "agrees": true
+    },
+    {
+      "fuel": "charcoal",
+      "expected_table": 1600,
+      "observed_lit_duration": 1600,
+      "agrees": true
+    },
+    {
+      "fuel": "coal_block",
+      "expected_table": 16000,
+      "observed_lit_duration": 16000,
+      "agrees": true
+    },
+    {
+      "fuel": "oak_sapling",
+      "expected_table": 100,
+      "observed_lit_duration": 100,
+      "agrees": true
+    },
+    {
+      "fuel": "lava_bucket",
+      "expected_table": 20000,
+      "observed_lit_duration": 20000,
+      "agrees": true
+    },
+    {
+      "fuel": "blaze_rod",
+      "expected_table": 2400,
+      "observed_lit_duration": 2400,
+      "agrees": true
+    },
+    {
+      "fuel": "dried_kelp_block",
+      "expected_table": 4001,
+      "observed_lit_duration": 4001,
+      "agrees": true
+    },
+    {
+      "fuel": "bamboo",
+      "expected_table": 50,
+      "observed_lit_duration": 50,
+      "agrees": true
+    },
+    {
+      "fuel": "oak_slab",
+      "expected_table": 150,
+      "observed_lit_duration": 150,
+      "agrees": true
+    },
+    {
+      "fuel": "wooden_pickaxe",
+      "expected_table": 200,
+      "observed_lit_duration": 200,
+      "agrees": true
+    },
+    {
+      "fuel": "crafting_table",
+      "expected_table": 300,
+      "observed_lit_duration": 300,
+      "agrees": true
+    },
+    {
+      "fuel": "scaffolding",
+      "expected_table": 50,
+      "observed_lit_duration": 50,
+      "agrees": true
+    },
+    {
+      "fuel": "oak_stairs",
+      "expected_table": 300,
+      "observed_lit_duration": 300,
+      "agrees": true
+    }
+  ],
+  "placement": [
+    {
+      "item": "oak_log",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "direct",
+      "rule": "rotated_pillar",
+      "predicted": "minecraft:oak_log[axis=y]",
+      "server": "minecraft:oak_log[axis=y]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_log",
+      "support": "stone",
+      "face": "North",
+      "look": "direct",
+      "rule": "rotated_pillar",
+      "predicted": "minecraft:oak_log[axis=z]",
+      "server": "minecraft:oak_log[axis=z]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_log",
+      "support": "stone",
+      "face": "West",
+      "look": "direct",
+      "rule": "rotated_pillar",
+      "predicted": "minecraft:oak_log[axis=x]",
+      "server": "minecraft:oak_log[axis=x]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_sapling",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "direct",
+      "rule": "sapling",
+      "predicted": "minecraft:oak_sapling[stage=0]",
+      "server": "minecraft:oak_sapling[stage=0]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_sapling",
+      "support": "stone",
+      "face": "Up",
+      "look": "direct",
+      "rule": "sapling",
+      "predicted": "refused",
+      "server": "refused (air)",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "torch",
+      "support": "stone",
+      "face": "Up",
+      "look": "direct",
+      "rule": "torch",
+      "predicted": "minecraft:torch",
+      "server": "minecraft:torch",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "torch",
+      "support": "stone",
+      "face": "North",
+      "look": "direct",
+      "rule": "torch",
+      "predicted": "minecraft:wall_torch[facing=north]",
+      "server": "minecraft:wall_torch[facing=north]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "torch",
+      "support": "stone",
+      "face": "Down",
+      "look": "direct",
+      "rule": "torch",
+      "predicted": "refused",
+      "server": "refused (air)",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "torch",
+      "support": "oak_fence",
+      "face": "Up",
+      "look": "direct",
+      "rule": "torch",
+      "predicted": "refused",
+      "server": "minecraft:torch",
+      "agrees": false,
+      "note": "fence top: vanilla accepts (center support), v0.1 table refuses (not a full cube)"
+    },
+    {
+      "item": "wheat_seeds",
+      "support": "farmland",
+      "face": "Up",
+      "look": "direct",
+      "rule": "crop_seed",
+      "predicted": "minecraft:wheat[age=0]",
+      "server": "minecraft:wheat[age=0]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "wheat_seeds",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "direct",
+      "rule": "crop_seed",
+      "predicted": "refused",
+      "server": "refused (air)",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "carrot",
+      "support": "farmland",
+      "face": "Up",
+      "look": "direct",
+      "rule": "crop_seed",
+      "predicted": "minecraft:carrots[age=0]",
+      "server": "minecraft:carrots[age=0]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_slab",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "direct",
+      "rule": "slab",
+      "predicted": "minecraft:oak_slab[type=bottom,waterlogged=false]",
+      "server": "minecraft:oak_slab[type=bottom,waterlogged=false]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_slab",
+      "support": "stone",
+      "face": "West",
+      "look": "direct",
+      "rule": "slab",
+      "predicted": "minecraft:oak_slab[type=top,waterlogged=false]",
+      "server": "minecraft:oak_slab[type=top,waterlogged=false]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_stairs",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "direct",
+      "rule": "stairs",
+      "predicted": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]",
+      "server": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "oak_stairs",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "physics",
+      "rule": "stairs",
+      "predicted": "minecraft:oak_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
+      "server": "minecraft:oak_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]",
+      "agrees": false,
+      "note": "look left to the physics plugin: sent one flush after block_place"
+    },
+    {
+      "item": "chest",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "direct",
+      "rule": "player_facing_opposite",
+      "predicted": "minecraft:chest[facing=south,type=single,waterlogged=false]",
+      "server": "minecraft:chest[facing=south,type=single,waterlogged=false]",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "cobblestone",
+      "support": "stone",
+      "face": "East",
+      "look": "direct",
+      "rule": "default_state",
+      "predicted": "minecraft:cobblestone",
+      "server": "minecraft:cobblestone",
+      "agrees": true,
+      "note": null
+    },
+    {
+      "item": "dirt",
+      "support": "grass_block",
+      "face": "Up",
+      "look": "direct",
+      "rule": "default_state",
+      "predicted": "minecraft:dirt",
+      "server": "minecraft:dirt",
+      "agrees": true,
+      "note": null
+    }
+  ],
+  "dig_summary": {
+    "combos": 16,
+    "observed_minus_model": [
+      2,
+      1,
+      1,
+      0,
+      1,
+      2,
+      1,
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1
+    ],
+    "mineflayer_vs_model_mismatch": [
+      "iron_ore/wooden_pickaxe: mineflayer 300, model 150",
+      "iron_ore/stone_pickaxe: mineflayer 91, model 23",
+      "gold_ore/stone_pickaxe: mineflayer 300, model 75",
+      "gold_ore/iron_pickaxe: mineflayer 91, model 15",
+      "diamond_ore/stone_pickaxe: mineflayer 300, model 75",
+      "diamond_ore/iron_pickaxe: mineflayer 91, model 15",
+      "obsidian/diamond_pickaxe: mineflayer 1500, model 188",
+      "oak_leaves/iron_hoe: mineflayer 6, model 0",
+      "cobweb/iron_sword: mineflayer 120, model 8"
+    ],
+    "harvest_agree": 16
+  },
+  "burn_summary": {
+    "fuels": 17,
+    "agree": 17
+  },
+  "placement_summary": {
+    "cases": 19,
+    "agree": 17
+  },
+  "validation": {
+    "counts": {
+      "launch": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "connectResult": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "tickInput": {
+        "valid": 2446,
+        "invalid": 0
+      },
+      "recordedTick": {
+        "valid": 2446,
+        "invalid": 0
+      },
+      "startRequest": {
+        "valid": 19,
+        "invalid": 0
+      }
+    },
+    "failures": []
+  }
+}

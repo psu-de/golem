@@ -1,0 +1,7981 @@
+{
+  "experiment": "E4 attribution",
+  "reps": 3,
+  "rtt_ms": 1,
+  "totals": {
+    "changes": 529,
+    "provisional": {
+      "false_own": 54,
+      "false_outside": 0
+    },
+    "refined": {
+      "false_own": 30,
+      "false_outside": 0
+    },
+    "runtimeSide": {
+      "false_own": 30,
+      "false_outside": 0
+    }
+  },
+  "by_scenario": {
+    "S1 second player breaks the block being dug (to the predicted value)": {
+      "harm": "benign: value equals the prediction; dig's BlockChanged invariant fires regardless",
+      "reps": 3,
+      "changes": 3,
+      "notes": [],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 3,
+        "false_outside": 0
+      }
+    },
+    "S2 console replaces the block being dug with stone": {
+      "harm": "harmful under provisional: masks interference",
+      "reps": 3,
+      "changes": 3,
+      "notes": [
+        "verdict Rejected",
+        "verdict Rejected",
+        "verdict Rejected"
+      ],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S3 dig confirmed, console puts the block back right after the verdict": {
+      "harm": "harmful under provisional: a caller's ensures fails as ContractViolation",
+      "reps": 3,
+      "changes": 9,
+      "notes": [],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S4 dig confirmed, second player places a block in the cell right after": {
+      "harm": "harmful under provisional",
+      "reps": 3,
+      "changes": 9,
+      "notes": [],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S5 place confirmed, console removes the block right after": {
+      "harm": "harmful under provisional",
+      "reps": 3,
+      "changes": 9,
+      "notes": [],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S6 second player fills the target cell just before the place arrives": {
+      "harm": "harmful under provisional",
+      "reps": 3,
+      "changes": 6,
+      "notes": [
+        "verdict Confirmed",
+        "verdict Confirmed",
+        "verdict Confirmed"
+      ],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S7 pick_up of a chest slot the second player emptied a moment before": {
+      "harm": "benign for the slot (value equals prediction); the cursor correction is Outside under value-consistency",
+      "reps": 3,
+      "changes": 3,
+      "notes": [
+        "verdict Rejected",
+        "verdict Rejected",
+        "verdict Rejected"
+      ],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 3,
+        "false_outside": 0
+      }
+    },
+    "S8 put into a chest slot, second player adds to the same slot right after": {
+      "harm": "harmful under provisional",
+      "reps": 3,
+      "changes": 6,
+      "notes": [
+        "verdict Rejected",
+        "verdict Rejected",
+        "verdict Rejected"
+      ],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S9 console teleports the bot during pathfind": {
+      "harm": "harmful under provisional and runtime-side (no correction flag)",
+      "reps": 3,
+      "changes": 262,
+      "notes": [
+        "verdict Confirmed",
+        "verdict Confirmed",
+        "verdict Confirmed"
+      ],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 3,
+        "false_outside": 0
+      }
+    },
+    "S9b console teleports the bot right after pathfind is confirmed": {
+      "harm": "harmful under provisional and runtime-side",
+      "reps": 3,
+      "changes": 60,
+      "notes": [],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S10 second player knocks the bot back during pathfind": {
+      "harm": "unlabelable per change: physics integrates own input and outside velocity",
+      "reps": 3,
+      "changes": 150,
+      "notes": [
+        "verdict Confirmed",
+        "verdict Confirmed",
+        "verdict Confirmed"
+      ],
+      "provisional": {
+        "false_own": 21,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 21,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 21,
+        "false_outside": 0
+      }
+    },
+    "S11 dig cancelled (freeze), then the second player breaks the block": {
+      "harm": "none: all rules exclude cancelled actions",
+      "reps": 3,
+      "changes": 3,
+      "notes": [],
+      "provisional": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S11b place started and cancelled in the same tick (deferred flush)": {
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "reps": 3,
+      "changes": 0,
+      "notes": [
+        "placed=false",
+        "placed=false",
+        "placed=false"
+      ],
+      "provisional": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S11b place started and cancelled in the same tick (immediate flush)": {
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "reps": 3,
+      "changes": 3,
+      "notes": [
+        "placed=true",
+        "placed=true",
+        "placed=true"
+      ],
+      "provisional": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 0,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    },
+    "S12 async strand: first place rejected (spawn protection), second rolled back in the same tick": {
+      "harm": "backend-side rules tag the rolled-back action's change Own",
+      "reps": 3,
+      "changes": 3,
+      "notes": [
+        "first Rejected, second Confirmed at 2375, rollback at 2375",
+        "first Rejected, second Confirmed at 2415, rollback at 2415",
+        "first Rejected, second Confirmed at 2455, rollback at 2455"
+      ],
+      "provisional": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "refined": {
+        "false_own": 3,
+        "false_outside": 0
+      },
+      "runtimeSide": {
+        "false_own": 0,
+        "false_outside": 0
+      }
+    }
+  },
+  "knockback": [
+    {
+      "hit_tick": 1874,
+      "displacement_400ms": 2.15
+    },
+    {
+      "hit_tick": 1954,
+      "displacement_400ms": 2.23
+    },
+    {
+      "hit_tick": 2034,
+      "displacement_400ms": 2.23
+    }
+  ],
+  "errors": [],
+  "runs": [
+    {
+      "name": "S1 second player breaks the block being dug (to the predicted value)",
+      "harm": "benign: value equals the prediction; dig's BlockChanged invariant fires regardless",
+      "rep": 0,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 59,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S1 second player breaks the block being dug (to the predicted value)",
+      "harm": "benign: value equals the prediction; dig's BlockChanged invariant fires regardless",
+      "rep": 1,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 121,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S1 second player breaks the block being dug (to the predicted value)",
+      "harm": "benign: value equals the prediction; dig's BlockChanged invariant fires regardless",
+      "rep": 2,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 201,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S2 console replaces the block being dug with stone",
+      "harm": "harmful under provisional: masks interference",
+      "rep": 0,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 284,
+          "key": "block(36,-60,36)",
+          "value": "minecraft:stone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S2 console replaces the block being dug with stone",
+      "harm": "harmful under provisional: masks interference",
+      "rep": 1,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 431,
+          "key": "block(36,-60,38)",
+          "value": "minecraft:stone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S2 console replaces the block being dug with stone",
+      "harm": "harmful under provisional: masks interference",
+      "rep": 2,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 580,
+          "key": "block(36,-60,40)",
+          "value": "minecraft:stone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S3 dig confirmed, console puts the block back right after the verdict",
+      "harm": "harmful under provisional: a caller's ensures fails as ContractViolation",
+      "rep": 0,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 738,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 738,
+          "key": "inventory.slot(37)",
+          "value": {
+            "item": "minecraft:stone_pickaxe",
+            "count": 1,
+            "components": {
+              "minecraft:damage": 2
+            }
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 740,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S3 dig confirmed, console puts the block back right after the verdict",
+      "harm": "harmful under provisional: a caller's ensures fails as ContractViolation",
+      "rep": 1,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 780,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 780,
+          "key": "inventory.slot(37)",
+          "value": {
+            "item": "minecraft:stone_pickaxe",
+            "count": 1,
+            "components": {
+              "minecraft:damage": 1
+            }
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 783,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S3 dig confirmed, console puts the block back right after the verdict",
+      "harm": "harmful under provisional: a caller's ensures fails as ContractViolation",
+      "rep": 2,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 823,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 823,
+          "key": "inventory.slot(37)",
+          "value": {
+            "item": "minecraft:stone_pickaxe",
+            "count": 1,
+            "components": {
+              "minecraft:damage": 1
+            }
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 825,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S4 dig confirmed, second player places a block in the cell right after",
+      "harm": "harmful under provisional",
+      "rep": 0,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 865,
+          "key": "block(42,-60,39)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 865,
+          "key": "inventory.slot(37)",
+          "value": {
+            "item": "minecraft:stone_pickaxe",
+            "count": 1,
+            "components": {
+              "minecraft:damage": 2
+            }
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 868,
+          "key": "block(42,-60,39)",
+          "value": "minecraft:cobblestone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S4 dig confirmed, second player places a block in the cell right after",
+      "harm": "harmful under provisional",
+      "rep": 1,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 908,
+          "key": "block(42,-60,39)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 908,
+          "key": "inventory.slot(37)",
+          "value": {
+            "item": "minecraft:stone_pickaxe",
+            "count": 1,
+            "components": {
+              "minecraft:damage": 3
+            }
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 909,
+          "key": "block(42,-60,39)",
+          "value": "minecraft:cobblestone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S4 dig confirmed, second player places a block in the cell right after",
+      "harm": "harmful under provisional",
+      "rep": 2,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 950,
+          "key": "block(42,-60,39)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 950,
+          "key": "inventory.slot(37)",
+          "value": {
+            "item": "minecraft:stone_pickaxe",
+            "count": 1,
+            "components": {
+              "minecraft:damage": 4
+            }
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 951,
+          "key": "block(42,-60,39)",
+          "value": "minecraft:cobblestone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S5 place confirmed, console removes the block right after",
+      "harm": "harmful under provisional",
+      "rep": 0,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 971,
+          "key": "block(44,-60,38)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 971,
+          "key": "inventory.slot(36)",
+          "value": {
+            "item": "minecraft:dirt",
+            "count": 63,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 973,
+          "key": "block(44,-60,38)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S5 place confirmed, console removes the block right after",
+      "harm": "harmful under provisional",
+      "rep": 1,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 992,
+          "key": "block(44,-60,39)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 992,
+          "key": "inventory.slot(36)",
+          "value": {
+            "item": "minecraft:dirt",
+            "count": 62,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 994,
+          "key": "block(44,-60,39)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S5 place confirmed, console removes the block right after",
+      "harm": "harmful under provisional",
+      "rep": 2,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 1013,
+          "key": "block(44,-60,40)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1013,
+          "key": "inventory.slot(36)",
+          "value": {
+            "item": "minecraft:dirt",
+            "count": 61,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1015,
+          "key": "block(44,-60,40)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S6 second player fills the target cell just before the place arrives",
+      "harm": "harmful under provisional",
+      "rep": 0,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1034,
+          "key": "block(45,-60,38)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1035,
+          "key": "block(45,-60,38)",
+          "value": "minecraft:stone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S6 second player fills the target cell just before the place arrives",
+      "harm": "harmful under provisional",
+      "rep": 1,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1055,
+          "key": "block(45,-60,39)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1056,
+          "key": "block(45,-60,39)",
+          "value": "minecraft:stone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S6 second player fills the target cell just before the place arrives",
+      "harm": "harmful under provisional",
+      "rep": 2,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1076,
+          "key": "block(45,-60,40)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1077,
+          "key": "block(45,-60,40)",
+          "value": "minecraft:stone",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S7 pick_up of a chest slot the second player emptied a moment before",
+      "harm": "benign for the slot (value equals prediction); the cursor correction is Outside under value-consistency",
+      "rep": 0,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 1138,
+          "key": "window.slot(0)",
+          "value": null,
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S7 pick_up of a chest slot the second player emptied a moment before",
+      "harm": "benign for the slot (value equals prediction); the cursor correction is Outside under value-consistency",
+      "rep": 1,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 1172,
+          "key": "window.slot(0)",
+          "value": null,
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S7 pick_up of a chest slot the second player emptied a moment before",
+      "harm": "benign for the slot (value equals prediction); the cursor correction is Outside under value-consistency",
+      "rep": 2,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 1206,
+          "key": "window.slot(0)",
+          "value": null,
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S8 put into a chest slot, second player adds to the same slot right after",
+      "harm": "harmful under provisional",
+      "rep": 0,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 1257,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1258,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 6,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S8 put into a chest slot, second player adds to the same slot right after",
+      "harm": "harmful under provisional",
+      "rep": 1,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 1314,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1316,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 6,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S8 put into a chest slot, second player adds to the same slot right after",
+      "harm": "harmful under provisional",
+      "rep": 2,
+      "notes": "verdict Rejected",
+      "changes": [
+        {
+          "tick": 1372,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1373,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 6,
+            "components": {}
+          },
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S9 console teleports the bot during pathfind",
+      "harm": "harmful under provisional and runtime-side (no correction flag)",
+      "rep": 0,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1406,
+          "key": "player.position",
+          "value": [
+            40.59009,
+            -60,
+            40.59009
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1407,
+          "key": "player.position",
+          "value": [
+            40.72936,
+            -60,
+            40.72936
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1408,
+          "key": "player.position",
+          "value": [
+            40.89549,
+            -60,
+            40.89549
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1409,
+          "key": "player.position",
+          "value": [
+            41.07628,
+            -60,
+            41.07628
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1410,
+          "key": "player.position",
+          "value": [
+            41.26507,
+            -60,
+            41.26507
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1411,
+          "key": "player.position",
+          "value": [
+            41.45824,
+            -60,
+            41.45824
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1412,
+          "key": "player.position",
+          "value": [
+            41.6538,
+            -60,
+            41.6538
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1413,
+          "key": "player.position",
+          "value": [
+            41.85066,
+            -60,
+            41.85066
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1414,
+          "key": "player.position",
+          "value": [
+            42.04823,
+            -60,
+            42.04823
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1415,
+          "key": "player.position",
+          "value": [
+            42.24619,
+            -60,
+            42.24619
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1416,
+          "key": "player.position",
+          "value": [
+            42.44436,
+            -60,
+            42.44436
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1417,
+          "key": "player.position",
+          "value": [
+            42.64264,
+            -60,
+            42.64264
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1418,
+          "key": "player.position",
+          "value": [
+            42.84099,
+            -60,
+            42.84099
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1419,
+          "key": "player.position",
+          "value": [
+            43.03938,
+            -60,
+            43.03938
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1420,
+          "key": "player.position",
+          "value": [
+            40.51802,
+            -60,
+            50.51802
+          ],
+          "correction": true,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1421,
+          "key": "player.position",
+          "value": [
+            40.54435,
+            -60,
+            50.51095
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1422,
+          "key": "player.position",
+          "value": [
+            40.61768,
+            -60,
+            50.38707
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1423,
+          "key": "player.position",
+          "value": [
+            40.70678,
+            -60,
+            50.20186
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1424,
+          "key": "player.position",
+          "value": [
+            40.80449,
+            -60,
+            49.98316
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1425,
+          "key": "player.position",
+          "value": [
+            40.9069,
+            -60,
+            49.74618
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1426,
+          "key": "player.position",
+          "value": [
+            41.01157,
+            -60,
+            49.49908
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1427,
+          "key": "player.position",
+          "value": [
+            41.11748,
+            -60,
+            49.24647
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1428,
+          "key": "player.position",
+          "value": [
+            41.22405,
+            -60,
+            48.99083
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1429,
+          "key": "player.position",
+          "value": [
+            41.331,
+            -60,
+            48.73356
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1430,
+          "key": "player.position",
+          "value": [
+            41.43815,
+            -60,
+            48.47538
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1431,
+          "key": "player.position",
+          "value": [
+            41.5454,
+            -60,
+            48.21672
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1432,
+          "key": "player.position",
+          "value": [
+            41.65272,
+            -60,
+            47.95778
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1433,
+          "key": "player.position",
+          "value": [
+            41.76006,
+            -60,
+            47.6987
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1434,
+          "key": "player.position",
+          "value": [
+            41.86743,
+            -60,
+            47.43954
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1435,
+          "key": "player.position",
+          "value": [
+            41.97481,
+            -60,
+            47.18034
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1436,
+          "key": "player.position",
+          "value": [
+            42.08219,
+            -60,
+            46.92111
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1437,
+          "key": "player.position",
+          "value": [
+            42.18957,
+            -60,
+            46.66187
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1438,
+          "key": "player.position",
+          "value": [
+            42.29696,
+            -60,
+            46.40262
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1439,
+          "key": "player.position",
+          "value": [
+            42.40434,
+            -60,
+            46.14337
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1440,
+          "key": "player.position",
+          "value": [
+            42.51173,
+            -60,
+            45.88412
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1441,
+          "key": "player.position",
+          "value": [
+            42.61912,
+            -60,
+            45.62486
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1442,
+          "key": "player.position",
+          "value": [
+            42.7265,
+            -60,
+            45.36561
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1443,
+          "key": "player.position",
+          "value": [
+            42.83389,
+            -60,
+            45.10635
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1444,
+          "key": "player.position",
+          "value": [
+            42.94128,
+            -60,
+            44.8471
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1445,
+          "key": "player.position",
+          "value": [
+            43.04867,
+            -60,
+            44.58784
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1446,
+          "key": "player.position",
+          "value": [
+            43.15605,
+            -60,
+            44.32858
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1447,
+          "key": "player.position",
+          "value": [
+            43.26344,
+            -60,
+            44.06933
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1448,
+          "key": "player.position",
+          "value": [
+            43.37083,
+            -60,
+            43.81007
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1449,
+          "key": "player.position",
+          "value": [
+            43.53809,
+            -60,
+            43.73508
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1450,
+          "key": "player.position",
+          "value": [
+            43.72905,
+            -60,
+            43.77354
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1451,
+          "key": "player.position",
+          "value": [
+            43.92595,
+            -60,
+            43.88198
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1452,
+          "key": "player.position",
+          "value": [
+            44.12019,
+            -60,
+            44.03452
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1453,
+          "key": "player.position",
+          "value": [
+            44.30667,
+            -60,
+            44.21661
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1454,
+          "key": "player.position",
+          "value": [
+            44.49522,
+            -60,
+            44.40935
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1455,
+          "key": "player.position",
+          "value": [
+            44.6844,
+            -60,
+            44.60837
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1456,
+          "key": "player.position",
+          "value": [
+            44.87368,
+            -60,
+            44.81104
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1457,
+          "key": "player.position",
+          "value": [
+            45.06277,
+            -60,
+            45.01592
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1458,
+          "key": "player.position",
+          "value": [
+            45.25151,
+            -60,
+            45.22224
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1459,
+          "key": "player.position",
+          "value": [
+            45.44369,
+            -60,
+            45.42592
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1460,
+          "key": "player.position",
+          "value": [
+            45.638,
+            -60,
+            45.62792
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1461,
+          "key": "player.position",
+          "value": [
+            45.83371,
+            -60,
+            45.82876
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1462,
+          "key": "player.position",
+          "value": [
+            46.03041,
+            -60,
+            46.02874
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1463,
+          "key": "player.position",
+          "value": [
+            46.22766,
+            -60,
+            46.22826
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1464,
+          "key": "player.position",
+          "value": [
+            46.42545,
+            -60,
+            46.42728
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1465,
+          "key": "player.position",
+          "value": [
+            46.62352,
+            -60,
+            46.62602
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1466,
+          "key": "player.position",
+          "value": [
+            46.82199,
+            -60,
+            46.82439
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1467,
+          "key": "player.position",
+          "value": [
+            47.02068,
+            -60,
+            47.02255
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1468,
+          "key": "player.position",
+          "value": [
+            47.21948,
+            -60,
+            47.22059
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1469,
+          "key": "player.position",
+          "value": [
+            47.41811,
+            -60,
+            47.41881
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1470,
+          "key": "player.position",
+          "value": [
+            47.61665,
+            -60,
+            47.61712
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1471,
+          "key": "player.position",
+          "value": [
+            47.81514,
+            -60,
+            47.81548
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1472,
+          "key": "player.position",
+          "value": [
+            48.0136,
+            -60,
+            48.01388
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1473,
+          "key": "player.position",
+          "value": [
+            48.21204,
+            -60,
+            48.21228
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1474,
+          "key": "player.position",
+          "value": [
+            48.41048,
+            -60,
+            48.4107
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1475,
+          "key": "player.position",
+          "value": [
+            48.60891,
+            -60,
+            48.60912
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1476,
+          "key": "player.position",
+          "value": [
+            48.80734,
+            -60,
+            48.80754
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1477,
+          "key": "player.position",
+          "value": [
+            49.00577,
+            -60,
+            49.00597
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1478,
+          "key": "player.position",
+          "value": [
+            49.2042,
+            -60,
+            49.20439
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1479,
+          "key": "player.position",
+          "value": [
+            49.40262,
+            -60,
+            49.40282
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1480,
+          "key": "player.position",
+          "value": [
+            49.60105,
+            -60,
+            49.60125
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1481,
+          "key": "player.position",
+          "value": [
+            49.79947,
+            -60,
+            49.79967
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1482,
+          "key": "player.position",
+          "value": [
+            49.9979,
+            -60,
+            49.9981
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1483,
+          "key": "player.position",
+          "value": [
+            50.19633,
+            -60,
+            50.19652
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1484,
+          "key": "player.position",
+          "value": [
+            50.39475,
+            -60,
+            50.39495
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1485,
+          "key": "player.position",
+          "value": [
+            50.59318,
+            -60,
+            50.59338
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1486,
+          "key": "player.position",
+          "value": [
+            50.7916,
+            -60,
+            50.7918
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1487,
+          "key": "player.position",
+          "value": [
+            50.99003,
+            -60,
+            50.99023
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1488,
+          "key": "player.position",
+          "value": [
+            51.18846,
+            -60,
+            51.18865
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1489,
+          "key": "player.position",
+          "value": [
+            51.38688,
+            -60,
+            51.38708
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1490,
+          "key": "player.position",
+          "value": [
+            51.58531,
+            -60,
+            51.58551
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1491,
+          "key": "player.position",
+          "value": [
+            51.78374,
+            -60,
+            51.78393
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1492,
+          "key": "player.position",
+          "value": [
+            51.98216,
+            -60,
+            51.98236
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1493,
+          "key": "player.position",
+          "value": [
+            52.18059,
+            -60,
+            52.18078
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1494,
+          "key": "player.position",
+          "value": [
+            52.5,
+            -60,
+            52.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S9 console teleports the bot during pathfind",
+      "harm": "harmful under provisional and runtime-side (no correction flag)",
+      "rep": 1,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1518,
+          "key": "player.position",
+          "value": [
+            40.59009,
+            -60,
+            40.59009
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1519,
+          "key": "player.position",
+          "value": [
+            40.72936,
+            -60,
+            40.72936
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1520,
+          "key": "player.position",
+          "value": [
+            40.89549,
+            -60,
+            40.89549
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1521,
+          "key": "player.position",
+          "value": [
+            41.07628,
+            -60,
+            41.07628
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1522,
+          "key": "player.position",
+          "value": [
+            41.26507,
+            -60,
+            41.26507
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1523,
+          "key": "player.position",
+          "value": [
+            41.45824,
+            -60,
+            41.45824
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1524,
+          "key": "player.position",
+          "value": [
+            41.6538,
+            -60,
+            41.6538
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1525,
+          "key": "player.position",
+          "value": [
+            41.85066,
+            -60,
+            41.85066
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1526,
+          "key": "player.position",
+          "value": [
+            42.04823,
+            -60,
+            42.04823
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1527,
+          "key": "player.position",
+          "value": [
+            42.24619,
+            -60,
+            42.24619
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1528,
+          "key": "player.position",
+          "value": [
+            42.44436,
+            -60,
+            42.44436
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1529,
+          "key": "player.position",
+          "value": [
+            42.64264,
+            -60,
+            42.64264
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1530,
+          "key": "player.position",
+          "value": [
+            42.84099,
+            -60,
+            42.84099
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1531,
+          "key": "player.position",
+          "value": [
+            43.03938,
+            -60,
+            43.03938
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1532,
+          "key": "player.position",
+          "value": [
+            43.23778,
+            -60,
+            43.23778
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1533,
+          "key": "player.position",
+          "value": [
+            40.51802,
+            -60,
+            50.51802
+          ],
+          "correction": true,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1534,
+          "key": "player.position",
+          "value": [
+            40.54846,
+            -60,
+            50.51315
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1535,
+          "key": "player.position",
+          "value": [
+            40.6461,
+            -60,
+            50.40224
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1536,
+          "key": "player.position",
+          "value": [
+            40.76909,
+            -60,
+            50.23502
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1537,
+          "key": "player.position",
+          "value": [
+            40.90562,
+            -60,
+            50.03688
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1538,
+          "key": "player.position",
+          "value": [
+            41.04956,
+            -60,
+            49.82184
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1539,
+          "key": "player.position",
+          "value": [
+            41.19753,
+            -60,
+            49.59758
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1540,
+          "key": "player.position",
+          "value": [
+            41.34771,
+            -60,
+            49.36829
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1541,
+          "key": "player.position",
+          "value": [
+            41.49882,
+            -60,
+            49.13607
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1542,
+          "key": "player.position",
+          "value": [
+            41.65043,
+            -60,
+            48.90225
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1543,
+          "key": "player.position",
+          "value": [
+            41.80232,
+            -60,
+            48.66756
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1544,
+          "key": "player.position",
+          "value": [
+            41.95435,
+            -60,
+            48.43239
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1545,
+          "key": "player.position",
+          "value": [
+            42.10647,
+            -60,
+            48.19695
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1546,
+          "key": "player.position",
+          "value": [
+            42.25864,
+            -60,
+            47.96138
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1547,
+          "key": "player.position",
+          "value": [
+            42.41083,
+            -60,
+            47.72573
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1548,
+          "key": "player.position",
+          "value": [
+            42.56331,
+            -60,
+            47.49022
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1549,
+          "key": "player.position",
+          "value": [
+            42.71595,
+            -60,
+            47.25478
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1550,
+          "key": "player.position",
+          "value": [
+            42.86868,
+            -60,
+            47.01939
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1551,
+          "key": "player.position",
+          "value": [
+            43.02118,
+            -60,
+            46.78383
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1552,
+          "key": "player.position",
+          "value": [
+            43.17355,
+            -60,
+            46.54819
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1553,
+          "key": "player.position",
+          "value": [
+            43.32613,
+            -60,
+            46.31269
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1554,
+          "key": "player.position",
+          "value": [
+            43.47883,
+            -60,
+            46.07725
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1555,
+          "key": "player.position",
+          "value": [
+            43.63131,
+            -60,
+            45.84168
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1556,
+          "key": "player.position",
+          "value": [
+            43.78367,
+            -60,
+            45.60603
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1557,
+          "key": "player.position",
+          "value": [
+            43.93624,
+            -60,
+            45.37052
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1558,
+          "key": "player.position",
+          "value": [
+            44.08894,
+            -60,
+            45.13508
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1559,
+          "key": "player.position",
+          "value": [
+            44.24141,
+            -60,
+            44.8995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1560,
+          "key": "player.position",
+          "value": [
+            44.39377,
+            -60,
+            44.66385
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1561,
+          "key": "player.position",
+          "value": [
+            44.57864,
+            -60,
+            44.61194
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1562,
+          "key": "player.position",
+          "value": [
+            44.7713,
+            -60,
+            44.67202
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1563,
+          "key": "player.position",
+          "value": [
+            44.96074,
+            -60,
+            44.80039
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1564,
+          "key": "player.position",
+          "value": [
+            45.142,
+            -60,
+            44.97135
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1565,
+          "key": "player.position",
+          "value": [
+            45.3123,
+            -60,
+            45.17025
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1566,
+          "key": "player.position",
+          "value": [
+            45.49003,
+            -60,
+            45.37397
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1567,
+          "key": "player.position",
+          "value": [
+            45.67208,
+            -60,
+            45.5801
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1568,
+          "key": "player.position",
+          "value": [
+            45.85672,
+            -60,
+            45.78733
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1569,
+          "key": "player.position",
+          "value": [
+            46.04278,
+            -60,
+            45.99515
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1570,
+          "key": "player.position",
+          "value": [
+            46.22986,
+            -60,
+            46.20307
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1571,
+          "key": "player.position",
+          "value": [
+            46.42115,
+            -60,
+            46.40762
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1572,
+          "key": "player.position",
+          "value": [
+            46.6152,
+            -60,
+            46.60986
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1573,
+          "key": "player.position",
+          "value": [
+            46.81101,
+            -60,
+            46.81061
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1574,
+          "key": "player.position",
+          "value": [
+            47.008,
+            -60,
+            47.0103
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1575,
+          "key": "player.position",
+          "value": [
+            47.20588,
+            -60,
+            47.20918
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1576,
+          "key": "player.position",
+          "value": [
+            47.40401,
+            -60,
+            47.40785
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1577,
+          "key": "player.position",
+          "value": [
+            47.60251,
+            -60,
+            47.60618
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1578,
+          "key": "player.position",
+          "value": [
+            47.80121,
+            -60,
+            47.80431
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1579,
+          "key": "player.position",
+          "value": [
+            48.00002,
+            -60,
+            48.00234
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1580,
+          "key": "player.position",
+          "value": [
+            48.19889,
+            -60,
+            48.20032
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1581,
+          "key": "player.position",
+          "value": [
+            48.39756,
+            -60,
+            48.3985
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1582,
+          "key": "player.position",
+          "value": [
+            48.59612,
+            -60,
+            48.59679
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1583,
+          "key": "player.position",
+          "value": [
+            48.79462,
+            -60,
+            48.79514
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1584,
+          "key": "player.position",
+          "value": [
+            48.99308,
+            -60,
+            48.99353
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1585,
+          "key": "player.position",
+          "value": [
+            49.19153,
+            -60,
+            49.19193
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1586,
+          "key": "player.position",
+          "value": [
+            49.38997,
+            -60,
+            49.39035
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1587,
+          "key": "player.position",
+          "value": [
+            49.5884,
+            -60,
+            49.58877
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1588,
+          "key": "player.position",
+          "value": [
+            49.78683,
+            -60,
+            49.78719
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1589,
+          "key": "player.position",
+          "value": [
+            49.98526,
+            -60,
+            49.98561
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1590,
+          "key": "player.position",
+          "value": [
+            50.18369,
+            -60,
+            50.18404
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1591,
+          "key": "player.position",
+          "value": [
+            50.38211,
+            -60,
+            50.38246
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1592,
+          "key": "player.position",
+          "value": [
+            50.58054,
+            -60,
+            50.58089
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1593,
+          "key": "player.position",
+          "value": [
+            50.77897,
+            -60,
+            50.77931
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1594,
+          "key": "player.position",
+          "value": [
+            50.97739,
+            -60,
+            50.97774
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1595,
+          "key": "player.position",
+          "value": [
+            51.17582,
+            -60,
+            51.17617
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1596,
+          "key": "player.position",
+          "value": [
+            51.37425,
+            -60,
+            51.37459
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1597,
+          "key": "player.position",
+          "value": [
+            51.57267,
+            -60,
+            51.57302
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1598,
+          "key": "player.position",
+          "value": [
+            51.7711,
+            -60,
+            51.77144
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1599,
+          "key": "player.position",
+          "value": [
+            51.96952,
+            -60,
+            51.96987
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1600,
+          "key": "player.position",
+          "value": [
+            52.16795,
+            -60,
+            52.1683
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1601,
+          "key": "player.position",
+          "value": [
+            52.5,
+            -60,
+            52.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S9 console teleports the bot during pathfind",
+      "harm": "harmful under provisional and runtime-side (no correction flag)",
+      "rep": 2,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1625,
+          "key": "player.position",
+          "value": [
+            40.59009,
+            -60,
+            40.59009
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1626,
+          "key": "player.position",
+          "value": [
+            40.72936,
+            -60,
+            40.72936
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1627,
+          "key": "player.position",
+          "value": [
+            40.89549,
+            -60,
+            40.89549
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1628,
+          "key": "player.position",
+          "value": [
+            41.07628,
+            -60,
+            41.07628
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1629,
+          "key": "player.position",
+          "value": [
+            41.26507,
+            -60,
+            41.26507
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1630,
+          "key": "player.position",
+          "value": [
+            41.45824,
+            -60,
+            41.45824
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1631,
+          "key": "player.position",
+          "value": [
+            41.6538,
+            -60,
+            41.6538
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1632,
+          "key": "player.position",
+          "value": [
+            41.85066,
+            -60,
+            41.85066
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1633,
+          "key": "player.position",
+          "value": [
+            42.04823,
+            -60,
+            42.04823
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1634,
+          "key": "player.position",
+          "value": [
+            42.24619,
+            -60,
+            42.24619
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1635,
+          "key": "player.position",
+          "value": [
+            42.44436,
+            -60,
+            42.44436
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1636,
+          "key": "player.position",
+          "value": [
+            42.64264,
+            -60,
+            42.64264
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1637,
+          "key": "player.position",
+          "value": [
+            42.84099,
+            -60,
+            42.84099
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1638,
+          "key": "player.position",
+          "value": [
+            43.03938,
+            -60,
+            43.03938
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1639,
+          "key": "player.position",
+          "value": [
+            40.51802,
+            -60,
+            50.51802
+          ],
+          "correction": true,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1640,
+          "key": "player.position",
+          "value": [
+            40.54435,
+            -60,
+            50.51095
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1641,
+          "key": "player.position",
+          "value": [
+            40.61768,
+            -60,
+            50.38707
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1642,
+          "key": "player.position",
+          "value": [
+            40.70678,
+            -60,
+            50.20186
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1643,
+          "key": "player.position",
+          "value": [
+            40.80449,
+            -60,
+            49.98316
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1644,
+          "key": "player.position",
+          "value": [
+            40.9069,
+            -60,
+            49.74618
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1645,
+          "key": "player.position",
+          "value": [
+            41.01157,
+            -60,
+            49.49908
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1646,
+          "key": "player.position",
+          "value": [
+            41.11748,
+            -60,
+            49.24647
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1647,
+          "key": "player.position",
+          "value": [
+            41.22405,
+            -60,
+            48.99083
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1648,
+          "key": "player.position",
+          "value": [
+            41.331,
+            -60,
+            48.73356
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1649,
+          "key": "player.position",
+          "value": [
+            41.43815,
+            -60,
+            48.47538
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1650,
+          "key": "player.position",
+          "value": [
+            41.5454,
+            -60,
+            48.21672
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1651,
+          "key": "player.position",
+          "value": [
+            41.65272,
+            -60,
+            47.95778
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1652,
+          "key": "player.position",
+          "value": [
+            41.76006,
+            -60,
+            47.6987
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1653,
+          "key": "player.position",
+          "value": [
+            41.86743,
+            -60,
+            47.43954
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1654,
+          "key": "player.position",
+          "value": [
+            41.97481,
+            -60,
+            47.18034
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1655,
+          "key": "player.position",
+          "value": [
+            42.08219,
+            -60,
+            46.92111
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1656,
+          "key": "player.position",
+          "value": [
+            42.18957,
+            -60,
+            46.66187
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1657,
+          "key": "player.position",
+          "value": [
+            42.29696,
+            -60,
+            46.40262
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1658,
+          "key": "player.position",
+          "value": [
+            42.40434,
+            -60,
+            46.14337
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1659,
+          "key": "player.position",
+          "value": [
+            42.51173,
+            -60,
+            45.88412
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1660,
+          "key": "player.position",
+          "value": [
+            42.61912,
+            -60,
+            45.62486
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1661,
+          "key": "player.position",
+          "value": [
+            42.7265,
+            -60,
+            45.36561
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1662,
+          "key": "player.position",
+          "value": [
+            42.83389,
+            -60,
+            45.10635
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1663,
+          "key": "player.position",
+          "value": [
+            42.94128,
+            -60,
+            44.8471
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1664,
+          "key": "player.position",
+          "value": [
+            43.04867,
+            -60,
+            44.58784
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1665,
+          "key": "player.position",
+          "value": [
+            43.15605,
+            -60,
+            44.32858
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1666,
+          "key": "player.position",
+          "value": [
+            43.26344,
+            -60,
+            44.06933
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1667,
+          "key": "player.position",
+          "value": [
+            43.37083,
+            -60,
+            43.81007
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1668,
+          "key": "player.position",
+          "value": [
+            43.53809,
+            -60,
+            43.73508
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1669,
+          "key": "player.position",
+          "value": [
+            43.72905,
+            -60,
+            43.77354
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1670,
+          "key": "player.position",
+          "value": [
+            43.92595,
+            -60,
+            43.88198
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1671,
+          "key": "player.position",
+          "value": [
+            44.12019,
+            -60,
+            44.03452
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1672,
+          "key": "player.position",
+          "value": [
+            44.30667,
+            -60,
+            44.21661
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1673,
+          "key": "player.position",
+          "value": [
+            44.49522,
+            -60,
+            44.40935
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1674,
+          "key": "player.position",
+          "value": [
+            44.6844,
+            -60,
+            44.60837
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1675,
+          "key": "player.position",
+          "value": [
+            44.87368,
+            -60,
+            44.81104
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1676,
+          "key": "player.position",
+          "value": [
+            45.06277,
+            -60,
+            45.01592
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1677,
+          "key": "player.position",
+          "value": [
+            45.25151,
+            -60,
+            45.22224
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1678,
+          "key": "player.position",
+          "value": [
+            45.44369,
+            -60,
+            45.42592
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1679,
+          "key": "player.position",
+          "value": [
+            45.638,
+            -60,
+            45.62792
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1680,
+          "key": "player.position",
+          "value": [
+            45.83371,
+            -60,
+            45.82876
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1681,
+          "key": "player.position",
+          "value": [
+            46.03041,
+            -60,
+            46.02874
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1682,
+          "key": "player.position",
+          "value": [
+            46.22766,
+            -60,
+            46.22826
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1683,
+          "key": "player.position",
+          "value": [
+            46.42545,
+            -60,
+            46.42728
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1684,
+          "key": "player.position",
+          "value": [
+            46.62352,
+            -60,
+            46.62602
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1685,
+          "key": "player.position",
+          "value": [
+            46.82199,
+            -60,
+            46.82439
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1686,
+          "key": "player.position",
+          "value": [
+            47.02068,
+            -60,
+            47.02255
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1687,
+          "key": "player.position",
+          "value": [
+            47.21948,
+            -60,
+            47.22059
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1688,
+          "key": "player.position",
+          "value": [
+            47.41811,
+            -60,
+            47.41881
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1689,
+          "key": "player.position",
+          "value": [
+            47.61665,
+            -60,
+            47.61712
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1690,
+          "key": "player.position",
+          "value": [
+            47.81514,
+            -60,
+            47.81548
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1691,
+          "key": "player.position",
+          "value": [
+            48.0136,
+            -60,
+            48.01388
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1692,
+          "key": "player.position",
+          "value": [
+            48.21204,
+            -60,
+            48.21228
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1693,
+          "key": "player.position",
+          "value": [
+            48.41048,
+            -60,
+            48.4107
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1694,
+          "key": "player.position",
+          "value": [
+            48.60891,
+            -60,
+            48.60912
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1695,
+          "key": "player.position",
+          "value": [
+            48.80734,
+            -60,
+            48.80754
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1696,
+          "key": "player.position",
+          "value": [
+            49.00577,
+            -60,
+            49.00597
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1697,
+          "key": "player.position",
+          "value": [
+            49.2042,
+            -60,
+            49.20439
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1698,
+          "key": "player.position",
+          "value": [
+            49.40262,
+            -60,
+            49.40282
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1699,
+          "key": "player.position",
+          "value": [
+            49.60105,
+            -60,
+            49.60125
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1700,
+          "key": "player.position",
+          "value": [
+            49.79947,
+            -60,
+            49.79967
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1701,
+          "key": "player.position",
+          "value": [
+            49.9979,
+            -60,
+            49.9981
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1702,
+          "key": "player.position",
+          "value": [
+            50.19633,
+            -60,
+            50.19652
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1703,
+          "key": "player.position",
+          "value": [
+            50.39475,
+            -60,
+            50.39495
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1704,
+          "key": "player.position",
+          "value": [
+            50.59318,
+            -60,
+            50.59338
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1705,
+          "key": "player.position",
+          "value": [
+            50.7916,
+            -60,
+            50.7918
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1706,
+          "key": "player.position",
+          "value": [
+            50.99003,
+            -60,
+            50.99023
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1707,
+          "key": "player.position",
+          "value": [
+            51.18846,
+            -60,
+            51.18865
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1708,
+          "key": "player.position",
+          "value": [
+            51.38688,
+            -60,
+            51.38708
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1709,
+          "key": "player.position",
+          "value": [
+            51.58531,
+            -60,
+            51.58551
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1710,
+          "key": "player.position",
+          "value": [
+            51.78374,
+            -60,
+            51.78393
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1711,
+          "key": "player.position",
+          "value": [
+            51.98216,
+            -60,
+            51.98236
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1712,
+          "key": "player.position",
+          "value": [
+            52.18059,
+            -60,
+            52.18078
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1713,
+          "key": "player.position",
+          "value": [
+            52.5,
+            -60,
+            52.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S9b console teleports the bot right after pathfind is confirmed",
+      "harm": "harmful under provisional and runtime-side",
+      "rep": 0,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 1737,
+          "key": "player.position",
+          "value": [
+            40.6274,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1738,
+          "key": "player.position",
+          "value": [
+            40.82436,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1739,
+          "key": "player.position",
+          "value": [
+            41.0593,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1740,
+          "key": "player.position",
+          "value": [
+            41.31498,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1741,
+          "key": "player.position",
+          "value": [
+            41.58198,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1742,
+          "key": "player.position",
+          "value": [
+            41.85516,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1743,
+          "key": "player.position",
+          "value": [
+            42.13172,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1744,
+          "key": "player.position",
+          "value": [
+            42.41012,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1745,
+          "key": "player.position",
+          "value": [
+            42.68953,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1746,
+          "key": "player.position",
+          "value": [
+            42.96948,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1747,
+          "key": "player.position",
+          "value": [
+            43.24974,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1748,
+          "key": "player.position",
+          "value": [
+            43.53016,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1749,
+          "key": "player.position",
+          "value": [
+            43.81067,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1750,
+          "key": "player.position",
+          "value": [
+            44.09122,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1751,
+          "key": "player.position",
+          "value": [
+            44.37181,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1752,
+          "key": "player.position",
+          "value": [
+            44.65241,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1753,
+          "key": "player.position",
+          "value": [
+            44.93302,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1754,
+          "key": "player.position",
+          "value": [
+            45.21363,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1755,
+          "key": "player.position",
+          "value": [
+            45.5,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1760,
+          "key": "player.position",
+          "value": [
+            40.5,
+            -60,
+            46.5
+          ],
+          "correction": true,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S9b console teleports the bot right after pathfind is confirmed",
+      "harm": "harmful under provisional and runtime-side",
+      "rep": 1,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 1779,
+          "key": "player.position",
+          "value": [
+            40.6274,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1780,
+          "key": "player.position",
+          "value": [
+            40.82436,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1781,
+          "key": "player.position",
+          "value": [
+            41.0593,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1782,
+          "key": "player.position",
+          "value": [
+            41.31498,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1783,
+          "key": "player.position",
+          "value": [
+            41.58198,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1784,
+          "key": "player.position",
+          "value": [
+            41.85516,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1785,
+          "key": "player.position",
+          "value": [
+            42.13172,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1786,
+          "key": "player.position",
+          "value": [
+            42.41012,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1787,
+          "key": "player.position",
+          "value": [
+            42.68953,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1788,
+          "key": "player.position",
+          "value": [
+            42.96948,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1789,
+          "key": "player.position",
+          "value": [
+            43.24974,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1790,
+          "key": "player.position",
+          "value": [
+            43.53016,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1791,
+          "key": "player.position",
+          "value": [
+            43.81067,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1792,
+          "key": "player.position",
+          "value": [
+            44.09122,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1793,
+          "key": "player.position",
+          "value": [
+            44.37181,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1794,
+          "key": "player.position",
+          "value": [
+            44.65241,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1795,
+          "key": "player.position",
+          "value": [
+            44.93302,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1796,
+          "key": "player.position",
+          "value": [
+            45.21363,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1797,
+          "key": "player.position",
+          "value": [
+            45.5,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1802,
+          "key": "player.position",
+          "value": [
+            40.5,
+            -60,
+            46.5
+          ],
+          "correction": true,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S9b console teleports the bot right after pathfind is confirmed",
+      "harm": "harmful under provisional and runtime-side",
+      "rep": 2,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 1821,
+          "key": "player.position",
+          "value": [
+            40.6274,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1822,
+          "key": "player.position",
+          "value": [
+            40.82436,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1823,
+          "key": "player.position",
+          "value": [
+            41.0593,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1824,
+          "key": "player.position",
+          "value": [
+            41.31498,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1825,
+          "key": "player.position",
+          "value": [
+            41.58198,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1826,
+          "key": "player.position",
+          "value": [
+            41.85516,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1827,
+          "key": "player.position",
+          "value": [
+            42.13172,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1828,
+          "key": "player.position",
+          "value": [
+            42.41012,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1829,
+          "key": "player.position",
+          "value": [
+            42.68953,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1830,
+          "key": "player.position",
+          "value": [
+            42.96948,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1831,
+          "key": "player.position",
+          "value": [
+            43.24974,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1832,
+          "key": "player.position",
+          "value": [
+            43.53016,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1833,
+          "key": "player.position",
+          "value": [
+            43.81067,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1834,
+          "key": "player.position",
+          "value": [
+            44.09122,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1835,
+          "key": "player.position",
+          "value": [
+            44.37181,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1836,
+          "key": "player.position",
+          "value": [
+            44.65241,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1837,
+          "key": "player.position",
+          "value": [
+            44.93302,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1838,
+          "key": "player.position",
+          "value": [
+            45.21363,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1839,
+          "key": "player.position",
+          "value": [
+            45.5,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1844,
+          "key": "player.position",
+          "value": [
+            40.5,
+            -60,
+            46.5
+          ],
+          "correction": true,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S10 second player knocks the bot back during pathfind",
+      "harm": "unlabelable per change: physics integrates own input and outside velocity",
+      "rep": 0,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1864,
+          "key": "player.position",
+          "value": [
+            40.6274,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1865,
+          "key": "player.position",
+          "value": [
+            40.82436,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1866,
+          "key": "player.position",
+          "value": [
+            41.0593,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1867,
+          "key": "player.position",
+          "value": [
+            41.31498,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1868,
+          "key": "player.position",
+          "value": [
+            41.58198,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1869,
+          "key": "player.position",
+          "value": [
+            41.85516,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1870,
+          "key": "player.position",
+          "value": [
+            42.13172,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1871,
+          "key": "player.position",
+          "value": [
+            42.41012,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1872,
+          "key": "player.position",
+          "value": [
+            42.68953,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1873,
+          "key": "player.position",
+          "value": [
+            42.96948,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1874,
+          "key": "player.position",
+          "value": [
+            43.40301,
+            -59.63925,
+            40.24262
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1875,
+          "key": "player.position",
+          "value": [
+            43.66452,
+            -59.36411,
+            40.10792
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1876,
+          "key": "player.position",
+          "value": [
+            43.92555,
+            -59.17288,
+            39.99618
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1877,
+          "key": "player.position",
+          "value": [
+            44.18224,
+            -59.06388,
+            39.9113
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1878,
+          "key": "player.position",
+          "value": [
+            44.42793,
+            -59.03545,
+            39.85649
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1879,
+          "key": "player.position",
+          "value": [
+            44.65438,
+            -59.08599,
+            39.83192
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1880,
+          "key": "player.position",
+          "value": [
+            44.85468,
+            -59.21392,
+            39.83439
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1881,
+          "key": "player.position",
+          "value": [
+            45.02498,
+            -59.41769,
+            39.85688
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1882,
+          "key": "player.position",
+          "value": [
+            45.16387,
+            -59.69579,
+            39.8971
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1883,
+          "key": "player.position",
+          "value": [
+            45.27141,
+            -60,
+            39.95085
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1884,
+          "key": "player.position",
+          "value": [
+            45.26542,
+            -60,
+            40.07356
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1885,
+          "key": "player.position",
+          "value": [
+            45.15083,
+            -60,
+            40.20253
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1886,
+          "key": "player.position",
+          "value": [
+            44.97243,
+            -60,
+            40.32597
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1887,
+          "key": "player.position",
+          "value": [
+            44.7555,
+            -60,
+            40.43747
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1888,
+          "key": "player.position",
+          "value": [
+            44.76401,
+            -60,
+            40.50901
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1889,
+          "key": "player.position",
+          "value": [
+            44.89604,
+            -60,
+            40.5464
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1890,
+          "key": "player.position",
+          "value": [
+            45.09517,
+            -60,
+            40.55715
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1891,
+          "key": "player.position",
+          "value": [
+            45.33002,
+            -60,
+            40.54507
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1892,
+          "key": "player.position",
+          "value": [
+            45.58555,
+            -60,
+            40.53348
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1893,
+          "key": "player.position",
+          "value": [
+            45.85238,
+            -60,
+            40.52248
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1894,
+          "key": "player.position",
+          "value": [
+            46.1254,
+            -60,
+            40.51213
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1895,
+          "key": "player.position",
+          "value": [
+            46.4018,
+            -60,
+            40.50249
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1896,
+          "key": "player.position",
+          "value": [
+            46.68012,
+            -60,
+            40.49689
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1897,
+          "key": "player.position",
+          "value": [
+            46.95948,
+            -60,
+            40.49416
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1898,
+          "key": "player.position",
+          "value": [
+            47.2394,
+            -60,
+            40.49549
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1899,
+          "key": "player.position",
+          "value": [
+            47.51964,
+            -60,
+            40.49583
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1900,
+          "key": "player.position",
+          "value": [
+            47.80005,
+            -60,
+            40.49649
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1901,
+          "key": "player.position",
+          "value": [
+            48.08055,
+            -60,
+            40.49716
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1902,
+          "key": "player.position",
+          "value": [
+            48.3611,
+            -60,
+            40.49816
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1903,
+          "key": "player.position",
+          "value": [
+            48.64168,
+            -60,
+            40.4985
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1904,
+          "key": "player.position",
+          "value": [
+            48.92228,
+            -60,
+            40.49883
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1905,
+          "key": "player.position",
+          "value": [
+            49.20288,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1906,
+          "key": "player.position",
+          "value": [
+            49.48349,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1907,
+          "key": "player.position",
+          "value": [
+            49.76411,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1908,
+          "key": "player.position",
+          "value": [
+            50.04472,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1909,
+          "key": "player.position",
+          "value": [
+            50.32534,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1910,
+          "key": "player.position",
+          "value": [
+            50.60595,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1911,
+          "key": "player.position",
+          "value": [
+            50.88657,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1912,
+          "key": "player.position",
+          "value": [
+            51.16719,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1913,
+          "key": "player.position",
+          "value": [
+            51.5,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S10 second player knocks the bot back during pathfind",
+      "harm": "unlabelable per change: physics integrates own input and outside velocity",
+      "rep": 1,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 1944,
+          "key": "player.position",
+          "value": [
+            40.6274,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1945,
+          "key": "player.position",
+          "value": [
+            40.82436,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1946,
+          "key": "player.position",
+          "value": [
+            41.0593,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1947,
+          "key": "player.position",
+          "value": [
+            41.31498,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1948,
+          "key": "player.position",
+          "value": [
+            41.58198,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1949,
+          "key": "player.position",
+          "value": [
+            41.85516,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1950,
+          "key": "player.position",
+          "value": [
+            42.13172,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1951,
+          "key": "player.position",
+          "value": [
+            42.41012,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1952,
+          "key": "player.position",
+          "value": [
+            42.68953,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1953,
+          "key": "player.position",
+          "value": [
+            42.96948,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1954,
+          "key": "player.position",
+          "value": [
+            43.40301,
+            -59.63925,
+            40.24262
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1955,
+          "key": "player.position",
+          "value": [
+            43.66452,
+            -59.36411,
+            40.10792
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1956,
+          "key": "player.position",
+          "value": [
+            43.92555,
+            -59.17288,
+            39.99618
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1957,
+          "key": "player.position",
+          "value": [
+            44.18224,
+            -59.06388,
+            39.9113
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1958,
+          "key": "player.position",
+          "value": [
+            44.42793,
+            -59.03545,
+            39.85649
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1959,
+          "key": "player.position",
+          "value": [
+            44.65438,
+            -59.08599,
+            39.83192
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1960,
+          "key": "player.position",
+          "value": [
+            44.85468,
+            -59.21392,
+            39.83439
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1961,
+          "key": "player.position",
+          "value": [
+            45.02498,
+            -59.41769,
+            39.85688
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1962,
+          "key": "player.position",
+          "value": [
+            45.16387,
+            -59.69579,
+            39.8971
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1963,
+          "key": "player.position",
+          "value": [
+            45.27141,
+            -60,
+            39.95085
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1964,
+          "key": "player.position",
+          "value": [
+            45.26542,
+            -60,
+            40.07356
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1965,
+          "key": "player.position",
+          "value": [
+            45.15083,
+            -60,
+            40.20253
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1966,
+          "key": "player.position",
+          "value": [
+            44.97243,
+            -60,
+            40.32597
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1967,
+          "key": "player.position",
+          "value": [
+            44.7555,
+            -60,
+            40.43747
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1968,
+          "key": "player.position",
+          "value": [
+            44.76401,
+            -60,
+            40.50901
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1969,
+          "key": "player.position",
+          "value": [
+            44.89604,
+            -60,
+            40.5464
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1970,
+          "key": "player.position",
+          "value": [
+            45.09517,
+            -60,
+            40.55715
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1971,
+          "key": "player.position",
+          "value": [
+            45.33002,
+            -60,
+            40.54507
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1972,
+          "key": "player.position",
+          "value": [
+            45.58555,
+            -60,
+            40.53348
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1973,
+          "key": "player.position",
+          "value": [
+            45.85238,
+            -60,
+            40.52248
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1974,
+          "key": "player.position",
+          "value": [
+            46.1254,
+            -60,
+            40.51213
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1975,
+          "key": "player.position",
+          "value": [
+            46.4018,
+            -60,
+            40.50249
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1976,
+          "key": "player.position",
+          "value": [
+            46.68012,
+            -60,
+            40.49689
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1977,
+          "key": "player.position",
+          "value": [
+            46.95948,
+            -60,
+            40.49416
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1978,
+          "key": "player.position",
+          "value": [
+            47.2394,
+            -60,
+            40.49549
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1979,
+          "key": "player.position",
+          "value": [
+            47.51964,
+            -60,
+            40.49583
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1980,
+          "key": "player.position",
+          "value": [
+            47.80005,
+            -60,
+            40.49649
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1981,
+          "key": "player.position",
+          "value": [
+            48.08055,
+            -60,
+            40.49716
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1982,
+          "key": "player.position",
+          "value": [
+            48.3611,
+            -60,
+            40.49816
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1983,
+          "key": "player.position",
+          "value": [
+            48.64168,
+            -60,
+            40.4985
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1984,
+          "key": "player.position",
+          "value": [
+            48.92228,
+            -60,
+            40.49883
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1985,
+          "key": "player.position",
+          "value": [
+            49.20288,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1986,
+          "key": "player.position",
+          "value": [
+            49.48349,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1987,
+          "key": "player.position",
+          "value": [
+            49.76411,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1988,
+          "key": "player.position",
+          "value": [
+            50.04472,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1989,
+          "key": "player.position",
+          "value": [
+            50.32534,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1990,
+          "key": "player.position",
+          "value": [
+            50.60595,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1991,
+          "key": "player.position",
+          "value": [
+            50.88657,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1992,
+          "key": "player.position",
+          "value": [
+            51.16719,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 1993,
+          "key": "player.position",
+          "value": [
+            51.5,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S10 second player knocks the bot back during pathfind",
+      "harm": "unlabelable per change: physics integrates own input and outside velocity",
+      "rep": 2,
+      "notes": "verdict Confirmed",
+      "changes": [
+        {
+          "tick": 2024,
+          "key": "player.position",
+          "value": [
+            40.6274,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2025,
+          "key": "player.position",
+          "value": [
+            40.82436,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2026,
+          "key": "player.position",
+          "value": [
+            41.0593,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2027,
+          "key": "player.position",
+          "value": [
+            41.31498,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2028,
+          "key": "player.position",
+          "value": [
+            41.58198,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2029,
+          "key": "player.position",
+          "value": [
+            41.85516,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2030,
+          "key": "player.position",
+          "value": [
+            42.13172,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2031,
+          "key": "player.position",
+          "value": [
+            42.41012,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2032,
+          "key": "player.position",
+          "value": [
+            42.68953,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2033,
+          "key": "player.position",
+          "value": [
+            42.96948,
+            -60,
+            40.5
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2034,
+          "key": "player.position",
+          "value": [
+            43.40301,
+            -59.63925,
+            40.24262
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2035,
+          "key": "player.position",
+          "value": [
+            43.66452,
+            -59.36411,
+            40.10792
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2036,
+          "key": "player.position",
+          "value": [
+            43.92555,
+            -59.17288,
+            39.99618
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2037,
+          "key": "player.position",
+          "value": [
+            44.18224,
+            -59.06388,
+            39.9113
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2038,
+          "key": "player.position",
+          "value": [
+            44.42793,
+            -59.03545,
+            39.85649
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2039,
+          "key": "player.position",
+          "value": [
+            44.65438,
+            -59.08599,
+            39.83192
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2040,
+          "key": "player.position",
+          "value": [
+            44.85468,
+            -59.21392,
+            39.83439
+          ],
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2041,
+          "key": "player.position",
+          "value": [
+            45.02498,
+            -59.41769,
+            39.85688
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2042,
+          "key": "player.position",
+          "value": [
+            45.16387,
+            -59.69579,
+            39.8971
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2043,
+          "key": "player.position",
+          "value": [
+            45.27141,
+            -60,
+            39.95085
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2044,
+          "key": "player.position",
+          "value": [
+            45.26542,
+            -60,
+            40.07356
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2045,
+          "key": "player.position",
+          "value": [
+            45.15083,
+            -60,
+            40.20253
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2046,
+          "key": "player.position",
+          "value": [
+            44.97243,
+            -60,
+            40.32597
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2047,
+          "key": "player.position",
+          "value": [
+            44.7555,
+            -60,
+            40.43747
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2048,
+          "key": "player.position",
+          "value": [
+            44.76401,
+            -60,
+            40.50901
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2049,
+          "key": "player.position",
+          "value": [
+            44.89604,
+            -60,
+            40.5464
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2050,
+          "key": "player.position",
+          "value": [
+            45.09517,
+            -60,
+            40.55715
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2051,
+          "key": "player.position",
+          "value": [
+            45.33002,
+            -60,
+            40.54507
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2052,
+          "key": "player.position",
+          "value": [
+            45.58555,
+            -60,
+            40.53348
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2053,
+          "key": "player.position",
+          "value": [
+            45.85238,
+            -60,
+            40.52248
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2054,
+          "key": "player.position",
+          "value": [
+            46.1254,
+            -60,
+            40.51213
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2055,
+          "key": "player.position",
+          "value": [
+            46.4018,
+            -60,
+            40.50249
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2056,
+          "key": "player.position",
+          "value": [
+            46.68012,
+            -60,
+            40.49689
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2057,
+          "key": "player.position",
+          "value": [
+            46.95948,
+            -60,
+            40.49416
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2058,
+          "key": "player.position",
+          "value": [
+            47.2394,
+            -60,
+            40.49549
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2059,
+          "key": "player.position",
+          "value": [
+            47.51964,
+            -60,
+            40.49583
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2060,
+          "key": "player.position",
+          "value": [
+            47.80005,
+            -60,
+            40.49649
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2061,
+          "key": "player.position",
+          "value": [
+            48.08055,
+            -60,
+            40.49716
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2062,
+          "key": "player.position",
+          "value": [
+            48.3611,
+            -60,
+            40.49816
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2063,
+          "key": "player.position",
+          "value": [
+            48.64168,
+            -60,
+            40.4985
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2064,
+          "key": "player.position",
+          "value": [
+            48.92228,
+            -60,
+            40.49883
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2065,
+          "key": "player.position",
+          "value": [
+            49.20288,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2066,
+          "key": "player.position",
+          "value": [
+            49.48349,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2067,
+          "key": "player.position",
+          "value": [
+            49.76411,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2068,
+          "key": "player.position",
+          "value": [
+            50.04472,
+            -60,
+            40.49916
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2069,
+          "key": "player.position",
+          "value": [
+            50.32534,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2070,
+          "key": "player.position",
+          "value": [
+            50.60595,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2071,
+          "key": "player.position",
+          "value": [
+            50.88657,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2072,
+          "key": "player.position",
+          "value": [
+            51.16719,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        },
+        {
+          "tick": 2073,
+          "key": "player.position",
+          "value": [
+            51.5,
+            -60,
+            40.4995
+          ],
+          "correction": false,
+          "truth": "own",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "own"
+        }
+      ]
+    },
+    {
+      "name": "S11 dig cancelled (freeze), then the second player breaks the block",
+      "harm": "none: all rules exclude cancelled actions",
+      "rep": 0,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 2118,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "outside",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S11 dig cancelled (freeze), then the second player breaks the block",
+      "harm": "none: all rules exclude cancelled actions",
+      "rep": 1,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 2146,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "outside",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S11 dig cancelled (freeze), then the second player breaks the block",
+      "harm": "none: all rules exclude cancelled actions",
+      "rep": 2,
+      "notes": null,
+      "changes": [
+        {
+          "tick": 2174,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "outside",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S11b place started and cancelled in the same tick (deferred flush)",
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "rep": 0,
+      "notes": "placed=false",
+      "changes": []
+    },
+    {
+      "name": "S11b place started and cancelled in the same tick (deferred flush)",
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "rep": 1,
+      "notes": "placed=false",
+      "changes": []
+    },
+    {
+      "name": "S11b place started and cancelled in the same tick (deferred flush)",
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "rep": 2,
+      "notes": "placed=false",
+      "changes": []
+    },
+    {
+      "name": "S11b place started and cancelled in the same tick (immediate flush)",
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "rep": 0,
+      "notes": "placed=true",
+      "changes": [
+        {
+          "tick": 2284,
+          "key": "block(41,-60,43)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "outside",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S11b place started and cancelled in the same tick (immediate flush)",
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "rep": 1,
+      "notes": "placed=true",
+      "changes": [
+        {
+          "tick": 2314,
+          "key": "block(42,-60,43)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "outside",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S11b place started and cancelled in the same tick (immediate flush)",
+      "harm": "none: §14.5 counts it Outside; deferred flush never sends it",
+      "rep": 2,
+      "notes": "placed=true",
+      "changes": [
+        {
+          "tick": 2344,
+          "key": "block(43,-60,43)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "outside",
+          "refined": "outside",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S12 async strand: first place rejected (spawn protection), second rolled back in the same tick",
+      "harm": "backend-side rules tag the rolled-back action's change Own",
+      "rep": 0,
+      "notes": "first Rejected, second Confirmed at 2375, rollback at 2375",
+      "changes": [
+        {
+          "tick": 2375,
+          "key": "block(18,-60,2)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S12 async strand: first place rejected (spawn protection), second rolled back in the same tick",
+      "harm": "backend-side rules tag the rolled-back action's change Own",
+      "rep": 1,
+      "notes": "first Rejected, second Confirmed at 2415, rollback at 2415",
+      "changes": [
+        {
+          "tick": 2415,
+          "key": "block(18,-60,3)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "outside"
+        }
+      ]
+    },
+    {
+      "name": "S12 async strand: first place rejected (spawn protection), second rolled back in the same tick",
+      "harm": "backend-side rules tag the rolled-back action's change Own",
+      "rep": 2,
+      "notes": "first Rejected, second Confirmed at 2455, rollback at 2455",
+      "changes": [
+        {
+          "tick": 2455,
+          "key": "block(18,-60,4)",
+          "value": "minecraft:dirt",
+          "correction": false,
+          "truth": "outside",
+          "provisional": "own",
+          "refined": "own",
+          "runtimeSide": "outside"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "counts": {
+      "launch": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "connectResult": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "tickInput": {
+        "valid": 2493,
+        "invalid": 0
+      },
+      "recordedTick": {
+        "valid": 2493,
+        "invalid": 0
+      },
+      "startRequest": {
+        "valid": 51,
+        "invalid": 0
+      },
+      "delta": {
+        "valid": 6,
+        "invalid": 0
+      }
+    },
+    "failures": []
+  }
+}
