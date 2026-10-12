@@ -290,7 +290,7 @@ export type EntityFilter = {
 };
 
 /**
- * §8.5 selector box x= y= z= dx= dy= dz=, all six given together, with vanilla's meaning. Provisional pending escalation E-4.
+ * §8.5 selector box x= y= z= dx= dy= dz=, all six given together, with vanilla's meaning. Added by escalation E-4 (errata v0.2.1 P4).
  */
 export type SelectorBox = {
   x: Float;

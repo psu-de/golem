@@ -1,6 +1,6 @@
 {
   "name": "@golem/contracts",
-  "version": "0.1.0-draft",
+  "version": "0.1.0",
   "description": "Interface contracts between the Golem compiler, runtime and backend: JSON Schemas, generated TypeScript types and the hand-written Backend interface (spec v0.2, Phase 2).",
   "license": "UNLICENSED",
   "private": true,

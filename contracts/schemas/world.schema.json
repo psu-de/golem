@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://psu-de.github.io/golem/contracts/0.1/world.schema.json",
   "title": "Golem world keys",
-  "description": "§14.1 world model: the canonical key-string grammar (proposed decision PD-9) and the value shape of every key family. Keys are the unit of change tracking (§14.5) and read tracking (§9.8) and appear on the wire as Interfered.key. A value of null means absent: an unloaded block, no open window, no item in a slot. Keys marked 'E-1' are needed by §17.2 members but missing from the §14.1 table; they are provisional pending escalation E-1. Grammar (ABNF): see CONTRACTS.md 'World keys'.",
+  "description": "§14.1 world model: the canonical key-string grammar (proposed decision PD-9) and the value shape of every key family. Keys are the unit of change tracking (§14.5) and read tracking (§9.8) and appear on the wire as Interfered.key. A value of null means absent: an unloaded block, no open window, no item in a slot. Keys marked 'E-1' are read by §17.2 members and were added to §14.1 by escalation E-1 (errata v0.2.1 P1). Grammar (ABNF): see CONTRACTS.md 'World keys'.",
   "$defs": {
     "WorldKey": {
       "description": "§14.1 canonical world-key string (PD-9). Integers are written in canonical decimal (no leading zeros, no '+', no '-0'); there is no whitespace.",

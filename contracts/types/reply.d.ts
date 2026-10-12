@@ -44,7 +44,7 @@ export type Refused = {
 };
 
 /**
- * §16.3 refusal reasons: Busy, UnknownJob, BadArgs, NotReady (assign); NoJob (cancel, pause, resume); NotPaused (resume). BadCommand is escalation E-3 (provisional): a line that is not a valid command.
+ * §16.3 refusal reasons: Busy, UnknownJob, BadArgs, NotReady (assign); NoJob (cancel, pause, resume); NotPaused (resume). BadCommand is escalation E-3 (errata v0.2.1 P3): a line that is not a valid command.
  */
 export type RefusalReason = "Busy" | "UnknownJob" | "BadArgs" | "NotReady" | "NoJob" | "NotPaused" | "BadCommand";
 

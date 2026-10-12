@@ -1,14 +1,14 @@
-# Golem interface contracts (`@golem/contracts` 0.1.0-draft)
+# Golem interface contracts (`@golem/contracts` 0.1.0)
 
 This package is the typed, machine-checked contract between the Golem compiler, runtime and backend. It closes readiness-review finding 2: the compiler, runtime and backend can now be built independently against these schemas and types. It implements spec v0.2 (`docs/spec/golem-spec-v0.2.md`), which stays normative: where this package and the spec disagree, the spec wins and the difference is a bug here.
 
-Drafted by the architect agent for Paul (spec owner), for decision point **D2**.
+Drafted by the architect agent; signed off by Paul (spec owner) at decision point **D2** on 2026-10-12.
 
 ## D2 sign-off summary
 
-Status: **D2 in progress.** On 2026-10-12 Paul accepted all 48 proposed decisions (PD-1 to PD-48); they are frozen for v0.1. The 13 escalations (E-1 to E-13) are still open and remain applied provisionally, so the contracts as a whole are not yet frozen. `npm test` passes: every example validates, every negative fixture fails for its stated reason, `check-ir` passes on the Lumberjack IR, type regeneration produces no diff, and the stub backend and stub IR consumer compile under `tsc --strict`.
+Status: **D2 complete; frozen as v0.1.0 on 2026-10-12.** Paul accepted all 48 proposed decisions (PD-1 to PD-48) and all 13 escalations (E-1 to E-13) with their proposed answers. The escalations reach the spec through errata v0.2.1 (`docs/spec/errata.md`), drafted and awaiting publication. Only the spike-dependent items (S-1 to S-5) remain provisional, pending D3. `npm test` passes: every example validates, every negative fixture fails for its stated reason, `check-ir` passes on the Lumberjack IR, type regeneration produces no diff, and the stub backend and stub IR consumer compile under `tsc --strict`.
 
-To complete D2, answer each escalation below. The accepted proposed decisions (PD) are frozen as part of the v0.1 contracts and keep their ids as stable references. Approving an escalation (E) also needs an errata patch to the spec (decision 130). Spike items (S) stay provisional until D3 whatever is decided here.
+The PD and E ids stay as stable references in schemas and documents. Escalation E-n is spec errata v0.2.1 patch Pn (decision 130). Spike items (S) stay provisional until D3.
 
 ### Proposed decisions
 
@@ -67,9 +67,9 @@ Each is a choice the spec leaves open, made in the simplest way consistent with 
 
 ### Escalations
 
-Each needs Paul's answer. The proposed answer is already applied provisionally. Full context is in [ESCALATIONS.md](ESCALATIONS.md).
+All 13 were accepted by Paul on 2026-10-12 with the answers below. Full context is in [ESCALATIONS.md](ESCALATIONS.md); the spec text is in errata v0.2.1.
 
-| ID | Question | Recommendation |
+| ID | Question | Accepted answer (2026-10-12) |
 | --- | --- | --- |
 | E-1 | §14.1 lacks keys that §17.2 reads (light, sign text, on-fire, vehicle, reach attributes, entity item/owner/bite) | Add the keys as drafted; keep `path_progress` a measurement |
 | E-2 | Replies have no correlation id | Add optional `id`, echoed in the reply |
@@ -160,10 +160,10 @@ Node ≥ 20, no runtime dependencies. The dev dependencies are pinned exactly: `
 
 ### Versioning and freeze policy
 
-- **Contract version** `0.1` is in every `$id` path, the IR `header.ir_format` (`golem-ir/0.1`), `hello.protocol` (`golem-protocol/0.1`), `launch.format` and the state file `format`. The package version is `0.1.0-draft` until D2 completes (all escalations answered) and becomes `0.1.0` at the freeze.
-- **Until D2 completes**, only the open escalations and the definitions they are applied in may change; the accepted proposed decisions change only by Paul's explicit decision. The `$id`s are identifiers, not fetched URLs.
-- **After D2 (frozen)**, `0.1` schemas change only through errata that fix a contradiction with the spec. Each erratum is a patch release (`0.1.1`, …) noted here, and never adds, removes or retypes a field that a conforming producer emits. Any other change, including an additive field (validators reject unknown fields under `additionalProperties: false`), is a new contract version `0.2` with new `$id`s, `ir_format` and `protocol`. A runtime refuses an IR whose `ir_format` it does not implement.
-- **D3 outcomes** may change the provisional items listed in [SPIKE_DEPENDENCIES.md](SPIKE_DEPENDENCIES.md) before the freeze. If D3 comes after D2, the change is an erratum confined to those definitions.
+- **Contract version** `0.1` is in every `$id` path, the IR `header.ir_format` (`golem-ir/0.1`), `hello.protocol` (`golem-protocol/0.1`), `launch.format` and the state file `format`. The package version became `0.1.0` at the D2 freeze on 2026-10-12.
+- **Frozen since D2 (2026-10-12)**, `0.1` schemas change only through errata that fix a contradiction with the spec. Each erratum is a patch release (`0.1.1`, …) noted here, and never adds, removes or retypes a field that a conforming producer emits. Any other change, including an additive field (validators reject unknown fields under `additionalProperties: false`), is a new contract version `0.2` with new `$id`s, `ir_format` and `protocol`. A runtime refuses an IR whose `ir_format` it does not implement.
+- **D3 outcomes** may still change the provisional items listed in [SPIKE_DEPENDENCIES.md](SPIKE_DEPENDENCIES.md). Because D3 comes after D2, such a change is an erratum confined to those definitions.
+- The `$id`s are identifiers, not fetched URLs.
 
 ---
 
@@ -535,7 +535,7 @@ All 48 were accepted by Paul on 2026-10-12 and are frozen for v0.1. Each entry g
 - **PD-18, argument order.** Defects are uncatchable but visible in reports, so which defect fires first is observable. Recording the written order keeps §7.1's left to right exact without verbose named argument lists.
 - **PD-19, flat charts.** A flat map gives O(1) lookup by state id (snapshots, persistence) and makes uniqueness structural. Exit behaviour on the runtime side is standard statechart semantics and keeps transitions free of duplicated cleanup.
 - **PD-20, ids.** §18.3 gives `module.task#i.j.k` and one example region. The owner-only root, the two reserved terminals and the closed region table are the minimal completion.
-- **PD-21, handler identity.** This is the provisional answer to E-9. The index is already the normative handler order (§11.6).
+- **PD-21, handler identity.** This is the answer to E-9. The index is already the normative handler order (§11.6).
 - **PD-22, job names.** Jobs are non-generic and non-overloaded (§12.1), so the qualified task name is unique and unambiguous across modules. `hello` advertises the names.
 - **PD-23, job ids.** The supervisor chooses ids in `assign` (§16.3). The start job is assigned by the runtime and needs an id the supervisor can `cancel` or `pause`.
 - **PD-24, seq and tick.** A per-bot counter must survive reconnects to keep the stream ordered. `world.tick` resets on connect (§15.5), so reports use the monotonic clock tick.

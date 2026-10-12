@@ -9,7 +9,7 @@ import type { WireObject } from "./wire.js";
 export type Command = Assign | Cancel | Pause | Resume | Snapshot;
 
 /**
- * Escalation E-2 (provisional): optional client-chosen id, echoed as id in the reply. Without it, replies correlate by order: commands are applied and answered in arrival order (§16.3).
+ * Escalation E-2 (errata v0.2.1 P2): optional client-chosen id, echoed as id in the reply. Without it, replies correlate by order: commands are applied and answered in arrival order (§16.3).
  */
 export type CorrelationId = string;
 

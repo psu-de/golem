@@ -267,7 +267,7 @@ export type TaskFailed = {
 };
 
 /**
- * Escalation E-11 (provisional): task_cancelled for a frame of a pub task that was cancelled by unwinding (abort when, the end of a with body, a cancel command, until cancelling a handler run); §16.2 gives such frames no terminal report.
+ * E-11 (errata v0.2.1 P11): task_cancelled for a frame of a pub task that was cancelled by unwinding (abort when, the end of a with body, a cancel command, until cancelling a handler run); §16.2 gives such frames no terminal report.
  */
 export type TaskCancelled = {
   seq: Seq;
@@ -446,7 +446,7 @@ export type Respawned = {
 };
 
 /**
- * §18.5 the persistence mismatch report the spec requires but §16.2 does not list (escalation E-6, provisional): a var or handler backoff state that was not restored, and why.
+ * §18.5 the persistence mismatch report the spec requires but §16.2 does not list (escalation E-6, errata v0.2.1 P6): a var or handler backoff state that was not restored, and why.
  */
 export type StateNotRestored = {
   seq: Seq;
