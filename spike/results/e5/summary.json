@@ -1,0 +1,302 @@
+{
+  "experiment": "E5 pathfinder",
+  "cancel": {
+    "runs": [
+      {
+        "run": 0,
+        "cancel_tick": 49,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.332,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 1,
+        "cancel_tick": 104,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 2,
+        "cancel_tick": 162,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 3,
+        "cancel_tick": 222,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 4,
+        "cancel_tick": 285,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 5,
+        "cancel_tick": 351,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 6,
+        "cancel_tick": 419,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 7,
+        "cancel_tick": 490,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 8,
+        "cancel_tick": 564,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      },
+      {
+        "run": 9,
+        "cancel_tick": 640,
+        "controls_before": [],
+        "controls_after_cancel_same_tick": [],
+        "pathfinder_goal_after_cancel": null,
+        "controls_any_later_tick": [],
+        "horizontal_speed_at_cancel": 0.153,
+        "slide_distance": 0.333,
+        "ticks_until_still": 7,
+        "movement_packets_next_30_ticks": 9,
+        "last_movement_packet_tick_offset": 28,
+        "sprint_stop_sent_in_cancel": true
+      }
+    ],
+    "pathfinder_stop_release_ticks": 4
+  },
+  "progress": {
+    "verdict": "Confirmed",
+    "ticks": 118,
+    "non_null_ticks": 117,
+    "final": 30,
+    "decreases": 0,
+    "max_ticks_between_increments": 5,
+    "mean_ticks_between_increments": 3.77
+  },
+  "progress_replan": {
+    "verdict": "Confirmed",
+    "final_progress": 30,
+    "decreases": 0,
+    "longest_stall_ticks": 6,
+    "within_5s": true,
+    "blocked_at_tick": 863
+  },
+  "no_path": {
+    "status_after_15s": "Running",
+    "path_update_statuses": {
+      "partial": 170,
+      "timeout": 1
+    },
+    "final_progress": 60,
+    "longest_progress_stall_ticks": 130,
+    "progress_clause_would_fail": true,
+    "final_pos": [
+      54.37,
+      -60,
+      56.5
+    ]
+  },
+  "no_path_enclosed": {
+    "verdict": "Failed",
+    "detail": "NoPath",
+    "ticks": 1
+  },
+  "goal_clear": {
+    "verdict": "Confirmed",
+    "clear_reached_exact": true,
+    "pos": [
+      39.685,
+      -60,
+      40.5
+    ]
+  },
+  "goal_clear_corridor": {
+    "verdict": "Confirmed",
+    "clear_reached_exact": true,
+    "pos": [
+      40.5,
+      -60,
+      46.685
+    ]
+  },
+  "goal_allof": {
+    "verdict": "Confirmed",
+    "clear_reached_exact": true,
+    "eye_to_support_centre": 2.271,
+    "pos": [
+      49.685,
+      -60,
+      50.5
+    ]
+  },
+  "goal_allof_unsatisfiable": {
+    "status_after_10s": "Running",
+    "path_update_statuses": {
+      "partial": 100,
+      "timeout": 1
+    },
+    "progress": 83
+  },
+  "avoid": [
+    {
+      "label": "slab across the straight line",
+      "region": {
+        "min": [
+          44,
+          -61,
+          36
+        ],
+        "max": [
+          46,
+          -55,
+          44
+        ]
+      },
+      "verdict": "Confirmed",
+      "ticks_feet_block_inside": 0,
+      "ticks_bbox_overlapping": 3
+    },
+    {
+      "label": "region around the goal approach",
+      "region": {
+        "min": [
+          55,
+          -61,
+          38
+        ],
+        "max": [
+          59,
+          -55,
+          42
+        ]
+      },
+      "verdict": "Confirmed",
+      "ticks_feet_block_inside": 0,
+      "ticks_bbox_overlapping": 3
+    },
+    {
+      "label": "goal inside the region",
+      "region": {
+        "min": [
+          58,
+          -61,
+          38
+        ],
+        "max": [
+          62,
+          -55,
+          42
+        ]
+      },
+      "verdict": "no verdict in 15 s (cancelled)",
+      "ticks_feet_block_inside": 0,
+      "ticks_bbox_overlapping": 0
+    }
+  ],
+  "validation": {
+    "counts": {
+      "launch": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "connectResult": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "tickInput": {
+        "valid": 2166,
+        "invalid": 0
+      },
+      "recordedTick": {
+        "valid": 2166,
+        "invalid": 0
+      },
+      "startRequest": {
+        "valid": 22,
+        "invalid": 0
+      }
+    },
+    "failures": []
+  }
+}

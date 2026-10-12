@@ -1,0 +1,78 @@
+{
+  "format": "golem-placement/0.1-draft",
+  "minecraft": "1.21.4",
+  "description": "DRAFT hand-authored placement table (review finding 4, S-3, decisions 68, 87, 92). Answers, for an item clicked against face F of a support block: which block state appears at support.offset(F), or that vanilla refuses. Rules are tried in order; the first whose items match decides. Item and block specs are ids or #tags resolved against the data generator's tags for the pinned version. Validated against the server by spike/experiments/e6-data.mjs.",
+  "scope_v0_1": {
+    "in": [
+      "logs, wood, stems and other rotated pillars (axis from the clicked face)",
+      "saplings (on #minecraft:dirt or farmland, top face only)",
+      "torch, soul_torch, redstone_torch (top face: standing torch; side face: wall torch facing away from the support; bottom face: refused)",
+      "crop seeds: wheat, beetroot, carrot, potato, melon, pumpkin (on farmland, top face only, age 0)",
+      "slabs (type from the clicked face and cursor height)",
+      "stairs (facing from the player's horizontal facing, half from face and cursor height; shape straight, neighbours not modelled)",
+      "full cubes used as scaffold or building blocks: dirt, cobblestone, stone, planks, cobbled deepslate, netherrack, sand, gravel, glass, crafting table, and any other block the target's defaults cover"
+    ],
+    "out": [
+      "doors, beds, signs, banners, buttons, levers, rails, redstone wire, fences and walls (connection state), chests and furnaces (facing: covered by the 'player_facing_opposite' rule only for chest, furnace, smoker, blast furnace)",
+      "waterlogging (the target is assumed dry), snow layers, candles and sea pickles stacking, double slabs",
+      "support that is not a full collision face (fences, walls, slabs as torch support)"
+    ]
+  },
+  "support_kinds": {
+    "any": "any non-replaceable block the client may click",
+    "sturdy_face": "the support's collision shape covers the clicked face completely (approximated by a full-cube collision shape in v0.1)",
+    "on": "the block under the target matches the listed ids or tags"
+  },
+  "rules": [
+    {
+      "id": "torch",
+      "items": { "minecraft:torch": ["minecraft:torch", "minecraft:wall_torch"], "minecraft:soul_torch": ["minecraft:soul_torch", "minecraft:soul_wall_torch"], "minecraft:redstone_torch": ["minecraft:redstone_torch", "minecraft:redstone_wall_torch"] },
+      "faces": {
+        "Up": { "block": 0, "support": "sturdy_face", "state": {} },
+        "side": { "block": 1, "support": "sturdy_face", "state": { "facing": "face" } },
+        "Down": null
+      }
+    },
+    {
+      "id": "sapling",
+      "items": ["#minecraft:saplings"],
+      "block": "same",
+      "faces": { "Up": { "support": "on", "on": ["#minecraft:dirt", "minecraft:farmland"], "state": { "stage": "0" } }, "side": null, "Down": null }
+    },
+    {
+      "id": "crop_seed",
+      "items": { "minecraft:wheat_seeds": "minecraft:wheat", "minecraft:beetroot_seeds": "minecraft:beetroots", "minecraft:carrot": "minecraft:carrots", "minecraft:potato": "minecraft:potatoes", "minecraft:melon_seeds": "minecraft:melon_stem", "minecraft:pumpkin_seeds": "minecraft:pumpkin_stem" },
+      "faces": { "Up": { "support": "on", "on": ["minecraft:farmland"], "state": { "age": "0" } }, "side": null, "Down": null }
+    },
+    {
+      "id": "rotated_pillar",
+      "items": ["#minecraft:logs", "minecraft:hay_block", "minecraft:bone_block", "minecraft:basalt", "minecraft:polished_basalt", "minecraft:quartz_pillar", "minecraft:purpur_pillar", "minecraft:bamboo_block", "minecraft:stripped_bamboo_block", "minecraft:muddy_mangrove_roots", "minecraft:deepslate"],
+      "block": "same",
+      "faces": { "any": { "support": "any", "state": { "axis": "face_axis" } } }
+    },
+    {
+      "id": "slab",
+      "items": ["#minecraft:slabs"],
+      "block": "same",
+      "faces": { "Up": { "support": "any", "state": { "type": "bottom", "waterlogged": "false" } }, "Down": { "support": "any", "state": { "type": "top", "waterlogged": "false" } }, "side": { "support": "any", "state": { "type": "cursor_y", "waterlogged": "false" } } }
+    },
+    {
+      "id": "stairs",
+      "items": ["#minecraft:stairs"],
+      "block": "same",
+      "faces": { "Up": { "support": "any", "state": { "facing": "player_facing", "half": "bottom", "shape": "straight", "waterlogged": "false" } }, "Down": { "support": "any", "state": { "facing": "player_facing", "half": "top", "shape": "straight", "waterlogged": "false" } }, "side": { "support": "any", "state": { "facing": "player_facing", "half": "cursor_y", "shape": "straight", "waterlogged": "false" } } }
+    },
+    {
+      "id": "player_facing_opposite",
+      "items": ["minecraft:chest", "minecraft:furnace", "minecraft:smoker", "minecraft:blast_furnace"],
+      "block": "same",
+      "faces": { "any": { "support": "any", "state": { "facing": "player_facing_opposite" } } }
+    },
+    {
+      "id": "default_state",
+      "items": ["*"],
+      "block": "same",
+      "faces": { "any": { "support": "any", "state": {} } }
+    }
+  ]
+}

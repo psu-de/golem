@@ -76,6 +76,13 @@ export class Server {
     this.proc.stdout.on("data", onData);
     this.proc.stderr.on("data", onData);
     this.exited = new Promise((r) => this.proc.on("exit", r));
+    // Never leave a server behind on the shared port if the experiment dies.
+    const proc = this.proc;
+    const kill = () => { try { proc.kill("SIGKILL"); } catch {} };
+    process.once("exit", kill);
+    for (const sig of ["SIGINT", "SIGTERM"]) process.once(sig, () => { kill(); process.exit(130); });
+    process.once("uncaughtException", (e) => { console.error(e); kill(); process.exit(1); });
+    process.once("unhandledRejection", (e) => { console.error(e); kill(); process.exit(1); });
     await this.waitFor(/Done \([0-9.]+s\)!/, 180000);
     for (const c of ["gamerule doDaylightCycle false", "gamerule doWeatherCycle false", "gamerule randomTickSpeed 0",
       "gamerule doMobSpawning false", "gamerule announceAdvancements false", "gamerule spawnRadius 0", "time set 1000", "weather clear"]) this.cmd(c);

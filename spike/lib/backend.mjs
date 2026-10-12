@@ -107,7 +107,7 @@ export class SpikeBackend {
       } : null;
       if (rec) this.writes.push(rec);
       if (this.opts.flushMode === "deferred" && client.state === "play" && !this.flushing) {
-        this.queue.push([name, params, rec]);
+        this.queue.push([name, params, rec, this.writingAction ?? null]);
         return;
       }
       if (rec) { rec.sentTick = this.clockDriver.tick; rec.sentPhase = rec.phase; rec.sentAt = rec.t; }
@@ -467,7 +467,9 @@ export class SpikeBackend {
       this.actions.set(action, a);
       a.rec = { id: action, primitive, start: this.tickNo, verdictTick: null, verdict: null, cancelled: null, rolledBack: null, affected: a.affected() };
       this.attr.push(a.rec);
-      const delta = a.begin();
+      this.writingAction = action;
+      let delta;
+      try { delta = a.begin(); } finally { this.writingAction = null; }
       return mode === "async" ? delta : undefined;
     } finally { this.phase = "tick"; }
   }
@@ -478,7 +480,13 @@ export class SpikeBackend {
       const a = this.actions.get(action);
       if (!a) return;
       a.rec.cancelled = this.tickNo;
-      a.cancel?.();
+      // Deferred flush: packets of this action still queued (started this tick) are never sent.
+      const before = this.queue.length;
+      this.queue = this.queue.filter((e) => e[3] !== action);
+      a.unsent = before - this.queue.length;
+      this.unsentLog = this.unsentLog ?? [];
+      if (a.unsent) this.unsentLog.push({ action, tick: this.tickNo, packets: a.unsent });
+      if (!a.unsent) a.cancel?.();
       this.actions.delete(action);
       if (this.pathfindAction === a) this.pathfindAction = null;
     } finally { this.phase = "tick"; }
@@ -495,13 +503,21 @@ export class SpikeBackend {
 
   heldSlot() { return 36 + (this.bot.quickBarSlot ?? 0); }
 
+  // Aims at target. "direct" (default) writes the look packet now, so in the same flush it precedes
+  // the action's own packets (the server reads the player's rotation when it places stairs, chests,
+  // furnaces ...). "physics" leaves it to Mineflayer's physics step, which in deferred mode sends it
+  // one flush after the action's packets (E6 shows the consequence).
   lookPacket(target) {
     const bot = this.bot;
     const eye = bot.entity.position.offset(0, bot.entity.eyeHeight, 0);
     const d = target.minus(eye);
     const yaw = Math.atan2(-d.x, -d.z);
     const pitch = Math.atan2(d.y, Math.sqrt(d.x * d.x + d.z * d.z));
-    bot.look(yaw, pitch, true); // force: the physics plugin sends this rotation at the end of the tick
+    bot.look(yaw, pitch, true); // force: also updates Mineflayer's last-sent rotation
+    if (this.opts.lookMode !== "physics") {
+      const og = !!bot.entity.onGround;
+      bot._client.write("look", { yaw: (180 / Math.PI) * (Math.PI - yaw), pitch: (180 / Math.PI) * -pitch, onGround: og, flags: { onGround: og, hasHorizontalCollision: false } });
+    }
   }
 }
 
@@ -558,7 +574,7 @@ class PlaceBlock {
   begin() {
     const bot = this.be.bot;
     const [fx, fy, fz] = FACE_VEC[this.args.face];
-    const cursor = [0.5 + fx * 0.5, 0.5 + fy * 0.5, 0.5 + fz * 0.5];
+    const cursor = this.cursorOverride ?? [0.5 + fx * 0.5, 0.5 + fy * 0.5, 0.5 + fz * 0.5];
     this.be.lookPacket(new Vec3(this.args.support[0] + cursor[0], this.args.support[1] + cursor[1], this.args.support[2] + cursor[2]));
     this.seq = this.be.nextSeq();
     bot._client.write("block_place", { hand: 0, location: vec(this.args.support), direction: FACES.indexOf(this.args.face), cursorX: cursor[0], cursorY: cursor[1], cursorZ: cursor[2], insideBlock: false, worldBorderHit: false, sequence: this.seq });
@@ -729,6 +745,7 @@ class Pathfind {
     return [];
   }
   onPathUpdate(r) {
+    (this.statuses ??= []).push({ tick: this.be.clockDriver.tick, status: r.status, length: r.path.length });
     if (this.pathRef) this.done += this.initialLen - this.pathRef.length;
     this.pathRef = r.path;
     this.initialLen = r.path.length;
@@ -739,6 +756,7 @@ class Pathfind {
   evaluate(t, buf) {
     const bot = this.be.bot;
     if (this.noPath) {
+      bot.pathfinder.setGoal(null); // the action ended: release the pathfinder
       const f = bot.entity.position.floored();
       return [{ action: this.id, status: "Failed", failure: { type: "NoPath", fields: { at: [f.x, f.y, f.z] } } }];
     }
@@ -751,7 +769,7 @@ class Pathfind {
   }
   cancel() {
     const bot = this.be.bot;
-    this.be.cancelLog.push({ id: this.id, tick: this.be.tickNo, t: performance.now(), pos: bot.entity.position.clone(), vel: bot.entity.velocity.clone(), controls: { ...bot.controlState } });
+    this.be.cancelLog.push({ id: this.id, tick: this.be.tickNo, t: performance.now(), pos: bot.entity.position.clone(), vel: bot.entity.velocity.clone(), controls: ["forward", "back", "left", "right", "jump", "sprint", "sneak"].filter((c) => bot.getControlState(c)) });
     bot.pathfinder.setGoal(null); // resetPath -> clearControlStates() now; pathfinder.stop() would wait for the next node
   }
 }

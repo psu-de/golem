@@ -1,0 +1,4529 @@
+{
+  "experiment": "E3 verdicts",
+  "table": [
+    {
+      "label": "D1.1 dig dirt (success)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 16,
+      "same_value_block_updates": 0,
+      "slot_packets": 1
+    },
+    {
+      "label": "D1.2 dig dirt (success)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 16,
+      "same_value_block_updates": 0,
+      "slot_packets": 1
+    },
+    {
+      "label": "D1.3 dig dirt (success)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 16,
+      "same_value_block_updates": 0,
+      "slot_packets": 1
+    },
+    {
+      "label": "D2 dig oak_log by hand (success)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 61,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "D3 dig inside spawn protection (non-op)",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:dirt at the acknowledgement",
+      "latency_ticks": 16,
+      "same_value_block_updates": 1,
+      "slot_packets": 0
+    },
+    {
+      "label": "D4 dig in adventure mode",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:dirt at the acknowledgement",
+      "latency_ticks": 16,
+      "same_value_block_updates": 1,
+      "slot_packets": 0
+    },
+    {
+      "label": "D5 dig, then /setblock reverts the block right after the verdict",
+      "expect": "Confirmed, then an Outside change",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 16,
+      "same_value_block_updates": 0,
+      "slot_packets": 1
+    },
+    {
+      "label": "D6 dig oak_log, /setblock replaces it with stone 10 ticks in",
+      "expect": "BlockChanged at the runtime (invariant); verdict per server",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:stone at the acknowledgement",
+      "latency_ticks": 61,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "D7 dig oak_log while the second player breaks it",
+      "expect": "verdict by state; BlockChanged invariant at the runtime",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 61,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "P1 place dirt on grass, face Up (success)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "P2 place inside spawn protection (non-op)",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:air at the acknowledgement",
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 0
+    },
+    {
+      "label": "P2c place inside spawn protection where the target already holds dirt (server refuses)",
+      "expect": "server refuses; state coincides with the prediction",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 0
+    },
+    {
+      "label": "P3 place in adventure mode",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:air at the acknowledgement",
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 0
+    },
+    {
+      "label": "P4 place into an occupied cell (target already stone)",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:stone at the acknowledgement",
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 0
+    },
+    {
+      "label": "P5 place dirt, then /setblock removes it right after the verdict",
+      "expect": "Confirmed, then an Outside change",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "P6 place oak_log on a side face (axis differs from default)",
+      "expect": "Confirmed by type; state axis=z",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "P7 place torch on a side face (becomes wall_torch)",
+      "expect": "server places wall_torch",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:wall_torch[facing=east] at the acknowledgement",
+      "latency_ticks": 2,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "P8 place torch on top of stone",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "L1 look_at (success)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 24,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "L2 look_at, /tp sets the rotation when the aim is reached",
+      "expect": "Rejected (correction in settle window)",
+      "verdict": "Rejected",
+      "detail": "server corrected the rotation during the settle window",
+      "latency_ticks": 23,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W1 pick_up chest slot 0 (whole)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W2 put into empty chest slot 1",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W3 pick_up half of slot 1",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W4 put one into slot 0",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W5 put the rest into slot 0",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W6 quick_move chest slot 2 (cobblestone) to the player",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W7 quick_move hotbar dirt (window slot 54) into the chest",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W8 pick_up slot 0 with a stale state id",
+      "expect": "server applies the click and resyncs",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 1
+    },
+    {
+      "label": "W8b put it back",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W9 pick_up slot 0 after the second player quick-moved it away",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "server set inventory.cursor to null",
+      "latency_ticks": 1,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W10 pick_up slot 1 after the second player added one to it",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "server set inventory.cursor to {\"item\":\"minecraft:oak_log\",\"count\":5,\"components\":{}}",
+      "latency_ticks": 1,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W10b put the cursor down",
+      "expect": "any",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W11 pick_up chest slot 0 (setup)",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W11 put cursor into player slot (window slot 30) to a window id the server has closed",
+      "expect": "false Confirmed (the server ignores clicks for another window id)",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W13 pick_up chest slot 0, confirmed by probe resync",
+      "expect": "Confirmed by state",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 0,
+      "slot_packets": 1
+    },
+    {
+      "label": "W14 put to a window id the server has closed, probe",
+      "expect": "no verdict (Unconfirmed at confirm_timeout)",
+      "verdict": "none within 30 s (runtime assigns Unconfirmed)",
+      "detail": null,
+      "latency_ticks": null,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "W12.1 pick_up while the chest is removed in the same tick",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 2
+    },
+    {
+      "label": "W12.2 pick_up while the chest is removed in the same tick",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 2
+    },
+    {
+      "label": "W12.3 pick_up while the chest is removed in the same tick",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 2
+    },
+    {
+      "label": "W12.4 pick_up while the chest is removed in the same tick",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 2
+    },
+    {
+      "label": "W12.5 pick_up while the chest is removed in the same tick",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 2
+    },
+    {
+      "label": "W12.6 pick_up while the chest is removed in the same tick",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 5,
+      "same_value_block_updates": 0,
+      "slot_packets": 2
+    },
+    {
+      "label": "A1 async dig dirt",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 16,
+      "same_value_block_updates": 0,
+      "slot_packets": 1
+    },
+    {
+      "label": "A2 async dig oak_log",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 61,
+      "same_value_block_updates": 0,
+      "slot_packets": 0
+    },
+    {
+      "label": "A3 async place dirt (Up)",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "A4 async place oak_log on a side face",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "A5 async place torch on a side face",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:wall_torch[facing=east] at the acknowledgement",
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "A6 async place torch on top",
+      "verdict": "Confirmed",
+      "detail": null,
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 1
+    },
+    {
+      "label": "A7 async dig inside spawn protection",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:dirt at the acknowledgement",
+      "latency_ticks": 16,
+      "same_value_block_updates": 1,
+      "slot_packets": 0
+    },
+    {
+      "label": "A8 async place inside spawn protection",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:air at the acknowledgement",
+      "latency_ticks": 1,
+      "same_value_block_updates": 2,
+      "slot_packets": 0
+    }
+  ],
+  "block_change_vs_ack": [
+    {
+      "label": "D1.1 dig dirt (success)",
+      "change_tick": 49,
+      "ack_tick": 49,
+      "same_tickinput": true
+    },
+    {
+      "label": "D1.2 dig dirt (success)",
+      "change_tick": 84,
+      "ack_tick": 84,
+      "same_tickinput": true
+    },
+    {
+      "label": "D1.3 dig dirt (success)",
+      "change_tick": 119,
+      "ack_tick": 119,
+      "same_tickinput": true
+    },
+    {
+      "label": "D2 dig oak_log by hand (success)",
+      "change_tick": 199,
+      "ack_tick": 199,
+      "same_tickinput": true
+    },
+    {
+      "label": "D5 dig, then /setblock reverts the block right after the verdict",
+      "change_tick": 305,
+      "ack_tick": 305,
+      "same_tickinput": true
+    },
+    {
+      "label": "D7 dig oak_log while the second player breaks it",
+      "change_tick": 435,
+      "ack_tick": 471,
+      "same_tickinput": false
+    },
+    {
+      "label": "A1 async dig dirt",
+      "change_tick": 2108,
+      "ack_tick": 2108,
+      "same_tickinput": true
+    },
+    {
+      "label": "A2 async dig oak_log",
+      "change_tick": 2180,
+      "ack_tick": 2180,
+      "same_tickinput": true
+    }
+  ],
+  "races": [
+    {
+      "verdict": "Confirmed",
+      "server": 0,
+      "mirror": 0
+    },
+    {
+      "verdict": "Confirmed",
+      "server": 10,
+      "mirror": 10
+    },
+    {
+      "verdict": "Confirmed",
+      "server": 10,
+      "mirror": 10
+    },
+    {
+      "verdict": "Confirmed",
+      "server": 10,
+      "mirror": 10
+    },
+    {
+      "verdict": "Confirmed",
+      "server": 10,
+      "mirror": 10
+    },
+    {
+      "verdict": "Confirmed",
+      "server": 10,
+      "mirror": 10
+    }
+  ],
+  "rows": [
+    {
+      "label": "D1.1 dig dirt (success)",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 33,
+      "issued_tick": 49,
+      "verdict_tick": 49,
+      "latency_ticks": 16,
+      "delta": null,
+      "view_at_verdict": {
+        "block(41,-60,40)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            41,
+            -60,
+            40
+          ],
+          "tick": 49,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 1,
+          "tick": 34
+        },
+        {
+          "seq": 2,
+          "tick": 49
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 39,
+          "stateId": 6,
+          "tick": 58
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 49,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 1
+          },
+          "provisional": {
+            "own": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "D1.2 dig dirt (success)",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 68,
+      "issued_tick": 84,
+      "verdict_tick": 84,
+      "latency_ticks": 16,
+      "delta": null,
+      "view_at_verdict": {
+        "block(41,-60,41)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            41,
+            -60,
+            41
+          ],
+          "tick": 84,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 3,
+          "tick": 69
+        },
+        {
+          "seq": 4,
+          "tick": 84
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 39,
+          "stateId": 7,
+          "tick": 93
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 84,
+          "key": "block(41,-60,41)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 2
+          },
+          "provisional": {
+            "own": 2
+          }
+        }
+      ]
+    },
+    {
+      "label": "D1.3 dig dirt (success)",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 103,
+      "issued_tick": 119,
+      "verdict_tick": 119,
+      "latency_ticks": 16,
+      "delta": null,
+      "view_at_verdict": {
+        "block(41,-60,39)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            41,
+            -60,
+            39
+          ],
+          "tick": 119,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 5,
+          "tick": 104
+        },
+        {
+          "seq": 6,
+          "tick": 119
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 39,
+          "stateId": 8,
+          "tick": 128
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 119,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 3
+          },
+          "provisional": {
+            "own": 3
+          }
+        }
+      ]
+    },
+    {
+      "label": "D2 dig oak_log by hand (success)",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 138,
+      "issued_tick": 199,
+      "verdict_tick": 199,
+      "latency_ticks": 61,
+      "delta": null,
+      "view_at_verdict": {
+        "block(42,-60,40)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            42,
+            -60,
+            40
+          ],
+          "tick": 199,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 7,
+          "tick": 139
+        },
+        {
+          "seq": 8,
+          "tick": 199
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 199,
+          "key": "block(42,-60,40)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 4
+          },
+          "provisional": {
+            "own": 4
+          }
+        }
+      ]
+    },
+    {
+      "label": "D3 dig inside spawn protection (non-op)",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:dirt at the acknowledgement",
+      "start_tick": 219,
+      "issued_tick": 235,
+      "verdict_tick": 235,
+      "latency_ticks": 16,
+      "delta": null,
+      "view_at_verdict": {
+        "block(3,-60,3)": "minecraft:dirt"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            3,
+            -60,
+            3
+          ],
+          "tick": 220,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 9,
+          "tick": 221
+        },
+        {
+          "seq": 10,
+          "tick": 235
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": []
+    },
+    {
+      "label": "D4 dig in adventure mode",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:dirt at the acknowledgement",
+      "start_tick": 254,
+      "issued_tick": 270,
+      "verdict_tick": 270,
+      "latency_ticks": 16,
+      "delta": null,
+      "view_at_verdict": {
+        "block(41,-60,40)": "minecraft:dirt"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            41,
+            -60,
+            40
+          ],
+          "tick": 255,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 11,
+          "tick": 255
+        },
+        {
+          "seq": 12,
+          "tick": 270
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": []
+    },
+    {
+      "label": "D5 dig, then /setblock reverts the block right after the verdict",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "Confirmed, then an Outside change",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 289,
+      "issued_tick": 305,
+      "verdict_tick": 305,
+      "latency_ticks": 16,
+      "delta": null,
+      "view_at_verdict": {
+        "block(41,-60,41)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            41,
+            -60,
+            41
+          ],
+          "tick": 305,
+          "value": "minecraft:air"
+        },
+        {
+          "pos": [
+            41,
+            -60,
+            41
+          ],
+          "tick": 307,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 13,
+          "tick": 290
+        },
+        {
+          "seq": 14,
+          "tick": 305
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 39,
+          "stateId": 9,
+          "tick": 314
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 305,
+          "key": "block(41,-60,41)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 7
+          },
+          "provisional": {
+            "own": 7
+          }
+        },
+        {
+          "tick": 307,
+          "key": "block(41,-60,41)",
+          "value": "minecraft:dirt",
+          "refined": "outside",
+          "provisional": {
+            "own": 7
+          }
+        }
+      ]
+    },
+    {
+      "label": "D6 dig oak_log, /setblock replaces it with stone 10 ticks in",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "BlockChanged at the runtime (invariant); verdict per server",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:stone at the acknowledgement",
+      "start_tick": 330,
+      "issued_tick": 391,
+      "verdict_tick": 391,
+      "latency_ticks": 61,
+      "delta": null,
+      "view_at_verdict": {
+        "block(41,-60,39)": "minecraft:stone"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            41,
+            -60,
+            39
+          ],
+          "tick": 342,
+          "value": "minecraft:stone"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 15,
+          "tick": 331
+        },
+        {
+          "seq": 16,
+          "tick": 391
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 342,
+          "key": "block(41,-60,39)",
+          "value": "minecraft:stone",
+          "refined": "outside",
+          "provisional": {
+            "own": 8
+          }
+        }
+      ]
+    },
+    {
+      "label": "D7 dig oak_log while the second player breaks it",
+      "primitive": "dig",
+      "mode": "sync",
+      "expect": "verdict by state; BlockChanged invariant at the runtime",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 410,
+      "issued_tick": 471,
+      "verdict_tick": 471,
+      "latency_ticks": 61,
+      "delta": null,
+      "view_at_verdict": {
+        "block(42,-60,41)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            42,
+            -60,
+            41
+          ],
+          "tick": 435,
+          "value": "minecraft:air"
+        },
+        {
+          "pos": [
+            41,
+            -60,
+            39
+          ],
+          "tick": 480,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 17,
+          "tick": 411
+        },
+        {
+          "seq": 18,
+          "tick": 471
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 435,
+          "key": "block(42,-60,41)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 9
+          },
+          "provisional": {
+            "own": 9
+          }
+        }
+      ]
+    },
+    {
+      "label": "P1 place dirt on grass, face Up (success)",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 483,
+      "issued_tick": 484,
+      "verdict_tick": 484,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(43,-60,41)": "minecraft:dirt"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            43,
+            -60,
+            41
+          ],
+          "tick": 484,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            43,
+            -61,
+            41
+          ],
+          "tick": 484,
+          "value": "minecraft:grass_block[snowy=false]"
+        },
+        {
+          "pos": [
+            43,
+            -60,
+            41
+          ],
+          "tick": 484,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 19,
+          "tick": 484
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 10,
+          "tick": 484
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 484,
+          "key": "block(43,-60,41)",
+          "value": "minecraft:dirt",
+          "refined": {
+            "own": 10
+          },
+          "provisional": {
+            "own": 10
+          }
+        }
+      ]
+    },
+    {
+      "label": "P2 place inside spawn protection (non-op)",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:air at the acknowledgement",
+      "start_tick": 503,
+      "issued_tick": 504,
+      "verdict_tick": 504,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(4,-60,2)": "minecraft:air"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            4,
+            -61,
+            2
+          ],
+          "tick": 504,
+          "value": "minecraft:grass_block[snowy=false]"
+        },
+        {
+          "pos": [
+            4,
+            -60,
+            2
+          ],
+          "tick": 504,
+          "value": "minecraft:air"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 20,
+          "tick": 504
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": []
+    },
+    {
+      "label": "P2c place inside spawn protection where the target already holds dirt (server refuses)",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "server refuses; state coincides with the prediction",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 515,
+      "issued_tick": 516,
+      "verdict_tick": 516,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(3,-60,3)": "minecraft:dirt"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            3,
+            -61,
+            3
+          ],
+          "tick": 516,
+          "value": "minecraft:grass_block[snowy=false]"
+        },
+        {
+          "pos": [
+            3,
+            -60,
+            3
+          ],
+          "tick": 516,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 21,
+          "tick": 516
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": []
+    },
+    {
+      "label": "P3 place in adventure mode",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:air at the acknowledgement",
+      "start_tick": 535,
+      "issued_tick": 536,
+      "verdict_tick": 536,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(43,-60,39)": "minecraft:air"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            43,
+            -61,
+            39
+          ],
+          "tick": 536,
+          "value": "minecraft:grass_block[snowy=false]"
+        },
+        {
+          "pos": [
+            43,
+            -60,
+            39
+          ],
+          "tick": 536,
+          "value": "minecraft:air"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 22,
+          "tick": 536
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": []
+    },
+    {
+      "label": "P4 place into an occupied cell (target already stone)",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:stone at the acknowledgement",
+      "start_tick": 555,
+      "issued_tick": 556,
+      "verdict_tick": 556,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(42,-59,39)": "minecraft:stone"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            42,
+            -60,
+            39
+          ],
+          "tick": 556,
+          "value": "minecraft:stone"
+        },
+        {
+          "pos": [
+            42,
+            -59,
+            39
+          ],
+          "tick": 556,
+          "value": "minecraft:stone"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 23,
+          "tick": 556
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": []
+    },
+    {
+      "label": "P5 place dirt, then /setblock removes it right after the verdict",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "Confirmed, then an Outside change",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 567,
+      "issued_tick": 568,
+      "verdict_tick": 568,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(44,-60,40)": "minecraft:dirt"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            44,
+            -60,
+            40
+          ],
+          "tick": 568,
+          "value": "minecraft:dirt"
+        },
+        {
+          "pos": [
+            44,
+            -60,
+            40
+          ],
+          "tick": 570,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            44,
+            -61,
+            40
+          ],
+          "tick": 568,
+          "value": "minecraft:grass_block[snowy=false]"
+        },
+        {
+          "pos": [
+            44,
+            -60,
+            40
+          ],
+          "tick": 568,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 24,
+          "tick": 568
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 11,
+          "tick": 568
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 568,
+          "key": "block(44,-60,40)",
+          "value": "minecraft:dirt",
+          "refined": {
+            "own": 15
+          },
+          "provisional": {
+            "own": 15
+          }
+        },
+        {
+          "tick": 570,
+          "key": "block(44,-60,40)",
+          "value": "minecraft:air",
+          "refined": "outside",
+          "provisional": {
+            "own": 15
+          }
+        }
+      ]
+    },
+    {
+      "label": "P6 place oak_log on a side face (axis differs from default)",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "Confirmed by type; state axis=z",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 585,
+      "issued_tick": 586,
+      "verdict_tick": 586,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(42,-60,38)": "minecraft:oak_log[axis=z]"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            42,
+            -60,
+            38
+          ],
+          "tick": 586,
+          "value": "minecraft:oak_log[axis=z]"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            42,
+            -60,
+            39
+          ],
+          "tick": 586,
+          "value": "minecraft:stone"
+        },
+        {
+          "pos": [
+            42,
+            -60,
+            38
+          ],
+          "tick": 586,
+          "value": "minecraft:oak_log[axis=z]"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 25,
+          "tick": 586
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 37,
+          "stateId": 12,
+          "tick": 586
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 586,
+          "key": "block(42,-60,38)",
+          "value": "minecraft:oak_log[axis=z]",
+          "refined": {
+            "own": 16
+          },
+          "provisional": {
+            "own": 16
+          }
+        }
+      ]
+    },
+    {
+      "label": "P7 place torch on a side face (becomes wall_torch)",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "server places wall_torch",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:wall_torch[facing=east] at the acknowledgement",
+      "start_tick": 598,
+      "issued_tick": 599,
+      "verdict_tick": 600,
+      "latency_ticks": 2,
+      "delta": null,
+      "view_at_verdict": {
+        "block(43,-60,39)": "minecraft:wall_torch[facing=east]"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            43,
+            -60,
+            39
+          ],
+          "tick": 599,
+          "value": "minecraft:wall_torch[facing=east]"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            42,
+            -60,
+            39
+          ],
+          "tick": 599,
+          "value": "minecraft:stone"
+        },
+        {
+          "pos": [
+            43,
+            -60,
+            39
+          ],
+          "tick": 600,
+          "value": "minecraft:wall_torch[facing=east]"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 26,
+          "tick": 600
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 38,
+          "stateId": 13,
+          "tick": 600
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 599,
+          "key": "block(43,-60,39)",
+          "value": "minecraft:wall_torch[facing=east]",
+          "refined": "outside",
+          "provisional": {
+            "own": 17
+          }
+        }
+      ]
+    },
+    {
+      "label": "P8 place torch on top of stone",
+      "primitive": "place_block",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 611,
+      "issued_tick": 612,
+      "verdict_tick": 612,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "block(42,-58,39)": "minecraft:torch"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            42,
+            -58,
+            39
+          ],
+          "tick": 612,
+          "value": "minecraft:torch"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            42,
+            -59,
+            39
+          ],
+          "tick": 612,
+          "value": "minecraft:stone"
+        },
+        {
+          "pos": [
+            42,
+            -58,
+            39
+          ],
+          "tick": 612,
+          "value": "minecraft:torch"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 27,
+          "tick": 612
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 38,
+          "stateId": 14,
+          "tick": 612
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 612,
+          "key": "block(42,-58,39)",
+          "value": "minecraft:torch",
+          "refined": {
+            "own": 18
+          },
+          "provisional": {
+            "own": 18
+          }
+        }
+      ]
+    },
+    {
+      "label": "L1 look_at (success)",
+      "primitive": "look_at",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 623,
+      "issued_tick": null,
+      "verdict_tick": 647,
+      "latency_ticks": 24,
+      "delta": null,
+      "view_at_verdict": {
+        "player.rotation": {
+          "yaw": 0.7854,
+          "pitch": -0.0262
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 625,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -1.8842,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 626,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -1.7342,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 627,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -1.5842,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 628,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -1.4342,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 629,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -1.2842,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 630,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -1.1342,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 631,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -0.9842,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 632,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -0.8342,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 633,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -0.6842,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 634,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -0.5342,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 635,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -0.3842,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 636,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -0.2342,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 637,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -0.0842,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 638,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 0.0658,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 639,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 0.2158,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 640,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 0.3658,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 641,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 0.5158,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 642,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 0.6658,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        },
+        {
+          "tick": 643,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 0.7854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 19
+          },
+          "provisional": {
+            "own": 19
+          }
+        }
+      ]
+    },
+    {
+      "label": "L2 look_at, /tp sets the rotation when the aim is reached",
+      "primitive": "look_at",
+      "mode": "sync",
+      "expect": "Rejected (correction in settle window)",
+      "verdict": "Rejected",
+      "detail": "server corrected the rotation during the settle window",
+      "start_tick": 658,
+      "issued_tick": null,
+      "verdict_tick": 681,
+      "latency_ticks": 23,
+      "delta": null,
+      "view_at_verdict": {
+        "player.rotation": {
+          "yaw": 1.5708,
+          "pitch": 0
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 660,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 0.9354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 661,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.0854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 662,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.2354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 663,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.3854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 664,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.5354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 665,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.6854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 666,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.8354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 667,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.9854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 668,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 2.1354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 669,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 2.2854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 670,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 2.4354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 671,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 2.5854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 672,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 2.7354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 673,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 2.8854,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 674,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 3.0354,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 675,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -3.0978,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 676,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -2.9478,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 677,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -2.7978,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 678,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -2.6478,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 679,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -2.4978,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 680,
+          "key": "player.rotation",
+          "value": {
+            "yaw": -2.3562,
+            "pitch": -0.0262
+          },
+          "refined": {
+            "own": 20
+          },
+          "provisional": {
+            "own": 20
+          }
+        },
+        {
+          "tick": 681,
+          "key": "player.rotation",
+          "value": {
+            "yaw": 1.5708,
+            "pitch": 0
+          },
+          "refined": "outside",
+          "provisional": {
+            "own": 20
+          }
+        }
+      ]
+    },
+    {
+      "label": "W1 pick_up chest slot 0 (whole)",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 724,
+      "issued_tick": 725,
+      "verdict_tick": 729,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": {
+          "item": "minecraft:oak_log",
+          "count": 10,
+          "components": {}
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 725,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 21
+          },
+          "provisional": {
+            "own": 21
+          }
+        },
+        {
+          "tick": 725,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 21
+          },
+          "provisional": {
+            "own": 21
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": {
+          "item": "minecraft:oak_log",
+          "count": 10,
+          "components": {}
+        },
+        "slots": {
+          "0": null,
+          "1": null,
+          "2": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          },
+          "54": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "62": null
+        },
+        "state_id": 1
+      }
+    },
+    {
+      "label": "W2 put into empty chest slot 1",
+      "primitive": "put",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 740,
+      "issued_tick": 741,
+      "verdict_tick": 745,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(1)": {
+          "item": "minecraft:oak_log",
+          "count": 10,
+          "components": {}
+        },
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 741,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": {
+            "own": 22
+          },
+          "provisional": {
+            "own": 22
+          }
+        },
+        {
+          "tick": 741,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 22
+          },
+          "provisional": {
+            "own": 22
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": null,
+        "slots": {
+          "0": null,
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          },
+          "54": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "62": null
+        },
+        "state_id": 1
+      }
+    },
+    {
+      "label": "W3 pick_up half of slot 1",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 756,
+      "issued_tick": 757,
+      "verdict_tick": 761,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(1)": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        },
+        "inventory.cursor": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 757,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "refined": {
+            "own": 23
+          },
+          "provisional": {
+            "own": 23
+          }
+        },
+        {
+          "tick": 757,
+          "key": "window.slot(1)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "refined": {
+            "own": 23
+          },
+          "provisional": {
+            "own": 23
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        },
+        "slots": {
+          "0": null,
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          },
+          "54": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "62": null
+        },
+        "state_id": 1
+      }
+    },
+    {
+      "label": "W4 put one into slot 0",
+      "primitive": "put",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 772,
+      "issued_tick": 773,
+      "verdict_tick": 777,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": {
+          "item": "minecraft:oak_log",
+          "count": 1,
+          "components": {}
+        },
+        "inventory.cursor": {
+          "item": "minecraft:oak_log",
+          "count": 4,
+          "components": {}
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 773,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 4,
+            "components": {}
+          },
+          "refined": {
+            "own": 24
+          },
+          "provisional": {
+            "own": 24
+          }
+        },
+        {
+          "tick": 773,
+          "key": "window.slot(0)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 1,
+            "components": {}
+          },
+          "refined": {
+            "own": 24
+          },
+          "provisional": {
+            "own": 24
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": {
+          "item": "minecraft:oak_log",
+          "count": 4,
+          "components": {}
+        },
+        "slots": {
+          "0": {
+            "item": "minecraft:oak_log",
+            "count": 1,
+            "components": {}
+          },
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          },
+          "54": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "62": null
+        },
+        "state_id": 1
+      }
+    },
+    {
+      "label": "W5 put the rest into slot 0",
+      "primitive": "put",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 788,
+      "issued_tick": 789,
+      "verdict_tick": 793,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        },
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 789,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": {
+            "own": 25
+          },
+          "provisional": {
+            "own": 25
+          }
+        },
+        {
+          "tick": 789,
+          "key": "window.slot(0)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "refined": {
+            "own": 25
+          },
+          "provisional": {
+            "own": 25
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": null,
+        "slots": {
+          "0": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          },
+          "54": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "62": null
+        },
+        "state_id": 1
+      }
+    },
+    {
+      "label": "W6 quick_move chest slot 2 (cobblestone) to the player",
+      "primitive": "quick_move",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 804,
+      "issued_tick": 805,
+      "verdict_tick": 809,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(2)": null,
+        "window.slot(62)": {
+          "item": "minecraft:cobblestone",
+          "count": 5,
+          "components": {}
+        },
+        "window.slot(61)": null,
+        "window.slot(54)": {
+          "item": "minecraft:dirt",
+          "count": 16,
+          "components": {}
+        },
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 805,
+          "key": "window.slot(2)",
+          "value": null,
+          "refined": {
+            "own": 26
+          },
+          "provisional": {
+            "own": 26
+          }
+        },
+        {
+          "tick": 805,
+          "key": "window.slot(62)",
+          "value": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          },
+          "refined": {
+            "own": 26
+          },
+          "provisional": {
+            "own": 26
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": null,
+        "slots": {
+          "0": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": null,
+          "54": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "62": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          }
+        },
+        "state_id": 1
+      }
+    },
+    {
+      "label": "W7 quick_move hotbar dirt (window slot 54) into the chest",
+      "primitive": "quick_move",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 820,
+      "issued_tick": 821,
+      "verdict_tick": 825,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(54)": null,
+        "window.slot(2)": {
+          "item": "minecraft:dirt",
+          "count": 16,
+          "components": {}
+        },
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 821,
+          "key": "window.slot(2)",
+          "value": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "refined": {
+            "own": 27
+          },
+          "provisional": {
+            "own": 27
+          }
+        },
+        {
+          "tick": 821,
+          "key": "window.slot(54)",
+          "value": null,
+          "refined": {
+            "own": 27
+          },
+          "provisional": {
+            "own": 27
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": null,
+        "slots": {
+          "0": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "54": null,
+          "62": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          }
+        },
+        "state_id": 1
+      }
+    },
+    {
+      "label": "W8 pick_up slot 0 with a stale state id",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "server applies the click and resyncs",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 836,
+      "issued_tick": 837,
+      "verdict_tick": 841,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "window_items",
+          "windowId": 1,
+          "stateId": 2,
+          "tick": 837
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 837,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "refined": {
+            "own": 28
+          },
+          "provisional": {
+            "own": 28
+          }
+        },
+        {
+          "tick": 837,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 28
+          },
+          "provisional": {
+            "own": 28
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        },
+        "slots": {
+          "0": null,
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "54": null,
+          "62": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          }
+        },
+        "state_id": 2
+      }
+    },
+    {
+      "label": "W8b put it back",
+      "primitive": "put",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 852,
+      "issued_tick": 853,
+      "verdict_tick": 857,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        },
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 853,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": {
+            "own": 29
+          },
+          "provisional": {
+            "own": 29
+          }
+        },
+        {
+          "tick": 853,
+          "key": "window.slot(0)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "refined": {
+            "own": 29
+          },
+          "provisional": {
+            "own": 29
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": null,
+        "slots": {
+          "0": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "54": null,
+          "62": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          }
+        },
+        "state_id": 2
+      }
+    },
+    {
+      "label": "W9 pick_up slot 0 after the second player quick-moved it away",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "server set inventory.cursor to null",
+      "start_tick": 894,
+      "issued_tick": 895,
+      "verdict_tick": 895,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 895,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 30
+          },
+          "provisional": {
+            "own": 30
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": null,
+        "slots": {
+          "0": null,
+          "1": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "2": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "54": null,
+          "62": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          }
+        },
+        "state_id": 2
+      }
+    },
+    {
+      "label": "W10 pick_up slot 1 after the second player added one to it",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "Rejected",
+      "verdict": "Rejected",
+      "detail": "server set inventory.cursor to {\"item\":\"minecraft:oak_log\",\"count\":5,\"components\":{}}",
+      "start_tick": 920,
+      "issued_tick": 921,
+      "verdict_tick": 921,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(1)": null,
+        "inventory.cursor": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 921,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "refined": "outside",
+          "provisional": {
+            "own": 32
+          }
+        },
+        {
+          "tick": 921,
+          "key": "window.slot(1)",
+          "value": null,
+          "refined": {
+            "own": 32
+          },
+          "provisional": {
+            "own": 32
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        },
+        "slots": {
+          "0": null,
+          "1": null,
+          "2": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "54": null,
+          "62": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          }
+        },
+        "state_id": 3
+      }
+    },
+    {
+      "label": "W10b put the cursor down",
+      "primitive": "put",
+      "mode": "sync",
+      "expect": "any",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 931,
+      "issued_tick": 932,
+      "verdict_tick": 936,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(4)": {
+          "item": "minecraft:oak_log",
+          "count": 5,
+          "components": {}
+        },
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 932,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": {
+            "own": 33
+          },
+          "provisional": {
+            "own": 33
+          }
+        },
+        {
+          "tick": 932,
+          "key": "window.slot(4)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 5,
+            "components": {}
+          },
+          "refined": {
+            "own": 33
+          },
+          "provisional": {
+            "own": 33
+          }
+        }
+      ],
+      "window_after": {
+        "cursor": null,
+        "slots": {
+          "0": null,
+          "1": null,
+          "2": {
+            "item": "minecraft:dirt",
+            "count": 16,
+            "components": {}
+          },
+          "54": null,
+          "62": {
+            "item": "minecraft:cobblestone",
+            "count": 5,
+            "components": {}
+          }
+        },
+        "state_id": 3
+      }
+    },
+    {
+      "label": "W11 pick_up chest slot 0 (setup)",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "Confirmed",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 973,
+      "issued_tick": 974,
+      "verdict_tick": 978,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": {
+          "item": "minecraft:oak_log",
+          "count": 10,
+          "components": {}
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 974,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 34
+          },
+          "provisional": {
+            "own": 34
+          }
+        },
+        {
+          "tick": 974,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 34
+          },
+          "provisional": {
+            "own": 34
+          }
+        }
+      ]
+    },
+    {
+      "label": "W11 put cursor into player slot (window slot 30) to a window id the server has closed",
+      "primitive": "put",
+      "mode": "sync",
+      "expect": "false Confirmed (the server ignores clicks for another window id)",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 989,
+      "issued_tick": 990,
+      "verdict_tick": 994,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(30)": {
+          "item": "minecraft:oak_log",
+          "count": 10,
+          "components": {}
+        },
+        "inventory.cursor": null
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 990,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": {
+            "own": 35
+          },
+          "provisional": {
+            "own": 35
+          }
+        },
+        {
+          "tick": 990,
+          "key": "window.slot(30)",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 35
+          },
+          "provisional": {
+            "own": 35
+          }
+        }
+      ],
+      "mirror_cursor": null,
+      "mirror_inv_slot_12": {
+        "item": "minecraft:oak_log",
+        "count": 10,
+        "components": {}
+      },
+      "server_truth": {
+        "oak_log_in_inventory": 10,
+        "mirror_inventory_oak_log": 10
+      },
+      "after_close": {
+        "oak_log_server": 10,
+        "oak_log_mirror": 20
+      }
+    },
+    {
+      "label": "W13 pick_up chest slot 0, confirmed by probe resync",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "Confirmed by state",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 1059,
+      "issued_tick": 1060,
+      "verdict_tick": 1060,
+      "latency_ticks": 1,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": {
+          "item": "minecraft:oak_log",
+          "count": 10,
+          "components": {}
+        }
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "window_items",
+          "windowId": 3,
+          "stateId": 2,
+          "tick": 1060
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 1060,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 36
+          },
+          "provisional": {
+            "own": 36
+          }
+        },
+        {
+          "tick": 1060,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 36
+          },
+          "provisional": {
+            "own": 36
+          }
+        }
+      ]
+    },
+    {
+      "label": "W14 put to a window id the server has closed, probe",
+      "primitive": "put",
+      "mode": "sync",
+      "expect": "no verdict (Unconfirmed at confirm_timeout)",
+      "verdict": "none within 30 s (runtime assigns Unconfirmed)",
+      "detail": null,
+      "latency_ticks": null,
+      "same_value_block_updates": [],
+      "slot_packets": []
+    },
+    {
+      "label": "W12.1 pick_up while the chest is removed in the same tick",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 1724,
+      "issued_tick": 1725,
+      "verdict_tick": 1729,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": null
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            38,
+            -60,
+            42
+          ],
+          "tick": 1726,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 4,
+          "slot": 0,
+          "stateId": 2,
+          "tick": 1726
+        },
+        {
+          "packet": "set_slot",
+          "windowId": 4,
+          "slot": 2,
+          "stateId": 3,
+          "tick": 1726
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 1725,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 38
+          },
+          "provisional": {
+            "own": 38
+          }
+        },
+        {
+          "tick": 1725,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 38
+          },
+          "provisional": {
+            "own": 38
+          }
+        },
+        {
+          "tick": 1726,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": "outside",
+          "provisional": {
+            "own": 38
+          }
+        }
+      ],
+      "window_closed_event": true,
+      "server_truth": {
+        "oak_log_in_inventory_or_dropped": 0,
+        "mirror_oak_log": 0,
+        "desync": false
+      }
+    },
+    {
+      "label": "W12.2 pick_up while the chest is removed in the same tick",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 1789,
+      "issued_tick": 1790,
+      "verdict_tick": 1794,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": null
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            38,
+            -60,
+            42
+          ],
+          "tick": 1791,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 5,
+          "slot": 2,
+          "stateId": 2,
+          "tick": 1791
+        },
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 35,
+          "tick": 1792
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 1790,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 39
+          },
+          "provisional": {
+            "own": 39
+          }
+        },
+        {
+          "tick": 1790,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 39
+          },
+          "provisional": {
+            "own": 39
+          }
+        },
+        {
+          "tick": 1791,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": "outside",
+          "provisional": {
+            "own": 39
+          }
+        }
+      ],
+      "window_closed_event": true,
+      "server_truth": {
+        "oak_log_in_inventory_or_dropped": 10,
+        "mirror_oak_log": 10,
+        "desync": false
+      }
+    },
+    {
+      "label": "W12.3 pick_up while the chest is removed in the same tick",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 1853,
+      "issued_tick": 1854,
+      "verdict_tick": 1858,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": null
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            38,
+            -60,
+            42
+          ],
+          "tick": 1855,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 6,
+          "slot": 2,
+          "stateId": 2,
+          "tick": 1855
+        },
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 39,
+          "tick": 1856
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 1854,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 40
+          },
+          "provisional": {
+            "own": 40
+          }
+        },
+        {
+          "tick": 1854,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 40
+          },
+          "provisional": {
+            "own": 40
+          }
+        },
+        {
+          "tick": 1855,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": "outside",
+          "provisional": {
+            "own": 40
+          }
+        }
+      ],
+      "window_closed_event": true,
+      "server_truth": {
+        "oak_log_in_inventory_or_dropped": 10,
+        "mirror_oak_log": 10,
+        "desync": false
+      }
+    },
+    {
+      "label": "W12.4 pick_up while the chest is removed in the same tick",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 1917,
+      "issued_tick": 1918,
+      "verdict_tick": 1922,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": null
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            38,
+            -60,
+            42
+          ],
+          "tick": 1919,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 7,
+          "slot": 2,
+          "stateId": 2,
+          "tick": 1919
+        },
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 43,
+          "tick": 1920
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 1918,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 41
+          },
+          "provisional": {
+            "own": 41
+          }
+        },
+        {
+          "tick": 1918,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 41
+          },
+          "provisional": {
+            "own": 41
+          }
+        },
+        {
+          "tick": 1919,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": "outside",
+          "provisional": {
+            "own": 41
+          }
+        }
+      ],
+      "window_closed_event": true,
+      "server_truth": {
+        "oak_log_in_inventory_or_dropped": 10,
+        "mirror_oak_log": 10,
+        "desync": false
+      }
+    },
+    {
+      "label": "W12.5 pick_up while the chest is removed in the same tick",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 1980,
+      "issued_tick": 1981,
+      "verdict_tick": 1985,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": null
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            38,
+            -60,
+            42
+          ],
+          "tick": 1982,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 8,
+          "slot": 2,
+          "stateId": 2,
+          "tick": 1982
+        },
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 47,
+          "tick": 1983
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 1981,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 42
+          },
+          "provisional": {
+            "own": 42
+          }
+        },
+        {
+          "tick": 1981,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 42
+          },
+          "provisional": {
+            "own": 42
+          }
+        },
+        {
+          "tick": 1982,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": "outside",
+          "provisional": {
+            "own": 42
+          }
+        }
+      ],
+      "window_closed_event": true,
+      "server_truth": {
+        "oak_log_in_inventory_or_dropped": 10,
+        "mirror_oak_log": 10,
+        "desync": false
+      }
+    },
+    {
+      "label": "W12.6 pick_up while the chest is removed in the same tick",
+      "primitive": "pick_up",
+      "mode": "sync",
+      "expect": "race",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 2044,
+      "issued_tick": 2045,
+      "verdict_tick": 2049,
+      "latency_ticks": 5,
+      "delta": null,
+      "view_at_verdict": {
+        "window.slot(0)": null,
+        "inventory.cursor": null
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            38,
+            -60,
+            42
+          ],
+          "tick": 2046,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 9,
+          "slot": 2,
+          "stateId": 2,
+          "tick": 2046
+        },
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 51,
+          "tick": 2047
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 2045,
+          "key": "inventory.cursor",
+          "value": {
+            "item": "minecraft:oak_log",
+            "count": 10,
+            "components": {}
+          },
+          "refined": {
+            "own": 43
+          },
+          "provisional": {
+            "own": 43
+          }
+        },
+        {
+          "tick": 2045,
+          "key": "window.slot(0)",
+          "value": null,
+          "refined": {
+            "own": 43
+          },
+          "provisional": {
+            "own": 43
+          }
+        },
+        {
+          "tick": 2046,
+          "key": "inventory.cursor",
+          "value": null,
+          "refined": "outside",
+          "provisional": {
+            "own": 43
+          }
+        }
+      ],
+      "window_closed_event": true,
+      "server_truth": {
+        "oak_log_in_inventory_or_dropped": 10,
+        "mirror_oak_log": 10,
+        "desync": false
+      }
+    },
+    {
+      "label": "A1 async dig dirt",
+      "primitive": "dig",
+      "mode": "async",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 2092,
+      "issued_tick": 2108,
+      "verdict_tick": 2108,
+      "latency_ticks": 16,
+      "delta": [
+        {
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air"
+        }
+      ],
+      "view_at_verdict": {
+        "block(41,-60,40)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            41,
+            -60,
+            40
+          ],
+          "tick": 2108,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 28,
+          "tick": 2093
+        },
+        {
+          "seq": 29,
+          "tick": 2108
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 39,
+          "stateId": 58,
+          "tick": 2117
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 2108,
+          "key": "block(41,-60,40)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 44
+          },
+          "provisional": {
+            "own": 44
+          }
+        }
+      ],
+      "prediction_vs_server": [
+        {
+          "key": "block(41,-60,40)",
+          "predicted": "minecraft:air",
+          "server": "minecraft:air",
+          "exact": true,
+          "same_type": true
+        }
+      ]
+    },
+    {
+      "label": "A2 async dig oak_log",
+      "primitive": "dig",
+      "mode": "async",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 2119,
+      "issued_tick": 2180,
+      "verdict_tick": 2180,
+      "latency_ticks": 61,
+      "delta": [
+        {
+          "key": "block(41,-60,41)",
+          "value": "minecraft:air"
+        }
+      ],
+      "view_at_verdict": {
+        "block(41,-60,41)": "minecraft:air"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            41,
+            -60,
+            41
+          ],
+          "tick": 2180,
+          "value": "minecraft:air"
+        }
+      ],
+      "same_value_block_updates": [],
+      "acks": [
+        {
+          "seq": 30,
+          "tick": 2120
+        },
+        {
+          "seq": 31,
+          "tick": 2180
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": [
+        {
+          "tick": 2180,
+          "key": "block(41,-60,41)",
+          "value": "minecraft:air",
+          "refined": {
+            "own": 45
+          },
+          "provisional": {
+            "own": 45
+          }
+        }
+      ],
+      "prediction_vs_server": [
+        {
+          "key": "block(41,-60,41)",
+          "predicted": "minecraft:air",
+          "server": "minecraft:air",
+          "exact": true,
+          "same_type": true
+        }
+      ]
+    },
+    {
+      "label": "A3 async place dirt (Up)",
+      "primitive": "place_block",
+      "mode": "async",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 2191,
+      "issued_tick": 2192,
+      "verdict_tick": 2192,
+      "latency_ticks": 1,
+      "delta": [
+        {
+          "key": "block(43,-60,42)",
+          "value": "minecraft:dirt"
+        }
+      ],
+      "view_at_verdict": {
+        "block(43,-60,42)": "minecraft:dirt"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            43,
+            -60,
+            42
+          ],
+          "tick": 2192,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            43,
+            -61,
+            42
+          ],
+          "tick": 2192,
+          "value": "minecraft:grass_block[snowy=false]"
+        },
+        {
+          "pos": [
+            43,
+            -60,
+            42
+          ],
+          "tick": 2192,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 32,
+          "tick": 2192
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 36,
+          "stateId": 59,
+          "tick": 2192
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 2192,
+          "key": "block(43,-60,42)",
+          "value": "minecraft:dirt",
+          "refined": {
+            "own": 46
+          },
+          "provisional": {
+            "own": 46
+          }
+        }
+      ],
+      "prediction_vs_server": [
+        {
+          "key": "block(43,-60,42)",
+          "predicted": "minecraft:dirt",
+          "server": "minecraft:dirt",
+          "exact": true,
+          "same_type": true
+        }
+      ]
+    },
+    {
+      "label": "A4 async place oak_log on a side face",
+      "primitive": "place_block",
+      "mode": "async",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 2204,
+      "issued_tick": 2205,
+      "verdict_tick": 2205,
+      "latency_ticks": 1,
+      "delta": [
+        {
+          "key": "block(42,-60,38)",
+          "value": "minecraft:oak_log[axis=y]"
+        }
+      ],
+      "view_at_verdict": {
+        "block(42,-60,38)": "minecraft:oak_log[axis=z]"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            42,
+            -60,
+            38
+          ],
+          "tick": 2205,
+          "value": "minecraft:oak_log[axis=z]"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            42,
+            -60,
+            39
+          ],
+          "tick": 2205,
+          "value": "minecraft:stone"
+        },
+        {
+          "pos": [
+            42,
+            -60,
+            38
+          ],
+          "tick": 2205,
+          "value": "minecraft:oak_log[axis=z]"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 33,
+          "tick": 2205
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 37,
+          "stateId": 60,
+          "tick": 2205
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 2205,
+          "key": "block(42,-60,38)",
+          "value": "minecraft:oak_log[axis=z]",
+          "refined": {
+            "own": 47
+          },
+          "provisional": {
+            "own": 47
+          }
+        }
+      ],
+      "prediction_vs_server": [
+        {
+          "key": "block(42,-60,38)",
+          "predicted": "minecraft:oak_log[axis=y]",
+          "server": "minecraft:oak_log[axis=z]",
+          "exact": false,
+          "same_type": true
+        }
+      ]
+    },
+    {
+      "label": "A5 async place torch on a side face",
+      "primitive": "place_block",
+      "mode": "async",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:wall_torch[facing=east] at the acknowledgement",
+      "start_tick": 2217,
+      "issued_tick": 2218,
+      "verdict_tick": 2218,
+      "latency_ticks": 1,
+      "delta": [
+        {
+          "key": "block(43,-60,39)",
+          "value": "minecraft:torch"
+        }
+      ],
+      "view_at_verdict": {
+        "block(43,-60,39)": "minecraft:wall_torch[facing=east]"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            43,
+            -60,
+            39
+          ],
+          "tick": 2218,
+          "value": "minecraft:wall_torch[facing=east]"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            42,
+            -60,
+            39
+          ],
+          "tick": 2218,
+          "value": "minecraft:stone"
+        },
+        {
+          "pos": [
+            43,
+            -60,
+            39
+          ],
+          "tick": 2218,
+          "value": "minecraft:wall_torch[facing=east]"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 34,
+          "tick": 2218
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 38,
+          "stateId": 61,
+          "tick": 2218
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 2218,
+          "key": "block(43,-60,39)",
+          "value": "minecraft:wall_torch[facing=east]",
+          "refined": "outside",
+          "provisional": {
+            "own": 48
+          }
+        }
+      ],
+      "prediction_vs_server": [
+        {
+          "key": "block(43,-60,39)",
+          "predicted": "minecraft:torch",
+          "server": "minecraft:wall_torch[facing=east]",
+          "exact": false,
+          "same_type": false
+        }
+      ]
+    },
+    {
+      "label": "A6 async place torch on top",
+      "primitive": "place_block",
+      "mode": "async",
+      "verdict": "Confirmed",
+      "detail": null,
+      "start_tick": 2229,
+      "issued_tick": 2230,
+      "verdict_tick": 2230,
+      "latency_ticks": 1,
+      "delta": [
+        {
+          "key": "block(42,-59,39)",
+          "value": "minecraft:torch"
+        }
+      ],
+      "view_at_verdict": {
+        "block(42,-59,39)": "minecraft:torch"
+      },
+      "server_block_changes": [
+        {
+          "pos": [
+            42,
+            -59,
+            39
+          ],
+          "tick": 2230,
+          "value": "minecraft:torch"
+        }
+      ],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            42,
+            -60,
+            39
+          ],
+          "tick": 2230,
+          "value": "minecraft:stone"
+        },
+        {
+          "pos": [
+            42,
+            -59,
+            39
+          ],
+          "tick": 2230,
+          "value": "minecraft:torch"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 35,
+          "tick": 2230
+        }
+      ],
+      "slot_packets": [
+        {
+          "packet": "set_slot",
+          "windowId": 0,
+          "slot": 38,
+          "stateId": 62,
+          "tick": 2230
+        }
+      ],
+      "changes_after": [
+        {
+          "tick": 2230,
+          "key": "block(42,-59,39)",
+          "value": "minecraft:torch",
+          "refined": {
+            "own": 49
+          },
+          "provisional": {
+            "own": 49
+          }
+        }
+      ],
+      "prediction_vs_server": [
+        {
+          "key": "block(42,-59,39)",
+          "predicted": "minecraft:torch",
+          "server": "minecraft:torch",
+          "exact": true,
+          "same_type": true
+        }
+      ]
+    },
+    {
+      "label": "A7 async dig inside spawn protection",
+      "primitive": "dig",
+      "mode": "async",
+      "verdict": "Rejected",
+      "detail": "block is minecraft:dirt at the acknowledgement",
+      "start_tick": 2250,
+      "issued_tick": 2266,
+      "verdict_tick": 2266,
+      "latency_ticks": 16,
+      "delta": [
+        {
+          "key": "block(3,-60,3)",
+          "value": "minecraft:air"
+        }
+      ],
+      "view_at_verdict": {
+        "block(3,-60,3)": "minecraft:dirt"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            3,
+            -60,
+            3
+          ],
+          "tick": 2251,
+          "value": "minecraft:dirt"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 36,
+          "tick": 2251
+        },
+        {
+          "seq": 37,
+          "tick": 2266
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": [],
+      "prediction_vs_server": [
+        {
+          "key": "block(3,-60,3)",
+          "predicted": "minecraft:air",
+          "server": "minecraft:dirt",
+          "exact": false,
+          "same_type": false
+        }
+      ]
+    },
+    {
+      "label": "A8 async place inside spawn protection",
+      "primitive": "place_block",
+      "mode": "async",
+      "verdict": "Rejected",
+      "detail": "target cell is minecraft:air at the acknowledgement",
+      "start_tick": 2276,
+      "issued_tick": 2277,
+      "verdict_tick": 2277,
+      "latency_ticks": 1,
+      "delta": [
+        {
+          "key": "block(4,-60,3)",
+          "value": "minecraft:dirt"
+        }
+      ],
+      "view_at_verdict": {
+        "block(4,-60,3)": "minecraft:air"
+      },
+      "server_block_changes": [],
+      "same_value_block_updates": [
+        {
+          "pos": [
+            4,
+            -61,
+            3
+          ],
+          "tick": 2277,
+          "value": "minecraft:grass_block[snowy=false]"
+        },
+        {
+          "pos": [
+            4,
+            -60,
+            3
+          ],
+          "tick": 2277,
+          "value": "minecraft:air"
+        }
+      ],
+      "acks": [
+        {
+          "seq": 38,
+          "tick": 2277
+        }
+      ],
+      "slot_packets": [],
+      "changes_after": [],
+      "prediction_vs_server": [
+        {
+          "key": "block(4,-60,3)",
+          "predicted": "minecraft:dirt",
+          "server": "minecraft:air",
+          "exact": false,
+          "same_type": false
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "counts": {
+      "launch": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "connectResult": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "tickInput": {
+        "valid": 2296,
+        "invalid": 0
+      },
+      "recordedTick": {
+        "valid": 2296,
+        "invalid": 0
+      },
+      "startRequest": {
+        "valid": 51,
+        "invalid": 0
+      },
+      "delta": {
+        "valid": 8,
+        "invalid": 0
+      }
+    },
+    "failures": []
+  },
+  "rtt_ms": 1
+}

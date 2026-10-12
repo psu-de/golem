@@ -1,0 +1,295 @@
+{
+  "experiment": "E1 clock and ingest",
+  "clock": {
+    "minutes": 1,
+    "ticks": 1217,
+    "elapsed_ms": 60932.8,
+    "drift_ms": 132.8,
+    "drift_ppm": 2179,
+    "ticks_by_source": {
+      "timer": 209,
+      "physics": 1008
+    },
+    "reentrant_calls": 0,
+    "interval_all": {
+      "n": 1216,
+      "mean": 50.109,
+      "sd": 4.867,
+      "min": 0.641,
+      "p01": 47.591,
+      "p50": 50.144,
+      "p95": 51.311,
+      "p99": 55.826,
+      "max": 121.258
+    },
+    "interval_physics": {
+      "n": 1005,
+      "mean": 50.043,
+      "sd": 4.778,
+      "min": 0.641,
+      "p01": 47.591,
+      "p50": 50.159,
+      "p95": 51.075,
+      "p99": 55.485,
+      "max": 100.375
+    },
+    "interval_timer": {
+      "n": 206,
+      "mean": 49.999,
+      "sd": 1.468,
+      "min": 39.867,
+      "p01": 47.705,
+      "p50": 49.929,
+      "p95": 51.542,
+      "p99": 51.837,
+      "max": 61.817
+    },
+    "intervals_under_25ms": 7,
+    "intervals_over_75ms": 4,
+    "source_switches": [
+      {
+        "tick": 3,
+        "from": "timer",
+        "to": "physics",
+        "ms": 68.3
+      },
+      {
+        "tick": 416,
+        "from": "physics",
+        "to": "timer",
+        "ms": 51.6
+      },
+      {
+        "tick": 519,
+        "from": "timer",
+        "to": "physics",
+        "ms": 121.3
+      },
+      {
+        "tick": 810,
+        "from": "physics",
+        "to": "timer",
+        "ms": 51.9
+      },
+      {
+        "tick": 913,
+        "from": "timer",
+        "to": "physics",
+        "ms": 46
+      }
+    ],
+    "timer_runs": [
+      {
+        "from": 0,
+        "n": 3,
+        "to": 2
+      },
+      {
+        "from": 416,
+        "n": 103,
+        "to": 518
+      },
+      {
+        "from": 810,
+        "n": 103,
+        "to": 912
+      }
+    ],
+    "drift_series": [
+      {
+        "tick": 0,
+        "minute": 0,
+        "drift_ms": 0
+      },
+      {
+        "tick": 1200,
+        "minute": 1,
+        "drift_ms": 127
+      }
+    ],
+    "tick_cost_ms": {
+      "n": 1198,
+      "mean": 1.418,
+      "sd": 4.353,
+      "min": 0.138,
+      "p01": 0.188,
+      "p50": 0.649,
+      "p95": 2.858,
+      "p99": 28.57,
+      "max": 45.564
+    },
+    "slowest_ticks": [
+      {
+        "tick": 20,
+        "ms": 45.6
+      },
+      {
+        "tick": 913,
+        "ms": 38.9
+      },
+      {
+        "tick": 28,
+        "ms": 36.5
+      },
+      {
+        "tick": 519,
+        "ms": 36.1
+      },
+      {
+        "tick": 530,
+        "ms": 35.7
+      }
+    ]
+  },
+  "replay": {
+    "recorded_ticks": 1217,
+    "live_decisions": 1286,
+    "live_ops": 69,
+    "replay_identical": true,
+    "first_difference": null,
+    "control_perturbed_report_detected": true,
+    "control_without_deltas_identical": false,
+    "ops_by_kind": {
+      "pathfind": 18,
+      "place_block": 10,
+      "look_at": 10,
+      "sneak": 10,
+      "cancel": 9,
+      "dig": 10,
+      "connect": 2
+    },
+    "final_program_state": {
+      "phase": "run",
+      "step": 16,
+      "cur": 58,
+      "wait": 958,
+      "cycles": 8,
+      "outsideB": 0,
+      "rejected": 0,
+      "failed": 0,
+      "disc": null,
+      "paused": 1,
+      "predicted": 10,
+      "lookAlt": 0,
+      "bootAt": 0,
+      "lookAt": [
+        42.5,
+        -59.5,
+        40.5
+      ]
+    }
+  },
+  "tickinput_inventory": {
+    "ticks": 1217,
+    "key_changes": 1374,
+    "own": 1043,
+    "outside": 331,
+    "chunk_load": 370,
+    "chunk_unload": 19,
+    "events": {
+      "system": 1,
+      "entity_appeared": 23,
+      "chat": 2,
+      "entity_gone": 13,
+      "item_collected": 6
+    },
+    "reports": {
+      "Running": 893,
+      "Confirmed": 46,
+      "Issued": 19
+    },
+    "infra": {
+      "connected": 3,
+      "spawned": 3,
+      "kicked": 1,
+      "disconnected": 1
+    },
+    "path_progress_non_null": 622,
+    "rtt_non_null": 1216,
+    "keys_by_family": {
+      "player": 1073,
+      "inventory": 159,
+      "window": 6,
+      "world": 6,
+      "entity": 111,
+      "block": 19
+    },
+    "round_trip_ms": {
+      "n": 1216,
+      "mean": 1.41,
+      "sd": 1.817,
+      "min": 0,
+      "p01": 0,
+      "p50": 1,
+      "p95": 3,
+      "p99": 10,
+      "max": 10
+    }
+  },
+  "validation": {
+    "counts": {
+      "launch": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "connectResult": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "tickInput": {
+        "valid": 1217,
+        "invalid": 0
+      },
+      "recordedTick": {
+        "valid": 1217,
+        "invalid": 0
+      },
+      "startRequest": {
+        "valid": 58,
+        "invalid": 0
+      },
+      "delta": {
+        "valid": 10,
+        "invalid": 0
+      }
+    },
+    "failures": []
+  },
+  "script_events": [
+    {
+      "what": "kick",
+      "tick": 415,
+      "t": 19813.857973
+    },
+    {
+      "what": "reconnect",
+      "tick": 517,
+      "t": 24880.963857999996
+    },
+    {
+      "what": "connected",
+      "tick": 519,
+      "t": 24988.403416
+    },
+    {
+      "what": "socket destroyed",
+      "tick": 810,
+      "t": 39625.762951
+    },
+    {
+      "what": "reconnect",
+      "tick": 911,
+      "t": 44649.226978
+    },
+    {
+      "what": "connected",
+      "tick": 912,
+      "t": 44730.059654
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 918,
+      "t": 45016.936086999995
+    }
+  ]
+}

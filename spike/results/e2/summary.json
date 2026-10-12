@@ -1,0 +1,1696 @@
+{
+  "experiment": "E2 packet flushing",
+  "cases": [
+    {
+      "case": "bot.dig(block)",
+      "mapping": "dig -> bot.dig",
+      "class": "durative",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 17,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 11,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:130 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 12,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:130:17)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "spike/experiments/e2-flush.mjs:59:11)",
+            "spike/experiments/e2-flush.mjs:83:1"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 12,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:137:9)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "spike/experiments/e2-flush.mjs:59:11)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 14,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [timer]",
+          "count": 2,
+          "firstTickOffset": 18,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:140:11)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:149 [timer]",
+          "count": 1,
+          "firstTickOffset": 26,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:149:21)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.dig(block)",
+      "mapping": "dig -> bot.dig",
+      "class": "durative",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 17,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 10,
+          "firstTickOffset": 2,
+          "sentInFlush": 10,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.1,
+            "max": 50.9
+          }
+        },
+        {
+          "packet": "position_look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:138 [timer]",
+          "count": 1,
+          "firstTickOffset": 10,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:138:17)",
+            "mineflayer/lib/plugins/physics.js:187:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.7,
+            "max": 49.7
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:130 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 12,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:130:17)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "spike/experiments/e2-flush.mjs:59:11)",
+            "spike/experiments/e2-flush.mjs:83:1"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.6,
+            "max": 49.6
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 12,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:137:9)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "spike/experiments/e2-flush.mjs:59:11)"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.6,
+            "max": 49.6
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [timer]",
+          "count": 2,
+          "firstTickOffset": 19,
+          "sentInFlush": 2,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:140:11)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.4,
+            "max": 50.8
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:149 [timer]",
+          "count": 1,
+          "firstTickOffset": 26,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:149:21)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.9,
+            "max": 0.9
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 30,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.3,
+            "max": 50.3
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.dig(block, forceLook=true)",
+      "mapping": "dig -> bot.dig",
+      "class": "durative",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 7,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:130 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:130:17)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:137:9)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 6,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [timer]",
+          "count": 2,
+          "firstTickOffset": 9,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:140:11)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:149 [timer]",
+          "count": 1,
+          "firstTickOffset": 16,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:149:21)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.dig(block, forceLook=true)",
+      "mapping": "dig -> bot.dig",
+      "class": "durative",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 7,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50,
+            "max": 50
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:130 [event]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:130:17)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50,
+            "max": 50
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [event]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:137:9)"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.9,
+            "max": 49.9
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [timer]",
+          "count": 2,
+          "firstTickOffset": 8,
+          "sentInFlush": 2,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/digging.js:140:11)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 1.9,
+            "max": 3.2
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 12,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.4,
+            "max": 50.4
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "outside-tick: mineflayer/lib/plugins/digging.js:149 [timer]",
+          "count": 1,
+          "firstTickOffset": 16,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/digging.js:149:21)",
+            "listOnTimeout (node:internal/timers:588:17)",
+            "process.processTimers (node:internal/timers:523:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 2.8,
+            "max": 2.8
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.lookAt(point)",
+      "mapping": "look_at -> bot.lookAt",
+      "class": "durative",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 6,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 6,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.lookAt(point)",
+      "mapping": "look_at -> bot.lookAt",
+      "class": "durative",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 6,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 6,
+          "firstTickOffset": 2,
+          "sentInFlush": 6,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.1,
+            "max": 50.9
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.placeBlock(ref, face)",
+      "mapping": "place_block (not via bot.placeBlock per §18.4)",
+      "class": "instant",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 9,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 6,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 7,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/generic_place.js:43:11)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "mineflayer/lib/plugins/place_block.js:15:5)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "block_place",
+          "origin": "outside-tick: mineflayer/lib/plugins/generic_place.js:75 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 7,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/generic_place.js:75:19)",
+            "process.processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "mineflayer/lib/plugins/place_block.js:15:5)",
+            "mineflayer/lib/plugins/place_block.js:48:5)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 9,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.placeBlock(ref, face)",
+      "mapping": "place_block (not via bot.placeBlock per §18.4)",
+      "class": "instant",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 8,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 5,
+          "firstTickOffset": 2,
+          "sentInFlush": 5,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50,
+            "max": 51
+          }
+        },
+        {
+          "packet": "position_look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:138 [timer]",
+          "count": 1,
+          "firstTickOffset": 4,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:138:17)",
+            "mineflayer/lib/plugins/physics.js:187:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.3,
+            "max": 50.3
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "outside-tick: mineflayer/lib/plugins/entities.js:835 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 7,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/generic_place.js:43:11)",
+            "processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "runNextTicks (node:internal/process/task_queues:69:3)"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.6,
+            "max": 49.6
+          }
+        },
+        {
+          "packet": "block_place",
+          "origin": "outside-tick: mineflayer/lib/plugins/generic_place.js:75 [promise continuation]",
+          "count": 1,
+          "firstTickOffset": 7,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/generic_place.js:75:19)",
+            "processTicksAndRejections (node:internal/process/task_queues:105:5)",
+            "runNextTicks (node:internal/process/task_queues:69:3)",
+            "process.processTimers (node:internal/timers:520:9)"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.5,
+            "max": 49.5
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.clickWindow(9,0,0) inventory",
+      "mapping": "pick_up -> bot.clickWindow mode 0",
+      "class": "instant",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 2,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "window_click",
+          "origin": "phase:start",
+          "count": 2,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:630:19)",
+            "spike/experiments/e2-flush.mjs:87:108",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.clickWindow(9,0,0) inventory",
+      "mapping": "pick_up -> bot.clickWindow mode 0",
+      "class": "instant",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 2,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "window_click",
+          "origin": "phase:start",
+          "count": 2,
+          "firstTickOffset": 1,
+          "sentInFlush": 2,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:630:19)",
+            "spike/experiments/e2-flush.mjs:87:108",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.2,
+            "max": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.clickWindow(36,0,0) hotbar after dig",
+      "mapping": "pick_up -> bot.clickWindow (hotbar, just dug)",
+      "class": "instant",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 3,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "window_click",
+          "origin": "phase:start",
+          "count": 2,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:630:19)",
+            "spike/experiments/e2-flush.mjs:88:172",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 10,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.clickWindow(36,0,0) hotbar after dig",
+      "mapping": "pick_up -> bot.clickWindow (hotbar, just dug)",
+      "class": "instant",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 3,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "window_click",
+          "origin": "phase:start",
+          "count": 2,
+          "firstTickOffset": 1,
+          "sentInFlush": 2,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:630:19)",
+            "spike/experiments/e2-flush.mjs:88:172",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.2,
+            "max": 0.2
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 13,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.8,
+            "max": 49.8
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.setControlState sneak/sprint/forward",
+      "mapping": "sneak, sprint, hold_jump -> bot.setControlState",
+      "class": "ongoing",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 17,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "player_input",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:265:21)",
+            "spike/experiments/e2-flush.mjs:89:132",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 15,
+          "firstTickOffset": 3,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "player_input",
+          "origin": "phase:cancel",
+          "count": 1,
+          "firstTickOffset": 11,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:265:21)",
+            "mineflayer/lib/plugins/physics.js:288:11)",
+            "spike/experiments/e2-flush.mjs:89:291",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.setControlState sneak/sprint/forward",
+      "mapping": "sneak, sprint, hold_jump -> bot.setControlState",
+      "class": "ongoing",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 18,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "player_input",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:265:21)",
+            "spike/experiments/e2-flush.mjs:89:132",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.2,
+            "max": 0.2
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 16,
+          "firstTickOffset": 2,
+          "sentInFlush": 16,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 49.9,
+            "max": 50.5
+          }
+        },
+        {
+          "packet": "player_input",
+          "origin": "phase:cancel",
+          "count": 1,
+          "firstTickOffset": 11,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:265:21)",
+            "mineflayer/lib/plugins/physics.js:288:11)",
+            "spike/experiments/e2-flush.mjs:89:291",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.3,
+            "max": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.activateItem / deactivateItem",
+      "mapping": "hold_use -> bot.activateItem",
+      "class": "ongoing",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 4,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "held_item_slot",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/simple_inventory.js:56:17)",
+            "spike/experiments/e2-flush.mjs:90:106",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "use_item",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:134:19)",
+            "spike/experiments/e2-flush.mjs:90:128",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "phase:cancel",
+          "count": 1,
+          "firstTickOffset": 8,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:157:17)",
+            "spike/experiments/e2-flush.mjs:90:235",
+            "spike/lib/harness.mjs:89:91)",
+            "spike/lib/runtime.mjs:42:18)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.activateItem / deactivateItem",
+      "mapping": "hold_use -> bot.activateItem",
+      "class": "ongoing",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 2,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "use_item",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:134:19)",
+            "spike/experiments/e2-flush.mjs:90:128",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.2,
+            "max": 0.2
+          }
+        },
+        {
+          "packet": "block_dig",
+          "origin": "phase:cancel",
+          "count": 1,
+          "firstTickOffset": 7,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/inventory.js:157:17)",
+            "spike/experiments/e2-flush.mjs:90:235",
+            "spike/lib/harness.mjs:89:91)",
+            "spike/lib/runtime.mjs:42:18)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.2,
+            "max": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.setQuickBarSlot(2)",
+      "mapping": "select_hotbar -> bot.setQuickBarSlot",
+      "class": "instant",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 1,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "held_item_slot",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/simple_inventory.js:56:17)",
+            "spike/experiments/e2-flush.mjs:91:101",
+            "spike/experiments/e2-flush.mjs:36:64",
+            "spike/lib/harness.mjs:89:91)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.setQuickBarSlot(2)",
+      "mapping": "select_hotbar -> bot.setQuickBarSlot",
+      "class": "instant",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 0,
+      "escaped_gate": 0,
+      "packets": []
+    },
+    {
+      "case": "bot.attack(Rival)",
+      "mapping": "attack -> bot.attack",
+      "class": "instant",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 2,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "use_entity",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:922:19)",
+            "mineflayer/lib/plugins/entities.js:851:7)",
+            "spike/experiments/e2-flush.mjs:92:80",
+            "spike/experiments/e2-flush.mjs:36:64"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/entities.js:853:9)",
+            "spike/experiments/e2-flush.mjs:92:80",
+            "spike/experiments/e2-flush.mjs:36:64"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.attack(Rival)",
+      "mapping": "attack -> bot.attack",
+      "class": "instant",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 2,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "use_entity",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:922:19)",
+            "mineflayer/lib/plugins/entities.js:851:7)",
+            "spike/experiments/e2-flush.mjs:92:80",
+            "spike/experiments/e2-flush.mjs:36:64"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.2,
+            "max": 0.2
+          }
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/entities.js:835:17)",
+            "mineflayer/lib/plugins/entities.js:853:9)",
+            "spike/experiments/e2-flush.mjs:92:80",
+            "spike/experiments/e2-flush.mjs:36:64"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.3,
+            "max": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.chat",
+      "mapping": "chat -> bot.chat",
+      "class": "instant",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 1,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "chat_message",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0,
+          "example": [
+            "minecraft-protocol/src/client/chat.js:448:14)",
+            "mineflayer/lib/plugins/chat.js:145:39)",
+            "mineflayer/lib/plugins/chat.js:183:9",
+            "Array.forEach (<anonymous>)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "bot.chat",
+      "mapping": "chat -> bot.chat",
+      "class": "instant",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 1,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "chat_message",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1,
+          "example": [
+            "minecraft-protocol/src/client/chat.js:448:14)",
+            "mineflayer/lib/plugins/chat.js:145:39)",
+            "mineflayer/lib/plugins/chat.js:183:9",
+            "Array.forEach (<anonymous>)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0.2,
+            "max": 0.2
+          }
+        }
+      ]
+    },
+    {
+      "case": "pathfinder.setGoal(GoalNear)",
+      "mapping": "pathfind -> mineflayer-pathfinder",
+      "class": "durative",
+      "mode": "immediate",
+      "ok": true,
+      "err": null,
+      "writes": 43,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "entity_action",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:255 [timer]",
+          "count": 2,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:255:19)",
+            "mineflayer-pathfinder/index.js:616:11)",
+            "EventEmitter.emit (node:events:531:35)",
+            "mineflayer/lib/plugins/physics.js:85:11)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 2,
+          "firstTickOffset": 2,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position_look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:138 [timer]",
+          "count": 35,
+          "firstTickOffset": 3,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:138:17)",
+            "mineflayer/lib/plugins/physics.js:187:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 4,
+          "firstTickOffset": 4,
+          "sentInFlush": 0,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 0,
+            "max": 0
+          }
+        }
+      ]
+    },
+    {
+      "case": "pathfinder.setGoal(GoalNear)",
+      "mapping": "pathfind -> mineflayer-pathfinder",
+      "class": "durative",
+      "mode": "deferred",
+      "ok": true,
+      "err": null,
+      "writes": 43,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "entity_action",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:255 [timer]",
+          "count": 2,
+          "firstTickOffset": 2,
+          "sentInFlush": 2,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:255:19)",
+            "mineflayer-pathfinder/index.js:616:11)",
+            "EventEmitter.emit (node:events:531:35)",
+            "mineflayer/lib/plugins/physics.js:85:11)"
+          ],
+          "gate_delay_ms": {
+            "mean": 45,
+            "max": 50
+          }
+        },
+        {
+          "packet": "position_look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:138 [timer]",
+          "count": 36,
+          "firstTickOffset": 2,
+          "sentInFlush": 36,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:138:17)",
+            "mineflayer/lib/plugins/physics.js:187:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 47.9,
+            "max": 50.4
+          }
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 4,
+          "firstTickOffset": 4,
+          "sentInFlush": 4,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:112:17)",
+            "mineflayer/lib/plugins/physics.js:190:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.1,
+            "max": 50.5
+          }
+        },
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 1,
+          "firstTickOffset": 42,
+          "sentInFlush": 1,
+          "example": [
+            "mineflayer/lib/plugins/physics.js:123:17)",
+            "mineflayer/lib/plugins/physics.js:193:7)",
+            "mineflayer/lib/plugins/physics.js:89:7)",
+            "mineflayer/lib/plugins/physics.js:72:7)"
+          ],
+          "gate_delay_ms": {
+            "mean": 50.3,
+            "max": 50.3
+          }
+        }
+      ]
+    },
+    {
+      "case": "backend dig (direct)",
+      "mapping": "dig -> direct packets (spike backend)",
+      "class": "durative",
+      "mode": "immediate",
+      "ok": true,
+      "verdict": "Confirmed",
+      "writes": 8,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "block_dig",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0
+        },
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 0
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 3,
+          "sentInFlush": 0
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:flush",
+          "count": 3,
+          "firstTickOffset": 5,
+          "sentInFlush": 3
+        },
+        {
+          "packet": "block_dig",
+          "origin": "phase:flush",
+          "count": 1,
+          "firstTickOffset": 16,
+          "sentInFlush": 1
+        }
+      ]
+    },
+    {
+      "case": "backend dig (direct)",
+      "mapping": "dig -> direct packets (spike backend)",
+      "class": "durative",
+      "mode": "deferred",
+      "ok": true,
+      "verdict": "Confirmed",
+      "writes": 8,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "block_dig",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1
+        },
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 1
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:flush",
+          "count": 3,
+          "firstTickOffset": 5,
+          "sentInFlush": 3
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 10,
+          "sentInFlush": 1
+        },
+        {
+          "packet": "block_dig",
+          "origin": "phase:flush",
+          "count": 1,
+          "firstTickOffset": 16,
+          "sentInFlush": 1
+        }
+      ]
+    },
+    {
+      "case": "backend place_block (direct)",
+      "mapping": "place_block -> direct packets (spike backend)",
+      "class": "instant",
+      "mode": "immediate",
+      "ok": true,
+      "verdict": "Confirmed",
+      "writes": 3,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "block_place",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 0
+        },
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 0
+        }
+      ]
+    },
+    {
+      "case": "backend place_block (direct)",
+      "mapping": "place_block -> direct packets (spike backend)",
+      "class": "instant",
+      "mode": "deferred",
+      "ok": true,
+      "verdict": "Confirmed",
+      "writes": 3,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "block_place",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1
+        },
+        {
+          "packet": "arm_animation",
+          "origin": "phase:start",
+          "count": 1,
+          "firstTickOffset": 1,
+          "sentInFlush": 1
+        },
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 1,
+          "firstTickOffset": 2,
+          "sentInFlush": 1
+        }
+      ]
+    },
+    {
+      "case": "backend look_at (bot.look + physics)",
+      "mapping": "look_at -> direct packets (spike backend)",
+      "class": "durative",
+      "mode": "immediate",
+      "ok": true,
+      "verdict": "Confirmed",
+      "writes": 6,
+      "escaped_gate": null,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 6,
+          "firstTickOffset": 2,
+          "sentInFlush": 0
+        }
+      ]
+    },
+    {
+      "case": "backend look_at (bot.look + physics)",
+      "mapping": "look_at -> direct packets (spike backend)",
+      "class": "durative",
+      "mode": "deferred",
+      "ok": true,
+      "verdict": "Confirmed",
+      "writes": 7,
+      "escaped_gate": 0,
+      "packets": [
+        {
+          "packet": "look",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:123 [timer]",
+          "count": 6,
+          "firstTickOffset": 2,
+          "sentInFlush": 6
+        },
+        {
+          "packet": "position",
+          "origin": "outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]",
+          "count": 1,
+          "firstTickOffset": 14,
+          "sentInFlush": 1
+        }
+      ]
+    }
+  ],
+  "background": {
+    "immediate": {
+      "writes": 5,
+      "by": {
+        "position @ outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]": 5
+      },
+      "escaped_gate": null
+    },
+    "deferred": {
+      "writes": 5,
+      "by": {
+        "position @ outside-tick: mineflayer/lib/plugins/physics.js:112 [timer]": 5
+      },
+      "escaped_gate": 0
+    }
+  },
+  "validation": {
+    "counts": {
+      "launch": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "connectResult": {
+        "valid": 1,
+        "invalid": 0
+      },
+      "tickInput": {
+        "valid": 1107,
+        "invalid": 0
+      },
+      "recordedTick": {
+        "valid": 1107,
+        "invalid": 0
+      },
+      "startRequest": {
+        "valid": 6,
+        "invalid": 0
+      }
+    },
+    "failures": []
+  }
+}
