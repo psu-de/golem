@@ -6,64 +6,64 @@ Drafted by the architect agent for Paul (spec owner), for decision point **D2**.
 
 ## D2 sign-off summary
 
-Status: **draft, awaiting D2.** `npm test` passes: every example validates, every negative fixture fails for its stated reason, `check-ir` passes on the Lumberjack IR, type regeneration produces no diff, and the stub backend and stub IR consumer compile under `tsc --strict`.
+Status: **D2 in progress.** On 2026-10-12 Paul accepted all 48 proposed decisions (PD-1 to PD-48); they are frozen for v0.1. The 13 escalations (E-1 to E-13) are still open and remain applied provisionally, so the contracts as a whole are not yet frozen. `npm test` passes: every example validates, every negative fixture fails for its stated reason, `check-ir` passes on the Lumberjack IR, type regeneration produces no diff, and the stub backend and stub IR consumer compile under `tsc --strict`.
 
-To sign off, approve or amend each row below. Approving a proposed decision (PD) freezes it as part of the v0.1 contracts. Approving an escalation (E) also needs an errata patch to the spec (decision 130). Spike items (S) stay provisional until D3 whatever is decided here.
+To complete D2, answer each escalation below. The accepted proposed decisions (PD) are frozen as part of the v0.1 contracts and keep their ids as stable references. Approving an escalation (E) also needs an errata patch to the spec (decision 130). Spike items (S) stay provisional until D3 whatever is decided here.
 
 ### Proposed decisions
 
-Each is a choice the spec leaves open, made in the simplest way consistent with it. Rationale is in [Proposed decisions](#proposed-decisions).
+Each is a choice the spec leaves open, made in the simplest way consistent with it. Rationale is in [Proposed decisions](#proposed-decisions). All 48 were accepted by Paul on 2026-10-12.
 
-| ID | Decision | Recommendation |
+| ID | Decision | Status |
 | --- | --- | --- |
-| PD-1 | One package; JSON Schema 2020-12 is the single source of truth for data; `.d.ts` generated and drift-checked; versioned `$id`s under `…/contracts/0.1/` | Approve |
-| PD-2 | The backend owns the 20 Hz clock and calls the runtime's `tick()` synchronously; tick-phase calls are synchronous; connect/disconnect async; connection outcomes arrive as TickInput infra events | Approve |
-| PD-3 | `BlockState` on the wire: all properties, ascending by key; a listed subset is accepted with defaults | Approve |
-| PD-4 | `ItemStack.components`: object keyed by component id, values as vanilla's component codec writes them | Approve |
-| PD-5 | `ANY` = `{"all":[]}`, `NOTHING` = `{"any":[]}`; zero-argument leaves are `{"air":{}}` | Approve |
-| PD-6 | Filter leaf keys `block`, `state` and `entity` for literal leaves; tag leaves without `#` (as in §8.4) | Approve |
-| PD-7 | `Defect.at` is `path:line:column` of the faulting expression | Approve |
-| PD-8 | Backend-only handles: `{"entity": id}` and `{"window": id, "generation": n}`, the generation assigned by the backend per opening | Approve |
-| PD-9 | One canonical world-key string grammar and a value shape per key family; `null` means absent | Approve |
-| PD-10 | Bulk `chunk_load` / `chunk_unload` changes, defined as exact abbreviations of per-key changes | Approve |
-| PD-11 | TickInput processing order: `connected`, changes, events, reports, other infra | Approve |
-| PD-12 | `ActionId` is an Int from 1, +1 per `start`, per session | Approve |
-| PD-13 | `spawned` and `died` events come from infra events; the backend never reports them twice | Approve |
-| PD-14 | Qualified names: module path, receiver type, name, `<type args>` for instances, `(param types)` only when the overload set has several members | Approve |
-| PD-15 | Type references are canonical strings (`Window<golem.windows.Container>?`) with an ABNF | Approve |
-| PD-16 | IR spans are `[file, line, col, end_line, end_col]`; columns count code points; diagnostic offsets are UTF-8 bytes | Approve |
-| PD-17 | Four IR-only expression nodes (`opt`, `unwrap`, `is_none`, `iter_more`); frame-local slot names with `~n` renames and `$` temporaries | Approve |
-| PD-18 | Call arguments are positional with defaults filled; `order` records a non-ascending evaluation order of named arguments | Approve |
-| PD-19 | Statecharts are flat maps with `parent` links; transitions may leave compounds and the runtime runs exit behaviour | Approve |
-| PD-20 | State ids: the owner alone is the root, `#end` and `#restart` are reserved, a fixed set of region names, `<instance>/<i>` handler owners and `job:<task>` owners | Approve |
-| PD-21 | A handler's identity is its declaration index (answer to E-9) | Approve with E-9 |
-| PD-22 | A job's wire name is its task's qualified name (`woodcutting.chop_trees`) | Approve |
-| PD-23 | `job_id`: a supervisor string of 1–128 characters; the start job gets `start-<n>` | Approve |
-| PD-24 | `seq` counts from 1 per runtime session; `tick` is the backend clock's tick | Approve |
-| PD-25 | A few report fields beyond §16.2's list, where a supervisor needs them (listed in [Reports](#reports-commands-and-replies)) | Approve |
-| PD-26 | Trace frames list innermost first; each gives the statement its frame was at (an extern frame gives its declaration) | Approve |
-| PD-27 | Commands discriminated by `command`; `assign` args by name with defaults; replies echo `command` and may carry `detail` | Approve |
-| PD-28 | Snapshot adds instances (handler states, vars); non-wire arguments omitted; an extern frame's state is its task name | Approve |
-| PD-29 | Transport: stdio JSON Lines (commands in; reports and replies out; logs on stderr) | Approve |
-| PD-30 | `launch.json` fields; auth by profile reference only | Approve |
-| PD-31 | One JSON state file per bot; backoff stored as remaining ticks | Approve |
-| PD-32 | CLI `golem build` / `golem run` arguments, outputs and exit codes | Approve |
-| PD-33 | Diagnostic codes `C<check>/<slug>`, with `C00` for lexical and syntax errors | Approve |
-| PD-34 | Backend primitive names are the §17.1 names; the overloaded `interact` is split by signature | Approve |
-| PD-35 | The `contracts` section copies the clause trees, and `check-ir` verifies the copy | Approve |
-| PD-36 | IR sources table; std modules appear as `std/golem/<m>.golem`, the prelude as `std/prelude.golem` | Approve |
-| PD-37 | Goal-typed constants use the backend Goal encoding | Approve |
-| PD-38 | Evaluated filter constants flatten associative `\|`/`&` chains | Approve |
-| PD-39 | Canonical ordering inside the IR: map keys ascending, resource sets in §2 order, failure sets sorted | Approve |
-| PD-40 | Lowering of straight-line code: choice states for `if`/`match`/`let … else`/loop heads, `$` temporaries, counters, iterators | Approve |
-| PD-41 | Implicit clauses are explicit IR clauses whose nodes point at the declaration | Approve |
-| PD-42 | Defaults filled at call sites as `const` literals spanning the callee's default expression | Approve |
-| PD-43 | Each job root is a chart (`job:<task>`) with one composite call | Approve |
-| PD-44 | `when … until` charts: completion and `return` go to `#restart`, whose transition replays the root's initial transition | Approve |
-| PD-45 | Catch arms sit outside the protected compound; deferred calls are `<i>.defer.call` states; `#end` runs the root's defers before `ensures` | Approve |
-| PD-46 | Handler charts per instance, with options and periods evaluated per instance | Approve |
-| PD-47 | `impl Trait` parameters become type arguments in order; `Window<K>` members are extern fns per kind | Approve |
-| PD-48 | One `old` slot per `old(…)` occurrence in source order; `?.` binders are scoped to their expression | Approve |
+| PD-1 | One package; JSON Schema 2020-12 is the single source of truth for data; `.d.ts` generated and drift-checked; versioned `$id`s under `…/contracts/0.1/` | Accepted 2026-10-12 |
+| PD-2 | The backend owns the 20 Hz clock and calls the runtime's `tick()` synchronously; tick-phase calls are synchronous; connect/disconnect async; connection outcomes arrive as TickInput infra events | Accepted 2026-10-12 |
+| PD-3 | `BlockState` on the wire: all properties, ascending by key; a listed subset is accepted with defaults | Accepted 2026-10-12 |
+| PD-4 | `ItemStack.components`: object keyed by component id, values as vanilla's component codec writes them | Accepted 2026-10-12 |
+| PD-5 | `ANY` = `{"all":[]}`, `NOTHING` = `{"any":[]}`; zero-argument leaves are `{"air":{}}` | Accepted 2026-10-12 |
+| PD-6 | Filter leaf keys `block`, `state` and `entity` for literal leaves; tag leaves without `#` (as in §8.4) | Accepted 2026-10-12 |
+| PD-7 | `Defect.at` is `path:line:column` of the faulting expression | Accepted 2026-10-12 |
+| PD-8 | Backend-only handles: `{"entity": id}` and `{"window": id, "generation": n}`, the generation assigned by the backend per opening | Accepted 2026-10-12 |
+| PD-9 | One canonical world-key string grammar and a value shape per key family; `null` means absent | Accepted 2026-10-12 |
+| PD-10 | Bulk `chunk_load` / `chunk_unload` changes, defined as exact abbreviations of per-key changes | Accepted 2026-10-12 |
+| PD-11 | TickInput processing order: `connected`, changes, events, reports, other infra | Accepted 2026-10-12 |
+| PD-12 | `ActionId` is an Int from 1, +1 per `start`, per session | Accepted 2026-10-12 |
+| PD-13 | `spawned` and `died` events come from infra events; the backend never reports them twice | Accepted 2026-10-12 |
+| PD-14 | Qualified names: module path, receiver type, name, `<type args>` for instances, `(param types)` only when the overload set has several members | Accepted 2026-10-12 |
+| PD-15 | Type references are canonical strings (`Window<golem.windows.Container>?`) with an ABNF | Accepted 2026-10-12 |
+| PD-16 | IR spans are `[file, line, col, end_line, end_col]`; columns count code points; diagnostic offsets are UTF-8 bytes | Accepted 2026-10-12 |
+| PD-17 | Four IR-only expression nodes (`opt`, `unwrap`, `is_none`, `iter_more`); frame-local slot names with `~n` renames and `$` temporaries | Accepted 2026-10-12 |
+| PD-18 | Call arguments are positional with defaults filled; `order` records a non-ascending evaluation order of named arguments | Accepted 2026-10-12 |
+| PD-19 | Statecharts are flat maps with `parent` links; transitions may leave compounds and the runtime runs exit behaviour | Accepted 2026-10-12 |
+| PD-20 | State ids: the owner alone is the root, `#end` and `#restart` are reserved, a fixed set of region names, `<instance>/<i>` handler owners and `job:<task>` owners | Accepted 2026-10-12 |
+| PD-21 | A handler's identity is its declaration index (answer to E-9) | Accepted 2026-10-12 |
+| PD-22 | A job's wire name is its task's qualified name (`woodcutting.chop_trees`) | Accepted 2026-10-12 |
+| PD-23 | `job_id`: a supervisor string of 1–128 characters; the start job gets `start-<n>` | Accepted 2026-10-12 |
+| PD-24 | `seq` counts from 1 per runtime session; `tick` is the backend clock's tick | Accepted 2026-10-12 |
+| PD-25 | A few report fields beyond §16.2's list, where a supervisor needs them (listed in [Reports](#reports-commands-and-replies)) | Accepted 2026-10-12 |
+| PD-26 | Trace frames list innermost first; each gives the statement its frame was at (an extern frame gives its declaration) | Accepted 2026-10-12 |
+| PD-27 | Commands discriminated by `command`; `assign` args by name with defaults; replies echo `command` and may carry `detail` | Accepted 2026-10-12 |
+| PD-28 | Snapshot adds instances (handler states, vars); non-wire arguments omitted; an extern frame's state is its task name | Accepted 2026-10-12 |
+| PD-29 | Transport: stdio JSON Lines (commands in; reports and replies out; logs on stderr) | Accepted 2026-10-12 |
+| PD-30 | `launch.json` fields; auth by profile reference only | Accepted 2026-10-12 |
+| PD-31 | One JSON state file per bot; backoff stored as remaining ticks | Accepted 2026-10-12 |
+| PD-32 | CLI `golem build` / `golem run` arguments, outputs and exit codes | Accepted 2026-10-12 |
+| PD-33 | Diagnostic codes `C<check>/<slug>`, with `C00` for lexical and syntax errors | Accepted 2026-10-12 |
+| PD-34 | Backend primitive names are the §17.1 names; the overloaded `interact` is split by signature | Accepted 2026-10-12 |
+| PD-35 | The `contracts` section copies the clause trees, and `check-ir` verifies the copy | Accepted 2026-10-12 |
+| PD-36 | IR sources table; std modules appear as `std/golem/<m>.golem`, the prelude as `std/prelude.golem` | Accepted 2026-10-12 |
+| PD-37 | Goal-typed constants use the backend Goal encoding | Accepted 2026-10-12 |
+| PD-38 | Evaluated filter constants flatten associative `\|`/`&` chains | Accepted 2026-10-12 |
+| PD-39 | Canonical ordering inside the IR: map keys ascending, resource sets in §2 order, failure sets sorted | Accepted 2026-10-12 |
+| PD-40 | Lowering of straight-line code: choice states for `if`/`match`/`let … else`/loop heads, `$` temporaries, counters, iterators | Accepted 2026-10-12 |
+| PD-41 | Implicit clauses are explicit IR clauses whose nodes point at the declaration | Accepted 2026-10-12 |
+| PD-42 | Defaults filled at call sites as `const` literals spanning the callee's default expression | Accepted 2026-10-12 |
+| PD-43 | Each job root is a chart (`job:<task>`) with one composite call | Accepted 2026-10-12 |
+| PD-44 | `when … until` charts: completion and `return` go to `#restart`, whose transition replays the root's initial transition | Accepted 2026-10-12 |
+| PD-45 | Catch arms sit outside the protected compound; deferred calls are `<i>.defer.call` states; `#end` runs the root's defers before `ensures` | Accepted 2026-10-12 |
+| PD-46 | Handler charts per instance, with options and periods evaluated per instance | Accepted 2026-10-12 |
+| PD-47 | `impl Trait` parameters become type arguments in order; `Window<K>` members are extern fns per kind | Accepted 2026-10-12 |
+| PD-48 | One `old` slot per `old(…)` occurrence in source order; `?.` binders are scoped to their expression | Accepted 2026-10-12 |
 
 ### Escalations
 
@@ -160,8 +160,8 @@ Node ≥ 20, no runtime dependencies. The dev dependencies are pinned exactly: `
 
 ### Versioning and freeze policy
 
-- **Contract version** `0.1` is in every `$id` path, the IR `header.ir_format` (`golem-ir/0.1`), `hello.protocol` (`golem-protocol/0.1`), `launch.format` and the state file `format`. The package version is `0.1.0-draft` until D2 and becomes `0.1.0` at the freeze.
-- **Until D2**, anything may change. The `$id`s are identifiers, not fetched URLs.
+- **Contract version** `0.1` is in every `$id` path, the IR `header.ir_format` (`golem-ir/0.1`), `hello.protocol` (`golem-protocol/0.1`), `launch.format` and the state file `format`. The package version is `0.1.0-draft` until D2 completes (all escalations answered) and becomes `0.1.0` at the freeze.
+- **Until D2 completes**, only the open escalations and the definitions they are applied in may change; the accepted proposed decisions change only by Paul's explicit decision. The `$id`s are identifiers, not fetched URLs.
 - **After D2 (frozen)**, `0.1` schemas change only through errata that fix a contradiction with the spec. Each erratum is a patch release (`0.1.1`, …) noted here, and never adds, removes or retypes a field that a conforming producer emits. Any other change, including an additive field (validators reject unknown fields under `additionalProperties: false`), is a new contract version `0.2` with new `$id`s, `ir_format` and `protocol`. A runtime refuses an IR whose `ir_format` it does not implement.
 - **D3 outcomes** may change the provisional items listed in [SPIKE_DEPENDENCIES.md](SPIKE_DEPENDENCIES.md) before the freeze. If D3 comes after D2, the change is an erratum confined to those definitions.
 
@@ -513,7 +513,7 @@ The file is rewritten after every tick in which something in it changed. Attache
 
 ## Proposed decisions
 
-Each entry gives the choice and why it is the simplest one consistent with spec v0.2.
+All 48 were accepted by Paul on 2026-10-12 and are frozen for v0.1. Each entry gives the choice and why it is the simplest one consistent with spec v0.2.
 
 - **PD-1, package and versioning.** One standalone package, so three teams depend on exactly one artifact. JSON Schema is the source of truth because every producer and consumer can validate against it, including non-TypeScript ones such as an azalea backend (decision 64). The custom generator is about 200 lines, because the stock generator mishandled tuples and cross-file references (see [Package](#package)).
 - **PD-2, clock.** §18.4 makes the clock the backend's physics tick. Synchronous tick-phase calls are the only way to make a tick's decisions a pure function of TickInput and commands (§15.5). Routing connection outcomes through TickInput keeps reconnects replayable. Keeping the clock alive across disconnects is the simplest way to count `reconnect_delay` in ticks (§12.2).
