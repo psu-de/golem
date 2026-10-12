@@ -1,0 +1,280 @@
+// golem.prim: the 34 primitives of spec §17.1, listing (decisions 111–128).
+//
+// Runtime rules not visible in the declarations (§9.6, §17.1):
+// - every primitive except `respawn` has an implicit first clause `@requires !bot.dead`;
+// - every `Window` parameter `w` adds `@requires w.open else fail WindowClosed(task)`, except in `close`;
+// - the class (instant, durative, ongoing) and the confirmation method are fixed per primitive and
+//   noted in the comment above each declaration.
+
+from golem.filters import breakable, CLEARED
+from golem.windows import WindowKind, HasButtons, Screen, Merchant, Anvil
+
+// ---------- failures ----------
+
+pub failure NoPath(at: BlockPos)                 // decision 112: the bot's feet when no path was found
+pub failure TooHungry(food: Int)
+pub failure NotRiding
+pub failure OutOfReach(pos: BlockPos)            // decision 113: for entities, the block holding the entity's feet
+pub failure EntityGone(id: Int)
+pub failure NotBreakable(pos: BlockPos)
+pub failure BlockChanged(pos: BlockPos)
+pub failure NotABlock(slot: Int)                 // decision 114: place_block with a held item that places no block
+pub failure CannotPut(slot: Int)
+pub failure NoRoom(slot: Int)
+pub failure CursorNotEmpty
+pub failure BadMessage(text: String)
+
+// ---------- helpers for clauses ----------
+
+fn count_in(s: ItemStack?) -> Int = s?.count ?? 0
+
+fn window_total<K: WindowKind>(w: Window<K>) -> Int {
+    var n = 0
+    for i in 0..w.size {
+        n += count_in(w.slot(i))
+    }
+    return n
+}
+
+fn sendable(text: String) -> Bool = text.len >= 1 && text.len <= 256
+
+fn feet_of(e: Entity) -> BlockPos = BlockPos(floor(e.pos.x), floor(e.pos.y), floor(e.pos.z))
+
+// ---------- movement ----------
+
+// durative; confirmed by state + settle (decision 93)
+@uses legs, head
+@ensures goal.reached
+@progress bot.path_progress increasing within 5s
+@timeout limit
+@fails NoPath
+pub extern task pathfind(goal: Goal, limit: Duration = 2min, opts: PathOpts = PathOpts())
+
+// durative; confirmed by state + settle; may dig when opts.dig and place items matching opts.scaffold (decision 93)
+@uses legs, head, hands, inventory
+@ensures goal.reached
+@progress bot.path_progress increasing within 5s
+@timeout limit
+@fails NoPath
+pub extern task pathfind_build(goal: Goal, limit: Duration = 2min, opts: BuildOpts = BuildOpts())
+
+// ongoing; confirmed by settle
+@uses stance
+@maintains bot.sneaking tolerate 10t
+pub ongoing extern task sneak()
+
+// ongoing; confirmed by settle
+@uses stance
+@requires bot.food > 6 else fail TooHungry(bot.food)
+@maintains bot.sprinting tolerate 10t
+pub ongoing extern task sprint()
+
+// ongoing; confirmed when sent
+@uses legs
+pub ongoing extern task hold_jump()
+
+// ongoing; confirmed when sent
+@uses legs
+@requires bot.riding else fail NotRiding
+pub ongoing extern task steer(forward: Float, sideways: Float)
+
+// instant; confirmed by state
+@uses legs
+@requires bot.riding else fail NotRiding
+@ensures !bot.riding
+@timeout 1min
+pub extern task dismount()
+
+// durative; confirmed by settle
+@uses head
+@ensures bot.aim_error(target) <= 1deg
+@timeout 2s
+pub extern task look_at(target: Vec3)
+
+// ---------- blocks ----------
+
+// durative; confirmed by ack + state (§9.10)
+@uses hands, head
+@requires world.block(pos) matches breakable() else fail NotBreakable(pos)
+@requires bot.in_reach(pos) else fail OutOfReach(pos)
+@invariant world.block(pos) == old(world.block(pos)) else fail BlockChanged(pos)
+@ensures world.block(pos) matches CLEARED
+@timeout bot.dig_time(pos) + 2s
+pub extern task dig(pos: BlockPos)
+
+// instant; confirmed by ack
+@uses hands, head
+@requires bot.in_reach(pos) else fail OutOfReach(pos)
+@timeout 1min
+pub unchecked extern task interact(pos: BlockPos, face: Face)
+
+// instant; confirmed by ack + state (block type at the target cell); a refusal fails Rejected (decision 92)
+@uses hands, head
+@requires bot.in_reach(support) else fail OutOfReach(support)
+@requires bot.held?.item.block != none else fail NotABlock(bot.held_slot)    // decisions 114, 115
+@ensures world.block(support.offset(face))?.block == old(bot.held?.item.block)
+@timeout 1min
+pub extern task place_block(support: BlockPos, face: Face)
+
+// instant; confirmed by state
+@uses hands, head
+@requires world.block(pos) matches #minecraft:all_signs              // decision 116: needs 1.20+ for the tag
+@requires lines.len == 4
+@ensures world.sign_text(pos, front) == lines
+@timeout 1min
+pub extern task edit_sign(pos: BlockPos, front: Bool, lines: List<String>)
+
+// ---------- entities ----------
+
+// instant; confirmed when sent
+@uses hands, head
+@requires target.alive else fail EntityGone(target.id)
+@requires bot.in_reach(target) else fail OutOfReach(feet_of(target))
+@timeout 1min
+pub unchecked extern task interact(target: Entity)
+
+// instant; confirmed when sent
+@uses hands, head
+@requires target.alive else fail EntityGone(target.id)
+@requires bot.in_reach(target) else fail OutOfReach(feet_of(target))
+@timeout 1min
+pub unchecked extern task attack(target: Entity)
+
+// ---------- hands ----------
+
+// instant; confirmed by ack
+@uses hands
+@timeout 1min
+pub unchecked extern task use_item(hand: Hand = Hand.Main)
+
+// ongoing; confirmed by settle
+@uses hands
+@maintains bot.using_item tolerate 10t
+pub ongoing extern task hold_use(hand: Hand = Hand.Main)
+
+// instant; confirmed by settle
+@uses hands
+@ensures bot.held == old(bot.offhand) && bot.offhand == old(bot.held)
+@timeout 1min
+pub extern task swap_hands()
+
+// instant; confirmed by settle
+@uses hands
+@requires slot in 0..9
+@ensures bot.held_slot == slot
+@timeout 1min
+pub extern task select_hotbar(slot: Int)
+
+// ---------- windows (implicit: requires w.open else WindowClosed) ----------
+
+// instant; confirmed by settle
+@uses inventory, screen
+@requires bot.cursor == none
+@requires w.slot(slot) != none
+@ensures bot.cursor?.item == old(w.slot(slot)?.item)
+@ensures count_in(bot.cursor) == (if half then (old(count_in(w.slot(slot))) + 1) / 2 else old(count_in(w.slot(slot))))
+@timeout 1min
+pub extern task pick_up<K: WindowKind>(w: Window<K>, slot: Int, half: Bool = false)
+
+// instant; confirmed by settle; never swaps (decision 15)
+@uses inventory, screen
+@requires bot.cursor != none
+@requires match bot.cursor { none => false, c => w.accepts(slot, c) } else fail CannotPut(slot)
+@ensures count_in(w.slot(slot)) - old(count_in(w.slot(slot))) == old(count_in(bot.cursor)) - count_in(bot.cursor)
+@ensures !one || old(count_in(bot.cursor)) - count_in(bot.cursor) == 1
+@timeout 1min
+pub extern task put<K: WindowKind>(w: Window<K>, slot: Int, one: Bool = false)
+
+// instant; confirmed by settle
+@uses inventory, screen
+@requires w.slot(slot) != none
+@requires w.can_quick_move(slot) else fail NoRoom(slot)
+@ensures count_in(w.slot(slot)) < old(count_in(w.slot(slot)))
+@ensures window_total(w) == old(window_total(w))
+@timeout 1min
+pub extern task quick_move<K: WindowKind>(w: Window<K>, slot: Int)
+
+// instant; confirmed by settle
+@uses inventory, screen
+@requires hotbar in 0..9
+@ensures w.slot(slot) == old(w.slot(w.hotbar.start + hotbar)) && w.slot(w.hotbar.start + hotbar) == old(w.slot(slot))   // decision 117
+@timeout 1min
+pub extern task swap_hotbar<K: WindowKind>(w: Window<K>, slot: Int, hotbar: Int)
+
+// instant; confirmed by settle
+@uses inventory, screen
+@requires w.slot(slot) != none
+@ensures if all then w.slot(slot) == none else count_in(w.slot(slot)) == old(count_in(w.slot(slot))) - 1
+@timeout 1min
+pub irreversible extern task throw<K: WindowKind>(w: Window<K>, slot: Int, all: Bool = false)
+
+// instant; confirmed by settle
+@uses inventory, screen
+@requires bot.cursor != none
+@ensures bot.cursor == none
+@timeout 1min
+pub irreversible extern task throw_cursor<K: WindowKind>(w: Window<K>)
+
+// instant; confirmed by settle
+@uses inventory, screen
+@timeout 1min
+pub unchecked extern task click_button(w: Window<impl HasButtons>, id: Int)
+
+// instant; confirmed by settle
+@uses inventory, screen
+@requires index in 0..w.trades.len
+@ensures w.selected_trade == index
+@timeout 1min
+pub extern task select_trade(w: Window<Merchant>, index: Int)
+
+// instant; confirmed by settle
+@uses inventory, screen
+@ensures w.rename_text == name
+@timeout 1min
+pub extern task rename(w: Window<Anvil>, name: String)
+
+// instant; confirmed when sent; no implicit `requires w.open`: on a closed handle it completes without acting (decision 84)
+@uses inventory, screen
+@requires !w.open || bot.cursor == none else fail CursorNotEmpty
+@ensures !w.open
+@timeout 1min
+pub extern task close(w: Window<impl Screen>)
+
+// ---------- books ----------
+
+// instant; confirmed when sent
+@uses inventory
+@requires bot.inventory_window.slot(slot) matches minecraft:writable_book
+@timeout 1min
+pub unchecked extern task write_book(slot: Int, pages: List<String>)
+
+// instant; confirmed when sent
+@uses inventory
+@requires bot.inventory_window.slot(slot) matches minecraft:writable_book
+@timeout 1min
+pub unchecked irreversible extern task sign_book(slot: Int, title: String, pages: List<String>)
+
+// ---------- life and chat ----------
+
+// instant; confirmed by state; the only primitive without the implicit `requires !bot.dead`
+@requires bot.dead
+@ensures !bot.dead
+@timeout 1min
+pub extern task respawn()
+
+// instant; confirmed by state
+@uses legs
+@requires bot.sleeping
+@ensures !bot.sleeping
+@timeout 1min
+pub extern task leave_bed()
+
+// instant; confirmed when sent
+@requires sendable(text) && text.chars.first != "/" else fail BadMessage(text)
+@timeout 1min
+pub unchecked irreversible extern task chat(text: String)
+
+// instant; confirmed when sent; text without the leading slash
+@requires sendable(text) && text.chars.first != "/" else fail BadMessage(text)
+@timeout 1min
+pub unchecked irreversible extern task command(text: String)

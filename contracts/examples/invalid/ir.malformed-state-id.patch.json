@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "move",
+      "from": "/tasks/golem.core.fight/chart/states/golem.core.fight#0.repeat.body.3",
+      "path": "/tasks/golem.core.fight/chart/states/golem.core.fight#0.repeat.bod.3"
+    }
+  ]
+}

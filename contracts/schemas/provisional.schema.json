@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/provisional.schema.json",
+  "title": "Golem provisional (spike-dependent) definitions",
+  "description": "Every data shape whose final form depends on the Phase 3 Mineflayer feasibility spike (decision point D3). Isolated here so a D3 change touches this file and SPIKE_DEPENDENCIES.md, plus the few refs listed there. Each definition names the SPIKE_DEPENDENCIES.md item (S-n) it belongs to. No spike report existed when these were drafted (docs/spike/ is absent), so every default is the readiness review's suggested default.",
+  "$defs": {
+    "KeyCause": {
+      "description": "S-2, §14.5 attribution of one key change: {\"own\": actionId} when the change is an expected effect of a live action of this bot, else \"outside\". Provisional rule (review question 4 default): Own exactly when the key is in the action's affected-key set and the change arrives between start and the action's verdict plus the settle window max(4t, 2 x round-trip time); changes caused by cancelled or rolled-back actions are Outside.",
+      "anyOf": [
+        {
+          "const": "outside"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "own"
+          ],
+          "properties": {
+            "own": {
+              "$ref": "tick-input.schema.json#/$defs/ActionId"
+            }
+          }
+        }
+      ]
+    },
+    "RoundTripTime": {
+      "description": "S-2, §17.1 settle window input: the latest round-trip time in milliseconds as the backend measured it (keep-alive or ping), or null before the first measurement. Recorded in TickInput so that a runtime-side settle or attribution computation replays exactly (§15.5).",
+      "anyOf": [
+        {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "FlushMode": {
+      "description": "S-1, finding 3: when the backend's packets for an action leave. \"deferred\": start() only queues, flush() in phase 7 sends (§15.2 as written). \"immediate\": packets leave during start() or cancel() in phase 6 and flush() sends what remains. Determinism is defined at the ingest boundary in both modes (§15.5), so either is conforming if D3 confirms that; the runtime only logs the mode.",
+      "enum": [
+        "deferred",
+        "immediate"
+      ]
+    },
+    "BackendCapabilities": {
+      "description": "§15.2, §18.4 S-1, S-2: what the connected backend guarantees, returned by connect() (backend-data.schema.json ConnectResult).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flush",
+        "attribution"
+      ],
+      "properties": {
+        "flush": {
+          "$ref": "#/$defs/FlushMode"
+        },
+        "attribution": {
+          "description": "S-2: \"backend\" when the backend tags every change Own or Outside (§14.5 as written); \"affected-keys\" is reserved for a no-go outcome in which the runtime attributes from Delta affected-key sets instead.",
+          "enum": [
+            "backend",
+            "affected-keys"
+          ]
+        }
+      }
+    },
+    "VersionDataSources": {
+      "description": "S-3, question 5: where the runtime loads version data for the pinned Minecraft version. Provisional default: the vanilla data generator for registries, block states, tags and recipes (§18.1); minecraft-data for hardness, outline and collision shapes, burn times and tool tiers; a hand-authored placement table for can_place and place_state (decisions 68, 87).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registries",
+        "physics",
+        "placement"
+      ],
+      "properties": {
+        "registries": {
+          "description": "Directory produced by java -DbundlerMainClass=net.minecraft.data.Main -jar server.jar --all, cached per version.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "path"
+          ],
+          "properties": {
+            "source": {
+              "const": "data-generator"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "physics": {
+          "description": "Package and data version supplying hardness, shapes, burn times and tool tiers.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "version"
+          ],
+          "properties": {
+            "source": {
+              "const": "minecraft-data"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "placement": {
+          "description": "Hand-authored placement-rule table with an explicit v0.1 scope (review finding 4).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "path"
+          ],
+          "properties": {
+            "source": {
+              "const": "placement-table"
+            },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

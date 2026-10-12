@@ -1,0 +1,324 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/ir/handlers.schema.json",
+  "title": "Golem IR activities and handlers",
+  "description": "§11, §18.2 activities section: activity instances with bound parameters, var declarations and handlers (trigger, options, statechart).",
+  "$defs": {
+    "ActivityInstance": {
+      "description": "§18.2 activities section entry, keyed by instance name: an activity attached by use (§12.1, params constant wire values) or by @attaches (§11.7, args evaluated from the job's parameters when job_started is emitted, so params is null). Handlers appear in declaration order, which with the instances order of bot gives the fixed handler order of §11.6.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activity",
+        "params",
+        "attached_to",
+        "attach_args",
+        "param_types",
+        "vars",
+        "handlers",
+        "span"
+      ],
+      "properties": {
+        "activity": {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        },
+        "params": {
+          "description": "Bound parameters by name, defaults filled, as wire values; null for an attached instance.",
+          "anyOf": [
+            {
+              "$ref": "../wire.schema.json#/$defs/WireObject"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attached_to": {
+          "description": "§11.7 the job (qualified task name) whose thread this instance lives with, or null for a use instance.",
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/QualifiedName"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attach_args": {
+          "description": "§11.7 for an attached instance: one argument expression per activity parameter, in parameter order, over the job's parameters (param nodes); null for a use instance.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "expr.schema.json#/$defs/Expr"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "param_types": {
+          "type": "array",
+          "items": {
+            "$ref": "types.schema.json#/$defs/Param"
+          }
+        },
+        "vars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VarDecl"
+          }
+        },
+        "handlers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Handler"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "VarDecl": {
+      "description": "§11.2 activity var: name, wire type and constant initial value; persisted per instance (§18.5) unless the instance is attached.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type",
+        "init"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "types.schema.json#/$defs/Ident"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "init": {
+          "$ref": "../wire.schema.json#/$defs/JsonValue"
+        }
+      }
+    },
+    "Handler": {
+      "description": "§11 one handler of an instance: its index in declaration order (PD-21: the handler's identity in reports, snapshots and persistence), trigger, evaluated options, inferred footprint (§13.3), boundedness, and the body statechart whose owner is <instance>/<index>. A when ... until handler's chart has a #restart state instead of #end.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "trigger",
+        "options",
+        "footprint",
+        "bounded",
+        "text",
+        "chart",
+        "span"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "trigger": {
+          "$ref": "#/$defs/Trigger"
+        },
+        "options": {
+          "$ref": "#/$defs/HandlerOptions"
+        },
+        "footprint": {
+          "$ref": "types.schema.json#/$defs/ResourceSet"
+        },
+        "bounded": {
+          "type": "boolean"
+        },
+        "text": {
+          "description": "The trigger line's source text, for hello and diagnostics.",
+          "type": "string"
+        },
+        "chart": {
+          "$ref": "statechart.schema.json#/$defs/Statechart"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "HandlerOptions": {
+      "description": "§11.5 handler options evaluated per instance: priority (required in source), backoff in ticks (default 5s = 100), queue (default 0; only on on-triggers).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "priority",
+        "backoff",
+        "queue"
+      ],
+      "properties": {
+        "priority": {
+          "$ref": "../wire.schema.json#/$defs/Int"
+        },
+        "backoff": {
+          "$ref": "../wire.schema.json#/$defs/Duration"
+        },
+        "queue": {
+          "$ref": "../wire.schema.json#/$defs/NonNegInt"
+        }
+      }
+    },
+    "Trigger": {
+      "description": "§11.3 closed union of triggers, discriminated by kind.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/OnEvent"
+        },
+        {
+          "$ref": "#/$defs/OnEnter"
+        },
+        {
+          "$ref": "#/$defs/OnExit"
+        },
+        {
+          "$ref": "#/$defs/When"
+        },
+        {
+          "$ref": "#/$defs/Every"
+        }
+      ]
+    },
+    "OnEvent": {
+      "description": "§11.3 on e(x, _) [if g]: fires once per occurrence of a §17.6 event, binders bound positionally (null for _), when guard holds.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "event",
+        "binders",
+        "guard"
+      ],
+      "properties": {
+        "kind": {
+          "const": "on"
+        },
+        "event": {
+          "$ref": "../tick-input.schema.json#/$defs/EventName"
+        },
+        "binders": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "types.schema.json#/$defs/LocalName"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "guard": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "OnEnter": {
+      "description": "§11.3 on enter c: fires in a tick where c is true and was false at the previous evaluation (initially false).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "cond"
+      ],
+      "properties": {
+        "kind": {
+          "const": "enter"
+        },
+        "cond": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        }
+      }
+    },
+    "OnExit": {
+      "description": "§11.3 on exit c: fires in a tick where c is false and was true at the previous evaluation (initially false).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "cond"
+      ],
+      "properties": {
+        "kind": {
+          "const": "exit"
+        },
+        "cond": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        }
+      }
+    },
+    "When": {
+      "description": "§11.3, §11.4 when c [for D] [until u]: level trigger. debounce is D in ticks (default 1t), a constant evaluated per instance (escalation E-7); until is null without an until clause.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "cond",
+        "debounce",
+        "until"
+      ],
+      "properties": {
+        "kind": {
+          "const": "when"
+        },
+        "cond": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "debounce": {
+          "$ref": "../wire.schema.json#/$defs/PosInt"
+        },
+        "until": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "Every": {
+      "description": "§11.4, decision 95 every D: period D in ticks, a constant evaluated per instance, >= 1t.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "period"
+      ],
+      "properties": {
+        "kind": {
+          "const": "every"
+        },
+        "period": {
+          "$ref": "../wire.schema.json#/$defs/PosInt"
+        }
+      }
+    },
+    "HandlerState": {
+      "description": "§11.4 handler states as exported in snapshots: idle, active, backoff, and disabled after a run ending in ContractViolation or Defect.",
+      "enum": [
+        "idle",
+        "active",
+        "backoff",
+        "disabled"
+      ]
+    }
+  }
+}

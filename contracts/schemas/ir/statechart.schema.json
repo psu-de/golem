@@ -1,0 +1,1074 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/ir/statechart.schema.json",
+  "title": "Golem IR statecharts",
+  "description": "§18.3 hierarchical state machines lowered from task, handler and job-root bodies (decision 1): atomic states for every suspension point, compound states for scopes and composite calls, parallel regions for with, choice pseudo-states and guarded transitions carrying the actions of stmt-actions.schema.json. Lowering rules in CONTRACTS.md 'Statecharts'.",
+  "$defs": {
+    "StateId": {
+      "description": "§18.3 state id (PD-20). ABNF and region names in CONTRACTS.md 'State ids'. owner is a task's qualified name, a handler <instance>/<index>, or a job root job:<task>; the path indexes statements within blocks (0-based) and names regions of compound statements, e.g. golem.core.collect#1.repeat.body.2.abort.body.0 (the wait inside collect). The owner alone is the chart's root scope; #end and #restart are reserved. An id stays stable as long as the statements before it on its path are unchanged.",
+      "type": "string",
+      "pattern": "^(job:[^#/:]+|[^#/:]+|[a-z_][A-Za-z0-9_]*(\\.[a-z_][A-Za-z0-9_]*)?/(0|[1-9][0-9]*))(#(end|restart|(0|[1-9][0-9]*)(\\.(if\\.(then|else|elif[1-9][0-9]*)|match\\.arm(0|[1-9][0-9]*)|(for|repeat|while|loop|abort|retry|atomic)\\.body|with\\.(child|body)|try\\.(body|catch(0|[1-9][0-9]*))|catch\\.(call|arm(0|[1-9][0-9]*))|async\\.(body|barrier)|defer\\.call|let\\.else|call\\.pending)\\.(0|[1-9][0-9]*))*(\\.(if\\.(then|else|elif[1-9][0-9]*)|match\\.arm(0|[1-9][0-9]*)|(for|repeat|while|loop|abort|retry|atomic)\\.body|with\\.(child|body)|try\\.(body|catch(0|[1-9][0-9]*))|catch\\.(call|arm(0|[1-9][0-9]*))|async\\.(body|barrier)|defer\\.call|let\\.else|call\\.pending))?))?$"
+    },
+    "Statechart": {
+      "description": "§18.3 one hierarchical state machine: a flat map from state id to state, with hierarchy given by parent. root is the owner's scope state; locals declares every frame-local slot with its type.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "root",
+        "locals",
+        "states"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string"
+        },
+        "root": {
+          "$ref": "#/$defs/StateId"
+        },
+        "locals": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "types.schema.json#/$defs/LocalName"
+          },
+          "additionalProperties": {
+            "$ref": "types.schema.json#/$defs/TypeRef"
+          }
+        },
+        "states": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/StateId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/State"
+          }
+        }
+      }
+    },
+    "State": {
+      "description": "§18.3 closed union of statechart states, discriminated by kind.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/StateScope"
+        },
+        {
+          "$ref": "#/$defs/StateExternCall"
+        },
+        {
+          "$ref": "#/$defs/StateCompositeCall"
+        },
+        {
+          "$ref": "#/$defs/StateWait"
+        },
+        {
+          "$ref": "#/$defs/StateWaitUntil"
+        },
+        {
+          "$ref": "#/$defs/StatePending"
+        },
+        {
+          "$ref": "#/$defs/StateBarrier"
+        },
+        {
+          "$ref": "#/$defs/StateRestart"
+        },
+        {
+          "$ref": "#/$defs/StateLoopEvery"
+        },
+        {
+          "$ref": "#/$defs/StateChoice"
+        },
+        {
+          "$ref": "#/$defs/StateFinal"
+        },
+        {
+          "$ref": "#/$defs/StateAbort"
+        },
+        {
+          "$ref": "#/$defs/StateTry"
+        },
+        {
+          "$ref": "#/$defs/StateRetry"
+        },
+        {
+          "$ref": "#/$defs/StateAtomic"
+        },
+        {
+          "$ref": "#/$defs/StateAsync"
+        },
+        {
+          "$ref": "#/$defs/StateWith"
+        }
+      ]
+    },
+    "Transition": {
+      "description": "§18.3 transition: optional guard, straight-line actions run in order, then target. A transition may leave compound states; the runtime runs their exit behaviour (deferred calls, cancelling a with child, the async barrier) before reaching target. target is null exactly when the last action is fail.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guard",
+        "actions",
+        "target"
+      ],
+      "properties": {
+        "guard": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "stmt-actions.schema.json#/$defs/Action"
+          }
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "FailureTransition": {
+      "description": "§10.5 failure-pattern transition implementing a catch arm or a retry: fires when an unwinding catchable failure matches one of on (and guard holds, with binders already bound), after the unwind to this state finished (§10.6).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "on",
+        "guard",
+        "actions",
+        "target"
+      ],
+      "properties": {
+        "on": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/FailPattern"
+          }
+        },
+        "guard": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "stmt-actions.schema.json#/$defs/Action"
+          }
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "FailPattern": {
+      "description": "§10.5, decision 101 catch-arm pattern: failure is a qualified failure name (user) or built-in name, or \"_\" for every catchable failure; binders is null for a bare name (any fields), else one local (or null for _) per field.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failure",
+        "binders"
+      ],
+      "properties": {
+        "failure": {
+          "anyOf": [
+            {
+              "const": "_"
+            },
+            {
+              "$ref": "types.schema.json#/$defs/QualifiedName"
+            }
+          ]
+        },
+        "binders": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "types.schema.json#/$defs/LocalName"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateScope": {
+      "description": "§18.3 compound state for a chart root (the state whose id is the owner) or a block that registers defers (§10.4: the defer scope). Entering it fires initial. When a transition leaves a scope with defers: true, its pending deferred calls run last-in first-out, each in its own deferred call state, before the transition completes (§10.6).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "initial",
+        "defers",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "scope"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "initial": {
+          "$ref": "#/$defs/Transition"
+        },
+        "defers": {
+          "type": "boolean"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateExternCall": {
+      "description": "§18.3 atomic state: an extern call awaiting its verdict (§9.6). On completion the result is stored in result and next fires; a failure unwinds.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "callee",
+        "args",
+        "result",
+        "mode",
+        "deferred",
+        "next",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "extern_call"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "callee": {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        },
+        "args": {
+          "description": "Arguments in parameter order with defaults filled, evaluated on the caller's view when the state is entered (§9.9); null for a deferred call, whose arguments the defer action captured.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "expr.schema.json#/$defs/Expr"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "order": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/LocalName"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mode": {
+          "description": "§10.8, §14.3 confirmation mode of this call: sync, async (inside confirm async), or sync_forced (sync t(...) or an irreversible callee inside confirm async, which first waits for the strand's pending verdicts, §14.4).",
+          "enum": [
+            "sync",
+            "async",
+            "sync_forced"
+          ]
+        },
+        "deferred": {
+          "type": "boolean"
+        },
+        "next": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Transition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateCompositeCall": {
+      "description": "§18.3 compound state by reference: a call into a composite, which nests the callee's statechart (tasks.<callee>.chart) as a new frame.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "callee",
+        "args",
+        "result",
+        "mode",
+        "deferred",
+        "next",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "composite_call"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "callee": {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        },
+        "args": {
+          "description": "Arguments in parameter order with defaults filled, evaluated on the caller's view when the state is entered (§9.9); null for a deferred call, whose arguments the defer action captured.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "expr.schema.json#/$defs/Expr"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "order": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/LocalName"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mode": {
+          "description": "§10.8, §14.3 confirmation mode of this call: sync, async (inside confirm async), or sync_forced (sync t(...) or an irreversible callee inside confirm async, which first waits for the strand's pending verdicts, §14.4).",
+          "enum": [
+            "sync",
+            "async",
+            "sync_forced"
+          ]
+        },
+        "deferred": {
+          "type": "boolean"
+        },
+        "next": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Transition"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateWait": {
+      "description": "§10.3 atomic state: wait D active ticks; D < 1t raises Defect(InvalidArgument).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "duration",
+        "next",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "wait"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "duration": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "next": {
+          "$ref": "#/$defs/Transition"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateWaitUntil": {
+      "description": "§10.3 atomic state: wait until cond, checked immediately and in each check phase; after timeout active ticks fail with else_fail or Timeout(task).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "cond",
+        "timeout",
+        "else_fail",
+        "next",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "wait_until"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cond": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "timeout": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "else_fail": {
+          "anyOf": [
+            {
+              "$ref": "stmt-actions.schema.json#/$defs/FailureCtor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "next": {
+          "$ref": "#/$defs/Transition"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StatePending": {
+      "description": "§14.3 atomic state: the pending limit. Entered instead of the extern call state call when the strand already has max_pending unverdicted actions; continues to call once one resolves. Id: <call>.call.pending.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "call",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "pending"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "call": {
+          "$ref": "#/$defs/StateId"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateBarrier": {
+      "description": "§14.3 atomic state: the async barrier of the enclosing confirm async state (id <async>.async.barrier). Every exit from the async block passes through it; it waits for every verdict of actions issued inside the block, then completes the exit, or rolls back (§14.4).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "barrier"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateRestart": {
+      "description": "§11.4, decision 135 atomic state: the restart point of a when ... until handler (id <owner>#restart). A completed or returned run waits here; the next run starts (next fires) in the step phase of the next tick in which the thread is granted, unless until holds first.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "next",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "restart"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "next": {
+          "$ref": "#/$defs/Transition"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateLoopEvery": {
+      "description": "§10.2 atomic state: the head of loop every D. D is evaluated (and checked >= 1t) on first entry; each later entry waits until D active ticks after the previous iteration started, or the next tick if the body took longer, then fires next.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "period",
+        "next",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "loop_every"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "period": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "next": {
+          "$ref": "#/$defs/Transition"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateChoice": {
+      "description": "§18.3 pseudo-state for branching and loop heads in straight-line code: entering it immediately takes the first transition whose guard holds; the last transition has no guard.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "transitions",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "choice"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transitions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Transition"
+          }
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateFinal": {
+      "description": "§9.7 completion of the chart (id <owner>#end): entering it ends the body block, so the root scope's pending deferred calls run (§10.4), then the frame's ensures are checked and it returns the value of the return action that led here (Unit if none). In a handler chart without until, the run ends and the handler returns to Idle (§11.4).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "final"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateAbort": {
+      "description": "§10.4 compound state abort when cond { B }: cond is evaluated on entry and in each check phase while B runs; when true, B is cancelled (unwinding with defers) and on_abort fires. Region abort.body.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "cond",
+        "initial",
+        "on_abort",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "abort"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cond": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "initial": {
+          "$ref": "#/$defs/Transition"
+        },
+        "on_abort": {
+          "$ref": "#/$defs/Transition"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateTry": {
+      "description": "§10.5 compound state for try { B } catch { arms } (form try, regions try.body and try.catch<k>) and for the catch postfix t(args) catch { arms } (form postfix, regions catch.call and catch.arm<k>). A catchable failure unwinding out of the body is matched against catches in order; the first match fires its transition after the unwind.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "form",
+        "initial",
+        "catches",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "try"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "form": {
+          "enum": [
+            "try",
+            "postfix"
+          ]
+        },
+        "initial": {
+          "$ref": "#/$defs/Transition"
+        },
+        "catches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/FailureTransition"
+          }
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateRetry": {
+      "description": "§10.5, decision 69 compound state retry n on F1, F2 { B } (region retry.body). The counter is initialised (min 1) by the transition entering it; catches holds one failure transition on the listed failures, guarded by counter > 1, that steps the counter and targets this state, re-entering B from its first statement after B unwound.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "initial",
+        "catches",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "retry"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "initial": {
+          "$ref": "#/$defs/Transition"
+        },
+        "catches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/FailureTransition"
+          }
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateAtomic": {
+      "description": "§10.7 compound state atomic { B } (region atomic.body): pins the thread while active (§15.3).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "initial",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "atomic"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "initial": {
+          "$ref": "#/$defs/Transition"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateAsync": {
+      "description": "§10.8, §14.3 compound state confirm async { B } (region async.body): calls inside run in async mode on the strand's predicted view; every exit passes through barrier.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "initial",
+        "barrier",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "async"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "initial": {
+          "$ref": "#/$defs/Transition"
+        },
+        "barrier": {
+          "$ref": "#/$defs/StateId"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "StateWith": {
+      "description": "§10.4, §18.3 parallel state with t(args) { B }: region with.child is the ongoing call state child (a second strand), region with.body is the scope state body. When B ends for any reason the child is cancelled; if the child fails first, B is cancelled and the failure is raised at this state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "parent",
+        "child",
+        "body",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "with"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StateId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "child": {
+          "$ref": "#/$defs/StateId"
+        },
+        "body": {
+          "$ref": "#/$defs/StateId"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

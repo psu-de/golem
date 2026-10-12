@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/launch.schema.json",
+  "title": "Golem launch file",
+  "description": "Review question 7 default: launch.json, the input of golem run (CONTRACTS.md 'CLI').",
+  "$ref": "#/$defs/Launch",
+  "$defs": {
+    "Launch": {
+      "description": "Question 7 launch.json: everything golem run needs for one bot that is not in source (§12.2: connection details are never in source). Paths are relative to the launch file's directory. Secrets are never inline: Microsoft auth names a token-cache profile (PD-30).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "bot",
+        "ir",
+        "minecraft",
+        "server",
+        "auth",
+        "persistence",
+        "data"
+      ],
+      "properties": {
+        "format": {
+          "const": "golem-launch/0.1"
+        },
+        "bot": {
+          "$ref": "wire.schema.json#/$defs/VariantName"
+        },
+        "ir": {
+          "description": "Path to <Bot>.golem-ir.json.",
+          "type": "string",
+          "minLength": 1
+        },
+        "minecraft": {
+          "description": "Expected Minecraft version; must equal the IR header's (decision 46).",
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+        },
+        "server": {
+          "$ref": "#/$defs/Server"
+        },
+        "auth": {
+          "$ref": "#/$defs/Auth"
+        },
+        "persistence": {
+          "description": "Path of the per-bot state file (§18.5, persistence.schema.json); created if absent.",
+          "type": "string",
+          "minLength": 1
+        },
+        "data": {
+          "$ref": "provisional.schema.json#/$defs/VersionDataSources"
+        },
+        "log": {
+          "description": "Logging on stderr (never on stdout, which carries reports and replies).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "level"
+          ],
+          "properties": {
+            "level": {
+              "enum": [
+                "error",
+                "warn",
+                "info",
+                "debug"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Server": {
+      "description": "§12.2 Server address.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host",
+        "port"
+      ],
+      "properties": {
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    },
+    "Auth": {
+      "description": "§12.2 Account and authentication, by reference only.",
+      "oneOf": [
+        {
+          "description": "Offline-mode account (no credentials exist).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "username"
+          ],
+          "properties": {
+            "mode": {
+              "const": "offline"
+            },
+            "username": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_]{3,16}$"
+            }
+          }
+        },
+        {
+          "description": "Microsoft account: profile names an entry in a token cache created beforehand by an interactive login (golem login); cache is the cache directory. No password or token appears here.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "profile",
+            "cache"
+          ],
+          "properties": {
+            "mode": {
+              "const": "microsoft"
+            },
+            "profile": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cache": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    }
+  }
+}

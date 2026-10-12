@@ -1,0 +1,982 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/ir/stmt-actions.schema.json",
+  "title": "Golem IR statements and transition actions",
+  "description": "§18.2-§18.3: statement trees of fn bodies (§7.4) and the closed set of statechart transition actions that carry straight-line task and handler code.",
+  "$defs": {
+    "FnStmt": {
+      "description": "§7.4 closed union of statements in fn bodies (fns never suspend, so they are statement trees, not statecharts).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SBind"
+        },
+        {
+          "$ref": "#/$defs/SLetElse"
+        },
+        {
+          "$ref": "#/$defs/SAssign"
+        },
+        {
+          "$ref": "#/$defs/SIf"
+        },
+        {
+          "$ref": "#/$defs/SMatch"
+        },
+        {
+          "$ref": "#/$defs/SFor"
+        },
+        {
+          "$ref": "#/$defs/SRepeat"
+        },
+        {
+          "$ref": "#/$defs/SWhile"
+        },
+        {
+          "$ref": "#/$defs/SReturn"
+        },
+        {
+          "$ref": "#/$defs/SBreak"
+        },
+        {
+          "$ref": "#/$defs/SContinue"
+        },
+        {
+          "$ref": "#/$defs/SEval"
+        }
+      ]
+    },
+    "SBind": {
+      "description": "§10.1 let x = e / var x = e in a fn body.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "local",
+        "value",
+        "mutable",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "bind"
+        },
+        "local": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "mutable": {
+          "type": "boolean"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SLetElse": {
+      "description": "§10.1 let x = e else { diverging block } in a fn body; e is T?.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "local",
+        "value",
+        "else",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "let_else"
+        },
+        "local": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "else": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FnStmt"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SAssign": {
+      "description": "§10.1 assignment to a fn local; op_target resolves the operator of += -= *= (null for =).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "local",
+        "op",
+        "value",
+        "op_target",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "assign"
+        },
+        "local": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "op": {
+          "$ref": "#/$defs/AssignOp"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "op_target": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/OpTarget"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SIf": {
+      "description": "§10.2 if / else if / else, including if let.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "branches",
+        "else",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "if"
+        },
+        "branches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Branch"
+          }
+        },
+        "else": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FnStmt"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SMatch": {
+      "description": "§10.2 match statement (decision 108); must be exhaustive (§13.1 check 11).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "scrutinee",
+        "arms",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "match"
+        },
+        "scrutinee": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "arms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pattern",
+              "guard",
+              "body"
+            ],
+            "properties": {
+              "pattern": {
+                "$ref": "expr.schema.json#/$defs/Pattern"
+              },
+              "guard": {
+                "anyOf": [
+                  {
+                    "$ref": "expr.schema.json#/$defs/Expr"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "body": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/FnStmt"
+                }
+              }
+            }
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SFor": {
+      "description": "§10.2 for x in e over a List, Set, Range or Map (keys); e evaluated once.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "local",
+        "over",
+        "body",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "for"
+        },
+        "local": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/LocalName"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "over": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FnStmt"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SRepeat": {
+      "description": "§10.2 repeat n; n < 0 raises Defect(InvalidArgument).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "count",
+        "body",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "repeat"
+        },
+        "count": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FnStmt"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SWhile": {
+      "description": "§10.2 while c decreasing v [by m]; a violated variant raises Defect(VariantViolated) in a fn.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "cond",
+        "variant",
+        "by",
+        "body",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "while"
+        },
+        "cond": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "variant": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "by": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FnStmt"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SReturn": {
+      "description": "§10.2 return [e].",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "return"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SBreak": {
+      "description": "§10.2 break.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "break"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SContinue": {
+      "description": "§10.2 continue.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "continue"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "SEval": {
+      "description": "§10.1 let _ = e, or an expression statement in a fn.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "eval"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AssignOp": {
+      "description": "§4.1 AssignStmt operators.",
+      "enum": [
+        "=",
+        "+=",
+        "-=",
+        "*="
+      ]
+    },
+    "Branch": {
+      "description": "§10.2 one if branch: a Bool condition, or if let binding local to the unwrapped value of an optional.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cond",
+            "body"
+          ],
+          "properties": {
+            "cond": {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            "body": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FnStmt"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "let",
+            "value",
+            "body"
+          ],
+          "properties": {
+            "let": {
+              "$ref": "types.schema.json#/$defs/LocalName"
+            },
+            "value": {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            "body": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FnStmt"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FailureCtor": {
+      "description": "§4.1 FailureCtor F(args): the failure's qualified name (a user failure, or a built-in name for implicit clauses) and its field values in declaration order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "failure",
+        "fields"
+      ],
+      "properties": {
+        "failure": {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "expr.schema.json#/$defs/Expr"
+          }
+        },
+        "order": {
+          "description": "Evaluation order as field indices, present only when it differs from declaration order (PD-18).",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "ABind": {
+      "description": "§10.1 let/var binding or compiler temporary: evaluate value and store it in the local slot.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "local",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "bind"
+        },
+        "local": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AAssign": {
+      "description": "§10.1, §11.2 assignment to a local or, in handler bodies, an activity var; op_target resolves += -= *= (null for =).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "target",
+        "op",
+        "value",
+        "op_target",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "assign"
+        },
+        "target": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "local"
+              ],
+              "properties": {
+                "local": {
+                  "$ref": "types.schema.json#/$defs/LocalName"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "var"
+              ],
+              "properties": {
+                "var": {
+                  "$ref": "types.schema.json#/$defs/Ident"
+                }
+              }
+            }
+          ]
+        },
+        "op": {
+          "$ref": "#/$defs/AssignOp"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "op_target": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/OpTarget"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AEval": {
+      "description": "§10.1 evaluate and discard (let _ = e; the value of a discarded catch arm).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "eval"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ANotify": {
+      "description": "§10.9 notify N(args): emit the notice report now; fields in declaration order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "notice",
+        "fields",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "notify"
+        },
+        "notice": {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "expr.schema.json#/$defs/Expr"
+          }
+        },
+        "order": {
+          "description": "Evaluation order as field indices, present only when it differs from declaration order (PD-18).",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AHeartbeat": {
+      "description": "§9.3, decision 76 heartbeat: reset the stalls_after count of the frame.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "heartbeat"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AFail": {
+      "description": "§10.5 fail F(args), and the else fail of let and wait until: raise the failure and unwind (§10.6). Terminal: a transition ending in fail has no target.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "failure",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "fail"
+        },
+        "failure": {
+          "$ref": "#/$defs/FailureCtor"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AReturn": {
+      "description": "§10.2 return [e]: complete the frame with the value (or, in a when ... until handler, end the run at the restart point). Must be the last action; the transition targets the chart's #end (or #restart) state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "return"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "expr.schema.json#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ADefer": {
+      "description": "§10.4 defer t(args): evaluate the arguments now and push the deferred call state call onto the enclosing scope's defer stack.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "call",
+        "args",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "defer"
+        },
+        "call": {
+          "$ref": "statechart.schema.json#/$defs/StateId"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "$ref": "expr.schema.json#/$defs/Expr"
+          }
+        },
+        "order": {
+          "description": "Evaluation order as field indices, present only when it differs from declaration order (PD-18).",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ACheck": {
+      "description": "§7.1 argument check: raise Defect(defect) unless cond holds (wait D >= 1t, loop every D >= 1t, timeout D >= 1t).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "cond",
+        "defect",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "check"
+        },
+        "cond": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "defect": {
+          "$ref": "../wire.schema.json#/$defs/DefectKind"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ACounterInit": {
+      "description": "§10.2, §10.5 loop and retry counters: evaluate value once into the counter slot; below min raises Defect(InvalidArgument) (min 0 for repeat, 1 for retry).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "counter",
+        "value",
+        "min",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "counter_init"
+        },
+        "counter": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "min": {
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ACounterStep": {
+      "description": "§10.2, §10.5 Decrement a counter slot by one (one repeat iteration or one retry attempt used).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "counter",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "counter_step"
+        },
+        "counter": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AIterInit": {
+      "description": "§10.2 for: evaluate over once and store an iterator over its elements (Map: keys in ascending order) in the iterator slot.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "iter",
+        "over",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "iter_init"
+        },
+        "iter": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "over": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AIterNext": {
+      "description": "§10.2 for: bind the next element to local (null for _) and advance the iterator.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "iter",
+        "local",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "iter_next"
+        },
+        "iter": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "local": {
+          "anyOf": [
+            {
+              "$ref": "types.schema.json#/$defs/LocalName"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "AVariant": {
+      "description": "§10.2 while c decreasing v [by m]: before an iteration, fail with Stalled(task) unless value >= 0 and, from the second iteration, value <= previous - by; then store value in slot.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "slot",
+        "value",
+        "by",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "variant"
+        },
+        "slot": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "value": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "by": {
+          "$ref": "expr.schema.json#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "Action": {
+      "description": "§18.3 closed set of transition actions for straight-line code between suspension points, discriminated by kind.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ABind"
+        },
+        {
+          "$ref": "#/$defs/AAssign"
+        },
+        {
+          "$ref": "#/$defs/AEval"
+        },
+        {
+          "$ref": "#/$defs/ANotify"
+        },
+        {
+          "$ref": "#/$defs/AHeartbeat"
+        },
+        {
+          "$ref": "#/$defs/AFail"
+        },
+        {
+          "$ref": "#/$defs/AReturn"
+        },
+        {
+          "$ref": "#/$defs/ADefer"
+        },
+        {
+          "$ref": "#/$defs/ACheck"
+        },
+        {
+          "$ref": "#/$defs/ACounterInit"
+        },
+        {
+          "$ref": "#/$defs/ACounterStep"
+        },
+        {
+          "$ref": "#/$defs/AIterInit"
+        },
+        {
+          "$ref": "#/$defs/AIterNext"
+        },
+        {
+          "$ref": "#/$defs/AVariant"
+        }
+      ]
+    }
+  }
+}

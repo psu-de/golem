@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/tasks/golem.core.fight/chart/states/golem.core.fight#0.repeat.body.2/catches/0/on/0/failure",
+      "value": "Defect"
+    }
+  ]
+}

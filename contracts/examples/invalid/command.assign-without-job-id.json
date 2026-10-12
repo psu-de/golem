@@ -1,0 +1,5 @@
+{
+  "command": "assign",
+  "job": "woodcutting.chop_trees",
+  "args": {}
+}

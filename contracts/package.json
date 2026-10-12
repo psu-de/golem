@@ -1,0 +1,41 @@
+{
+  "name": "@golem/contracts",
+  "version": "0.1.0",
+  "description": "Interface contracts between the Golem compiler, runtime and backend: JSON Schemas, generated TypeScript types and the hand-written Backend interface (spec v0.2, Phase 2).",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts"
+    },
+    "./schemas/*": "./schemas/*",
+    "./types/*": "./types/*"
+  },
+  "files": [
+    "schemas",
+    "types",
+    "CONTRACTS.md",
+    "ESCALATIONS.md",
+    "SPIKE_DEPENDENCIES.md",
+    "COVERAGE.md"
+  ],
+  "scripts": {
+    "generate-types": "node scripts/generate-types.mjs",
+    "build-examples": "node examples/author/lumberjack.mjs",
+    "check-generated": "node scripts/generate-types.mjs --check && node examples/author/lumberjack.mjs --check",
+    "validate-all": "node scripts/validate-all.mjs",
+    "check-ir": "node scripts/check-ir.mjs examples/Lumberjack.golem-ir.json",
+    "check-docs": "node scripts/check-docs.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "npm run check-generated && npm run validate-all && npm run check-ir && npm run typecheck && npm run check-docs"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1",
+    "typescript": "5.9.3"
+  }
+}

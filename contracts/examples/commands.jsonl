@@ -1,0 +1,11 @@
+{"command": "assign", "job": "woodcutting.stash_logs", "args": {"chest": [10, 64, 4]}, "job_id": "s-1"}
+{"command": "assign", "job": "woodcutting.chop_trees", "args": {"area": {"min": [0, 60, 0], "max": [47, 79, 47]}, "target": 32}, "job_id": "s-2"}
+{"command": "pause", "job_id": "s-1"}
+{"command": "snapshot", "id": "q-7"}
+{"command": "resume", "job_id": "s-1"}
+{"command": "resume", "job_id": "s-1"}
+{"command": "cancel", "job_id": "s-1"}
+{"command": "cancel", "job_id": "s-1"}
+{"command": "assign", "job": "woodcutting.chop_trees", "args": {"area": {"min": [0, 60, 0], "max": [47, 79, 47]}}, "job_id": "s-3"}
+{"command": "assign", "job": "farming.harvest", "args": {}, "job_id": "s-4"}
+{"command": "assign", "job": "woodcutting.stash_logs", "args": {"chest": [10, 64, 4]}, "job_id": "s-5", "id": "c-12"}

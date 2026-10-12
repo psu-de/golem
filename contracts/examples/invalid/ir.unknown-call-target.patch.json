@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/fns/woodcutting.next_log/body/expr/target",
+      "value": "List<BlockPos>.last"
+    }
+  ]
+}

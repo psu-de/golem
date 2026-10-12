@@ -1,0 +1,1342 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/report.schema.json",
+  "title": "Golem report stream",
+  "description": "§16.2 report messages with the field types §16.2 defers to the interface contracts. Every message has seq, tick, bot and type.",
+  "$ref": "#/$defs/Report",
+  "$defs": {
+    "Report": {
+      "description": "§16.2 one report-stream message (one JSON object per line), discriminated by type; notice and thread_started have one variant per thread kind.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Hello"
+        },
+        {
+          "$ref": "#/$defs/JobStarted"
+        },
+        {
+          "$ref": "#/$defs/JobCompleted"
+        },
+        {
+          "$ref": "#/$defs/JobFailed"
+        },
+        {
+          "$ref": "#/$defs/JobCancelled"
+        },
+        {
+          "$ref": "#/$defs/ThreadStartedJob"
+        },
+        {
+          "$ref": "#/$defs/ThreadStartedHandler"
+        },
+        {
+          "$ref": "#/$defs/ThreadEnded"
+        },
+        {
+          "$ref": "#/$defs/Frozen"
+        },
+        {
+          "$ref": "#/$defs/Resumed"
+        },
+        {
+          "$ref": "#/$defs/TaskStarted"
+        },
+        {
+          "$ref": "#/$defs/TaskCompleted"
+        },
+        {
+          "$ref": "#/$defs/TaskFailed"
+        },
+        {
+          "$ref": "#/$defs/TaskCancelled"
+        },
+        {
+          "$ref": "#/$defs/Progress"
+        },
+        {
+          "$ref": "#/$defs/Rollback"
+        },
+        {
+          "$ref": "#/$defs/NoticeFromJob"
+        },
+        {
+          "$ref": "#/$defs/NoticeFromHandler"
+        },
+        {
+          "$ref": "#/$defs/HandlerFailed"
+        },
+        {
+          "$ref": "#/$defs/HandlerBackoff"
+        },
+        {
+          "$ref": "#/$defs/HandlerDisabled"
+        },
+        {
+          "$ref": "#/$defs/EventDropped"
+        },
+        {
+          "$ref": "#/$defs/DeferFailed"
+        },
+        {
+          "$ref": "#/$defs/Disconnected"
+        },
+        {
+          "$ref": "#/$defs/Reconnected"
+        },
+        {
+          "$ref": "#/$defs/Died"
+        },
+        {
+          "$ref": "#/$defs/Respawned"
+        },
+        {
+          "$ref": "#/$defs/StateNotRestored"
+        }
+      ]
+    },
+    "Seq": {
+      "description": "§16.2 per-bot message counter: 1 for the first report of a runtime session, +1 per report, never reset by reconnects (PD-24).",
+      "$ref": "wire.schema.json#/$defs/PosInt"
+    },
+    "Tick": {
+      "description": "§16.2 the tick in whose phase the report was emitted: the backend clock's tick number, as in TickInput.tick (PD-24).",
+      "$ref": "wire.schema.json#/$defs/NonNegInt"
+    },
+    "BotName": {
+      "description": "§16.2 the bot's name (the bot declaration's TYPE_IDENT).",
+      "$ref": "wire.schema.json#/$defs/VariantName"
+    },
+    "JobId": {
+      "description": "§16.3 job id: chosen by the supervisor in assign; start-<n> for the n-th start-job assignment of the session (PD-23). Non-empty, at most 128 characters.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "ThreadId": {
+      "description": "§15.1 thread id, increasing in creation order, 1 for the first thread of the session.",
+      "$ref": "wire.schema.json#/$defs/PosInt"
+    },
+    "FrameId": {
+      "description": "§16.2 frame id, increasing in creation order per session, 1 for the first frame.",
+      "$ref": "wire.schema.json#/$defs/PosInt"
+    },
+    "InstanceName": {
+      "description": "§12.1 activity instance name (job.activity for attached instances, §11.7).",
+      "type": "string",
+      "pattern": "^[a-z_][A-Za-z0-9_]*(\\.[a-z_][A-Za-z0-9_]*)?$"
+    },
+    "HandlerIndex": {
+      "description": "§11.6, §16.2 PD-21 a handler's index in its activity's declaration order (handlers have no names; escalation E-9).",
+      "$ref": "wire.schema.json#/$defs/NonNegInt"
+    },
+    "TraceFrame": {
+      "description": "§16.1 one frame a failure unwound: the task's qualified name and the source position the frame was at (the statement executing or suspended when the failure reached it). Innermost frame first (PD-26).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task",
+        "file",
+        "line",
+        "column"
+      ],
+      "properties": {
+        "task": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "Failure": {
+      "description": "§16.2 a failure in a report: {type, fields, trace}.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "wire.schema.json#/$defs/FailureBody"
+        },
+        {
+          "type": "object",
+          "required": [
+            "trace"
+          ],
+          "properties": {
+            "trace": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/TraceFrame"
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "JobSignature": {
+      "description": "§12.1, §16.2 hello: one assignable job (name on the wire = qualified task name, PD-22), its parameters with wire types and defaults, and its result type.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "job",
+        "params",
+        "result"
+      ],
+      "properties": {
+        "job": {
+          "type": "string"
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "ir/types.schema.json#/$defs/Param"
+          }
+        },
+        "result": {
+          "$ref": "ir/types.schema.json#/$defs/TypeRef"
+        }
+      }
+    },
+    "InstanceInfo": {
+      "description": "§16.2 hello: one activity instance, its bound parameters (null for an @attaches instance, whose parameters come from the job), the job it is attached to, and its handlers.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instance",
+        "activity",
+        "params",
+        "attached_to",
+        "handlers"
+      ],
+      "properties": {
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "activity": {
+          "type": "string"
+        },
+        "params": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/WireObject"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attached_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "handlers": {
+          "type": "array",
+          "items": {
+            "description": "One handler: index, trigger source text, priority.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "handler",
+              "trigger",
+              "priority"
+            ],
+            "properties": {
+              "handler": {
+                "$ref": "#/$defs/HandlerIndex"
+              },
+              "trigger": {
+                "type": "string"
+              },
+              "priority": {
+                "$ref": "wire.schema.json#/$defs/Int"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ThreadOutcome": {
+      "description": "§16.2 thread_ended outcome.",
+      "enum": [
+        "completed",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "Hello": {
+      "description": "§16.2 hello, after each connect: IR hash, Minecraft version, protocol version, job signatures and activity instances.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "ir_hash",
+        "minecraft",
+        "protocol",
+        "jobs",
+        "instances"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "hello"
+        },
+        "ir_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "minecraft": {
+          "type": "string"
+        },
+        "protocol": {
+          "const": "golem-protocol/0.1"
+        },
+        "jobs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JobSignature"
+          }
+        },
+        "instances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/InstanceInfo"
+          }
+        }
+      }
+    },
+    "JobStarted": {
+      "description": "§16.2 job_started: job_id, plus the job and its wire args (PD-25: needed to tell which job started, e.g. the start job).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "job_id",
+        "job",
+        "args"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "job_started"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        },
+        "job": {
+          "type": "string"
+        },
+        "args": {
+          "$ref": "wire.schema.json#/$defs/WireObject"
+        }
+      }
+    },
+    "JobCompleted": {
+      "description": "§16.2 job_completed: job_id and the wire-encoded result.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "job_id",
+        "result"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "job_completed"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        },
+        "result": {
+          "$ref": "wire.schema.json#/$defs/JsonValue"
+        }
+      }
+    },
+    "JobFailed": {
+      "description": "§16.2 job_failed: job_id and failure (also for Disconnected, Kicked, Died, §12.3).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "job_id",
+        "failure"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "job_failed"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "JobCancelled": {
+      "description": "§16.2 job_cancelled: job_id (after the cancel command's unwind finished).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "job_id"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "job_cancelled"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        }
+      }
+    },
+    "ThreadStartedJob": {
+      "description": "§16.2 thread_started for a job thread: thread, kind, priority, and job_id (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "kind",
+        "priority",
+        "job_id"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "thread_started"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "kind": {
+          "const": "job"
+        },
+        "priority": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        }
+      }
+    },
+    "ThreadStartedHandler": {
+      "description": "§16.2 thread_started for a handler thread: thread, kind, priority, and instance and handler (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "kind",
+        "priority",
+        "instance",
+        "handler"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "thread_started"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "kind": {
+          "const": "handler"
+        },
+        "priority": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "handler": {
+          "$ref": "#/$defs/HandlerIndex"
+        }
+      }
+    },
+    "ThreadEnded": {
+      "description": "§16.2 thread_ended: thread, kind, priority, outcome, and the failure when it failed.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "kind",
+        "priority",
+        "outcome"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "thread_ended"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "kind": {
+          "enum": [
+            "job",
+            "handler"
+          ]
+        },
+        "priority": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        },
+        "outcome": {
+          "$ref": "#/$defs/ThreadOutcome"
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "Frozen": {
+      "description": "§16.2 frozen: thread, and by, the thread that took the resources or \"pause\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "by"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "frozen"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "by": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ThreadId"
+            },
+            {
+              "const": "pause"
+            }
+          ]
+        }
+      }
+    },
+    "Resumed": {
+      "description": "§16.2 resumed: thread, and by: \"resume\" when the supervisor's resume made it a candidate again, else null (its resources became free) (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "by"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "resumed"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "by": {
+          "anyOf": [
+            {
+              "const": "resume"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "TaskStarted": {
+      "description": "§16.2 task_started for a frame of a pub task: thread, frame, task (qualified name).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "frame",
+        "task"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "task_started"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "frame": {
+          "$ref": "#/$defs/FrameId"
+        },
+        "task": {
+          "type": "string"
+        }
+      }
+    },
+    "TaskCompleted": {
+      "description": "§16.2 task_completed: thread, frame, task.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "frame",
+        "task"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "task_completed"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "frame": {
+          "$ref": "#/$defs/FrameId"
+        },
+        "task": {
+          "type": "string"
+        }
+      }
+    },
+    "TaskFailed": {
+      "description": "§16.2 task_failed: thread, frame, task, failure.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "frame",
+        "task",
+        "failure"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "task_failed"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "frame": {
+          "$ref": "#/$defs/FrameId"
+        },
+        "task": {
+          "type": "string"
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "TaskCancelled": {
+      "description": "E-11 (errata v0.2.1 P11): task_cancelled for a frame of a pub task that was cancelled by unwinding (abort when, the end of a with body, a cancel command, until cancelling a handler run); §16.2 gives such frames no terminal report.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "frame",
+        "task"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "task_cancelled"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "frame": {
+          "$ref": "#/$defs/FrameId"
+        },
+        "task": {
+          "type": "string"
+        }
+      }
+    },
+    "Progress": {
+      "description": "§16.2 progress: frame and the metric's new best value (Int, Float or Duration in ticks), at most once per second per frame.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "frame",
+        "value"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "progress"
+        },
+        "frame": {
+          "$ref": "#/$defs/FrameId"
+        },
+        "value": {
+          "type": "number"
+        }
+      }
+    },
+    "Rollback": {
+      "description": "§16.2, §14.4 rollback: thread, the rejected or unconfirmed action, and the failure raised at its call site.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "thread",
+        "action",
+        "failure"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "rollback"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "action": {
+          "$ref": "tick-input.schema.json#/$defs/ActionId"
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "NoticeFromJob": {
+      "description": "§16.2, decision 94 notice from a job thread: name (wire name), fields, thread, job_id.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "name",
+        "fields",
+        "thread",
+        "job_id"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "notice"
+        },
+        "name": {
+          "$ref": "wire.schema.json#/$defs/VariantName"
+        },
+        "fields": {
+          "$ref": "wire.schema.json#/$defs/WireObject"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "job_id": {
+          "$ref": "#/$defs/JobId"
+        }
+      }
+    },
+    "NoticeFromHandler": {
+      "description": "§16.2, decision 94 notice from a handler thread: name, fields, thread, instance, handler.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "name",
+        "fields",
+        "thread",
+        "instance",
+        "handler"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "notice"
+        },
+        "name": {
+          "$ref": "wire.schema.json#/$defs/VariantName"
+        },
+        "fields": {
+          "$ref": "wire.schema.json#/$defs/WireObject"
+        },
+        "thread": {
+          "$ref": "#/$defs/ThreadId"
+        },
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "handler": {
+          "$ref": "#/$defs/HandlerIndex"
+        }
+      }
+    },
+    "HandlerFailed": {
+      "description": "§16.2, §11.4 handler_failed: instance, handler, and the run's failure (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "instance",
+        "handler",
+        "failure"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "handler_failed"
+        },
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "handler": {
+          "$ref": "#/$defs/HandlerIndex"
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "HandlerBackoff": {
+      "description": "§16.2, §11.4 handler_backoff: instance, handler, consecutive failed runs k and the backoff length b x 2^(k-1) capped at 32 x b, in ticks (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "instance",
+        "handler",
+        "failures",
+        "duration"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "handler_backoff"
+        },
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "handler": {
+          "$ref": "#/$defs/HandlerIndex"
+        },
+        "failures": {
+          "$ref": "wire.schema.json#/$defs/PosInt"
+        },
+        "duration": {
+          "$ref": "wire.schema.json#/$defs/Duration"
+        }
+      }
+    },
+    "HandlerDisabled": {
+      "description": "§16.2, §11.4 handler_disabled: instance, handler, and the ContractViolation or Defect that disabled it (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "instance",
+        "handler",
+        "failure"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "handler_disabled"
+        },
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "handler": {
+          "$ref": "#/$defs/HandlerIndex"
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "EventDropped": {
+      "description": "§16.2, §11.5 event_dropped: instance, handler, and the dropped event's name (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "instance",
+        "handler",
+        "event"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "event_dropped"
+        },
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "handler": {
+          "$ref": "#/$defs/HandlerIndex"
+        },
+        "event": {
+          "$ref": "tick-input.schema.json#/$defs/EventName"
+        }
+      }
+    },
+    "DeferFailed": {
+      "description": "§16.2, §10.6 defer_failed: the deferred call's frame and its failure.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "frame",
+        "failure"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "defer_failed"
+        },
+        "frame": {
+          "$ref": "#/$defs/FrameId"
+        },
+        "failure": {
+          "$ref": "#/$defs/Failure"
+        }
+      }
+    },
+    "Disconnected": {
+      "description": "§16.2, §12.3 disconnected: reason; kind tells Disconnected from Kicked; final is true when max_reconnects is exhausted and the session ends (PD-25, escalation E-8).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "reason",
+        "kind",
+        "final"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "disconnected"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "Disconnected",
+            "Kicked"
+          ]
+        },
+        "final": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Reconnected": {
+      "description": "§16.2 reconnected: reason of the disconnect it recovers from and the attempt number (PD-25).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "reason",
+        "attempt"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "reconnected"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "attempt": {
+          "$ref": "wire.schema.json#/$defs/PosInt"
+        }
+      }
+    },
+    "Died": {
+      "description": "§16.2 died: reason (the death cause).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "reason"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "died"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "Respawned": {
+      "description": "§16.2 respawned: reason, the death cause it recovers from.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "reason"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "respawned"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "StateNotRestored": {
+      "description": "§18.5 the persistence mismatch report the spec requires but §16.2 does not list (escalation E-6, errata v0.2.1 P6): a var or handler backoff state that was not restored, and why.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seq",
+        "tick",
+        "bot",
+        "type",
+        "instance",
+        "name",
+        "reason"
+      ],
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/Seq"
+        },
+        "tick": {
+          "$ref": "#/$defs/Tick"
+        },
+        "bot": {
+          "$ref": "#/$defs/BotName"
+        },
+        "type": {
+          "const": "state_not_restored"
+        },
+        "instance": {
+          "$ref": "#/$defs/InstanceName"
+        },
+        "name": {
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "missing",
+            "type_changed",
+            "instance_gone"
+          ]
+        }
+      }
+    }
+  }
+}

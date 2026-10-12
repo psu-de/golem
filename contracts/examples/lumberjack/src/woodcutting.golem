@@ -1,0 +1,36 @@
+from golem.core import goto, mine, collect, open, deposit
+from golem.prim import close
+from golem.windows import Container
+
+pub failure NoTrees(area: Region)
+pub failure NotEnoughLogs(have: Int)
+pub notice LogMined(pos: BlockPos)
+
+fn next_log(area: Region) -> BlockPos? = world.blocks(#minecraft:logs, area).first
+
+@requires target > 0
+@ensures result >= target
+@fails NoTrees, NotEnoughLogs
+pub task chop_trees(area: Region, target: Int) -> Int {
+    repeat 4 * target {
+        let have = bot.inventory.count(#minecraft:logs)
+        if have >= target {
+            return have
+        }
+        let log = next_log(area) else fail NoTrees(area)
+        mine(log) catch {
+            Interfered(_, _) | Rejected(_, _) => { continue }
+        }
+        collect(#minecraft:logs, 6.0) catch { _ => 0 }
+        notify LogMined(log)
+    }
+    fail NotEnoughLogs(bot.inventory.count(#minecraft:logs))
+}
+
+@ensures bot.inventory.count(#minecraft:logs) == old(bot.inventory.count(#minecraft:logs)) - result
+pub task stash_logs(chest: BlockPos) -> Int {
+    goto(Goal.InReach(chest))
+    let w = open<Container>(chest)
+    defer close(w)
+    return deposit(w, #minecraft:logs, 2304)
+}

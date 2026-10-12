@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/diagnostic.schema.json",
+  "title": "Golem compiler diagnostic",
+  "description": "Review finding 15: one structured compiler diagnostic, written as one JSON object per line by golem build --format json (CONTRACTS.md 'CLI'). Codes are stable and namespaced by the §13.1 check number (proposed decision PD-33).",
+  "$ref": "#/$defs/Diagnostic",
+  "$defs": {
+    "Diagnostic": {
+      "description": "§13.1, finding 15 diagnostic: code, severity, message, primary span, violated § reference and optional related spans.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "message",
+        "span",
+        "spec"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/DiagnosticCode"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "span": {
+          "$ref": "#/$defs/SourceSpan"
+        },
+        "spec": {
+          "$ref": "#/$defs/SpecRef"
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RelatedSpan"
+          }
+        }
+      }
+    },
+    "DiagnosticCode": {
+      "description": "PD-33 stable code C<nn>/<slug>: nn is the §13.1 check number 01-14, or 00 for lexical and syntax errors of §3-§4; slug is kebab-case and never reused for a different meaning once frozen.",
+      "type": "string",
+      "pattern": "^C(0[0-9]|1[0-4])/[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "Severity": {
+      "description": "§13.1: every check is an error; the three warnings are catch arms for failures that cannot occur (C08), unused imports (C01) and requires clauses implied by a callee's own requires (C07).",
+      "enum": [
+        "error",
+        "warning"
+      ]
+    },
+    "SpecRef": {
+      "description": "The violated section, written § followed by its number, e.g. §9.5.",
+      "type": "string",
+      "pattern": "^§[0-9]+(\\.[0-9]+)*$"
+    },
+    "SourcePosition": {
+      "description": "PD-16: line and column are 1-based, the column counted in Unicode code points; offset is the 0-based UTF-8 byte offset into the file (§3: source is UTF-8).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line",
+        "column",
+        "offset"
+      ],
+      "properties": {
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "SourceSpan": {
+      "description": "§3, finding 15 Half-open source range [start, end) in one file; file is the project-relative path (src/...), or std/golem/<module>.golem for the standard library.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "start",
+        "end"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "$ref": "#/$defs/SourcePosition"
+        },
+        "end": {
+          "$ref": "#/$defs/SourcePosition"
+        }
+      }
+    },
+    "RelatedSpan": {
+      "description": "§13.1, finding 15 A secondary location, such as the other end of a cycle or the clashing declaration.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "span",
+        "message"
+      ],
+      "properties": {
+        "span": {
+          "$ref": "#/$defs/SourceSpan"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+from golem.survival import auto_eat, defend, stay_afloat, auto_respawn
+from woodcutting import chop_trees, stash_logs
+
+bot Lumberjack {
+    use auto_eat(min_food = 14)
+    use defend(radius = 6.0)
+    use stay_afloat()
+    use auto_respawn()
+    jobs chop_trees, stash_logs
+    start chop_trees(area = Region(BlockPos(0, 60, 0), BlockPos(47, 79, 47)), target = 64)
+    config job_priority = 10
+    config confirm_timeout = 5s
+}

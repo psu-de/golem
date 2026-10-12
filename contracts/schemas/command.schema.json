@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/command.schema.json",
+  "title": "Golem supervisor commands",
+  "description": "§16.3 supervisor commands, applied in tick phase 3 in arrival order (decision 37).",
+  "$ref": "#/$defs/Command",
+  "$defs": {
+    "Command": {
+      "description": "§16.3 one supervisor command (one JSON object per line on stdin), discriminated by command (PD-27).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Assign"
+        },
+        {
+          "$ref": "#/$defs/Cancel"
+        },
+        {
+          "$ref": "#/$defs/Pause"
+        },
+        {
+          "$ref": "#/$defs/Resume"
+        },
+        {
+          "$ref": "#/$defs/Snapshot"
+        }
+      ]
+    },
+    "CorrelationId": {
+      "description": "Escalation E-2 (errata v0.2.1 P2): optional client-chosen id, echoed as id in the reply. Without it, replies correlate by order: commands are applied and answered in arrival order (§16.3).",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "Assign": {
+      "description": "§16.3 assign {job, args, job_id}: job is the job's qualified task name (PD-22); args holds wire values by parameter name, omitted parameters taking their declared defaults (PD-27).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "job",
+        "args",
+        "job_id"
+      ],
+      "properties": {
+        "command": {
+          "const": "assign"
+        },
+        "job": {
+          "type": "string"
+        },
+        "args": {
+          "$ref": "wire.schema.json#/$defs/WireObject"
+        },
+        "job_id": {
+          "$ref": "report.schema.json#/$defs/JobId"
+        },
+        "id": {
+          "$ref": "#/$defs/CorrelationId"
+        }
+      }
+    },
+    "Cancel": {
+      "description": "§16.3 cancel {job_id}: unwind the job, running defers.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "job_id"
+      ],
+      "properties": {
+        "command": {
+          "const": "cancel"
+        },
+        "job_id": {
+          "$ref": "report.schema.json#/$defs/JobId"
+        },
+        "id": {
+          "$ref": "#/$defs/CorrelationId"
+        }
+      }
+    },
+    "Pause": {
+      "description": "§16.3 pause {job_id}: freeze the job until resume.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "job_id"
+      ],
+      "properties": {
+        "command": {
+          "const": "pause"
+        },
+        "job_id": {
+          "$ref": "report.schema.json#/$defs/JobId"
+        },
+        "id": {
+          "$ref": "#/$defs/CorrelationId"
+        }
+      }
+    },
+    "Resume": {
+      "description": "§16.3 resume {job_id}: make the job a candidate again.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "job_id"
+      ],
+      "properties": {
+        "command": {
+          "const": "resume"
+        },
+        "job_id": {
+          "$ref": "report.schema.json#/$defs/JobId"
+        },
+        "id": {
+          "$ref": "#/$defs/CorrelationId"
+        }
+      }
+    },
+    "Snapshot": {
+      "description": "§16.3 snapshot {}: return the read-only machine state.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command"
+      ],
+      "properties": {
+        "command": {
+          "const": "snapshot"
+        },
+        "id": {
+          "$ref": "#/$defs/CorrelationId"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "tick": 5,
+  "infra": [],
+  "changes": [
+    {
+      "key": "player.food",
+      "value": "full",
+      "cause": "outside"
+    }
+  ],
+  "events": [],
+  "reports": [],
+  "measurements": {
+    "path_progress": null,
+    "round_trip_ms": 40
+  }
+}

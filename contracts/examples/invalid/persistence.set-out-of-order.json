@@ -1,0 +1,21 @@
+{
+  "format": "golem-state/0.1",
+  "bot": "Farmer",
+  "ir_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "instances": {
+    "rows": {
+      "activity": "farm.rows",
+      "vars": {
+        "done": {
+          "type": "Set<Int>",
+          "value": [
+            3,
+            1,
+            2
+          ]
+        }
+      },
+      "handlers": []
+    }
+  }
+}

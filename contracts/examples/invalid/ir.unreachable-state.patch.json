@@ -1,0 +1,33 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "add",
+      "path": "/tasks/golem.core.fight/chart/states/golem.core.fight#1",
+      "value": {
+        "kind": "wait",
+        "parent": "golem.core.fight",
+        "duration": {
+          "kind": "lit",
+          "type": "Duration",
+          "form": "duration",
+          "value": 1,
+          "text": "1t",
+          "span": [
+            2,
+            278,
+            14,
+            278,
+            17
+          ]
+        },
+        "next": {
+          "guard": null,
+          "actions": [],
+          "target": "golem.core.fight#end"
+        },
+        "span": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "seq": 4,
+  "tick": 9,
+  "bot": "Lumberjack",
+  "type": "job_failed",
+  "job_id": "s-1",
+  "failure": {
+    "type": "NoPath",
+    "fields": {
+      "at": [
+        1,
+        64,
+        1
+      ]
+    }
+  }
+}

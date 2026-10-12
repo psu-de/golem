@@ -1,0 +1,17 @@
+{
+  "tick": 5,
+  "infra": [],
+  "changes": [
+    {
+      "key": "block(1,2)",
+      "value": "minecraft:air",
+      "cause": "outside"
+    }
+  ],
+  "events": [],
+  "reports": [],
+  "measurements": {
+    "path_progress": null,
+    "round_trip_ms": 40
+  }
+}

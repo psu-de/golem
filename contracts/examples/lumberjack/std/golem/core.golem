@@ -1,0 +1,523 @@
+// golem.core: the composites of spec §17.7, listing (decisions 111–128).
+// Bodies are a reference implementation: Golem requires one for every non-extern task, and the
+// inferred `uses` of a composite comes from its body.
+
+from golem.prim import pathfind, look_at, dig, interact, place_block, attack, hold_use, select_hotbar, swap_hands
+from golem.prim import pick_up, put, quick_move, swap_hotbar, click_button, close
+from golem.prim import NoPath, OutOfReach, EntityGone
+from golem.windows import WindowKind, Screen, HasContainer, Smelter, CraftingStation, Container, Stonecutter
+from golem.filters import replaceable, prop, within, CLEARED
+
+// ---------- failures ----------
+
+pub failure Missing(item: ItemFilter, n: Int)
+pub failure NotReplaceable(pos: BlockPos)
+pub failure NoSupport(pos: BlockPos)
+pub failure CannotPlace(pos: BlockPos)
+pub failure NotPlaceable(state: BlockState)
+pub failure UnsupportedState(state: BlockState)
+pub failure WrongTool(pos: BlockPos)
+pub failure NotHungry
+pub failure CannotSleep(bed: BlockPos)              // decision 124: §17.7 names no failure for sleep
+pub failure ScreenBusy
+pub failure NotOpened(pos: BlockPos)
+pub failure WrongKind(pos: BlockPos)
+pub failure ChestFull(chest: BlockPos)
+pub failure NoRecipe(item: ItemFilter)
+pub failure MissingIngredients(item: ItemFilter)
+pub failure SmelterBusy(pos: BlockPos)
+pub failure SmeltIncomplete(crafts: Int)            // decision 125: smelt stopped before n crafts
+pub failure CookIncomplete(items: Int)              // decision 125: fewer campfire results collected than cooked
+
+// ---------- placement and tool data from the backend (decision 126) ----------
+
+pub struct Support(pos: BlockPos, face: Face)
+pub struct Placement(support: BlockPos, face: Face, stand: BlockPos, look: Vec3)
+
+// a solid neighbour of pos and the face of it to click, from version placement rules
+pub extern fn support_face(pos: BlockPos) -> Support?
+// support, face, standing cell and look point that place s at pos with its properties (decision 87)
+pub extern fn placement_for(s: BlockState, pos: BlockPos) -> Placement?
+// true when s sets only axis, horizontal or full facing, slab type and stair or trapdoor half
+pub extern fn supported_state(s: BlockState) -> Bool
+// the fastest inventory tool for pos, among those that harvest it when harvest is true; none for the bare hand
+pub extern fn best_tool(pos: BlockPos, harvest: Bool) -> ItemType?
+// the stonecutter button that selects r for the input currently in w
+pub extern fn stonecutter_button(w: Window<Stonecutter>, r: StonecuttingRecipe) -> Int?
+
+pub const DEFAULT_FUEL: ItemFilter = minecraft:coal | minecraft:charcoal     // decision 127
+
+// ---------- helpers ----------
+
+fn count_of(s: ItemStack?) -> Int = s?.count ?? 0
+
+fn feet_of(e: Entity) -> BlockPos = BlockPos(floor(e.pos.x), floor(e.pos.y), floor(e.pos.z))
+
+fn lit(pos: BlockPos) -> Bool = world.block(pos) matches prop("lit", "true")
+
+fn ingredient_filter(i: Ingredient) -> ItemFilter {
+    var f = ItemFilter.NOTHING
+    for t in i.items {
+        f = f | ItemFilter.of(t)
+    }
+    return f
+}
+
+fn free_slot<K: WindowKind>(w: Window<K>, r: SlotRange) -> Int? {
+    for i in r {
+        if w.slot(i) == none {
+            return i
+        }
+    }
+    return none
+}
+
+// the grid slot that receives cell c of r: shaped recipes sit in the top-left corner (decision 117)
+fn grid_slot<K: CraftingStation>(w: Window<K>, r: CraftingRecipe, c: Int) -> Int =
+    if r.shapeless then w.grid.start + c else w.grid.start + (c / r.width) * K.grid_width() + c % r.width
+
+fn fitting(rs: List<CraftingRecipe>, w: Int, h: Int) -> List<CraftingRecipe> {
+    var out: List<CraftingRecipe> = []
+    for r in rs {
+        if r.fits_grid(w, h) {
+            out = out.push(r)
+        }
+    }
+    return out
+}
+
+fn first_satisfiable(rs: List<CraftingRecipe>) -> CraftingRecipe? {
+    for r in rs {
+        if bot.inventory.satisfies(r, 1) {
+            return r
+        }
+    }
+    return none
+}
+
+// dropped item entities matching f within radius, nearest first (Entity.item: decision 123)
+fn next_drop(f: ItemFilter, radius: Float) -> Entity? {
+    for e in world.entities(minecraft:item & within(radius)) {
+        if e.item matches f {
+            return e
+        }
+    }
+    return none
+}
+
+// items one fuel item smelts: furnaces cook one item per 10s of burn time (§17.2)
+fn items_per_fuel(t: ItemType) -> Int {
+    let burn = world.burn_time(t) else { return 0 }
+    var n = 0
+    repeat 128 {
+        if 10s * (n + 1) <= burn {
+            n += 1
+        }
+    }
+    return n
+}
+
+// ---------- movement ----------
+
+@ensures goal.reached
+pub task goto(goal: Goal, attempts: Int = 3, opts: PathOpts = PathOpts()) {
+    retry attempts on Stalled, Rejected, NoPath {
+        pathfind(goal, opts = opts)
+    }
+}
+
+@ensures bot.feet == pos
+pub task goto(pos: BlockPos) {
+    goto(Goal.At(pos))
+}
+
+@ensures Goal.NearEntity(target, radius).reached
+pub task goto(target: Entity, radius: Float = 2.0) {
+    goto(Goal.NearEntity(target, radius))
+}
+
+@maintains target.alive else fail EntityGone(target.id)
+pub ongoing task follow(target: Entity, radius: Float = 3.0) {
+    loop every 10t {
+        let goal = Goal.NearEntity(target, radius)
+        if !goal.reached {
+            pathfind(goal, limit = 10t) catch {
+                Timeout | Stalled | NoPath | Rejected => {}
+            }
+        }
+    }
+}
+
+@requires bot.in_reach(pos) else fail OutOfReach(pos)
+@ensures match bot.aim_point(pos) { none => false, p => bot.aim_error(p) <= 1deg }
+@fails OutOfReach
+pub task look_at_block(pos: BlockPos) {
+    let p = bot.aim_point(pos) else fail OutOfReach(pos)
+    look_at(p)
+}
+
+// ---------- inventory and hands ----------
+
+@requires bot.inventory.count(item) > 0 else fail Missing(item, 1)
+@ensures (if hand == Hand.Main then bot.held else bot.offhand) matches item
+@fails Missing
+pub task equip(item: ItemFilter, hand: Hand = Hand.Main) {
+    if (if hand == Hand.Main then bot.held else bot.offhand) matches item {
+        return
+    }
+    let inv = bot.inventory_window
+    let s = inv.find(item) else fail Missing(item, 1)
+    if s in inv.hotbar {
+        select_hotbar(s - inv.hotbar.start)
+    } else {
+        swap_hotbar(inv, s, bot.held_slot)
+    }
+    if hand == Hand.Off {
+        swap_hands()
+    }
+}
+
+// ---------- blocks ----------
+
+@requires world.block(pos) matches replaceable() else fail NotReplaceable(pos)
+@requires bot.inventory.count(item) > 0 else fail Missing(item, 1)
+@requires bot.can_place(item, pos) else fail CannotPlace(pos)
+@ensures !(world.block(pos) matches replaceable())
+@fails NoSupport, CannotPlace
+pub task place(item: ItemFilter, pos: BlockPos) {
+    let s = support_face(pos) else fail NoSupport(pos)
+    equip(item)
+    let spot = Goal.AllOf([Goal.InReach(s.pos), Goal.Clear(pos)])   // decision 92
+    if !spot.reached {
+        goto(spot)
+    }
+    if !bot.can_place(item, pos) {
+        fail CannotPlace(pos)
+    }
+    place_block(s.pos, s.face)
+}
+
+@requires s.block.item != none else fail NotPlaceable(s)
+@requires supported_state(s) else fail UnsupportedState(s)
+@ensures world.block(pos) matches BlockFilter.placed(s)
+@fails CannotPlace
+pub task place_state(s: BlockState, pos: BlockPos) {
+    let item = s.block.item else fail CannotPlace(pos)
+    let p = placement_for(s, pos) else fail CannotPlace(pos)
+    equip(ItemFilter.of(item))
+    goto(Goal.At(p.stand))
+    look_at(p.look)
+    place_block(p.support, p.face)
+}
+
+@requires !harvest || bot.can_harvest(pos) else fail WrongTool(pos)
+@ensures world.block(pos) matches CLEARED
+pub task mine(pos: BlockPos, harvest: Bool = true) {
+    if !bot.in_reach(pos) {
+        goto(Goal.InReach(pos))
+    }
+    if let t = best_tool(pos, harvest) {
+        equip(ItemFilter.of(t))
+    }
+    dig(pos)
+}
+
+@ensures bot.inventory.count(f) == old(bot.inventory.count(f)) + result
+pub task collect(f: ItemFilter, radius: Float) -> Int {
+    let before = bot.inventory.count(f)
+    repeat 16 {
+        let drop = next_drop(f, radius) else { break }
+        goto(Goal.Near(feet_of(drop), 1.0)) catch {
+            NoPath | Stalled | Timeout | Rejected => { break }
+        }
+        abort when !drop.alive {
+            wait 1s
+        }
+    }
+    return bot.inventory.count(f) - before
+}
+
+// ---------- survival ----------
+
+@requires bot.food < 20 else fail NotHungry
+@requires bot.inventory.count(food) > 0 else fail Missing(food, 1)
+@ensures bot.inventory.count(food) < old(bot.inventory.count(food))
+@timeout 10s
+pub task consume(food: ItemFilter) {
+    equip(food)
+    let before = bot.inventory.count(food)
+    with hold_use() {
+        wait until bot.inventory.count(food) < before timeout 5s
+    }
+}
+
+@ensures bot.sleeping
+@fails OutOfReach, CannotSleep
+pub task sleep(bed: BlockPos) {
+    goto(Goal.InReach(bed))
+    let face = bot.aim_face(bed) else fail OutOfReach(bed)
+    interact(bed, face)
+    wait until bot.sleeping timeout 2s else fail CannotSleep(bed)
+}
+
+// approaches and attacks on cooldown; 12t covers every vanilla weapon's attack cooldown
+@timeout 30s
+pub unchecked task fight(target: Entity) {
+    repeat 60 {
+        if !target.alive {
+            return
+        }
+        if !bot.in_reach(target) {
+            goto(target, radius = 2.0) catch {
+                NoPath | Stalled | Rejected | Timeout => { return }
+            }
+        }
+        attack(target) catch {
+            EntityGone | OutOfReach => {}
+        }
+        wait 12t
+    }
+}
+
+// ---------- windows ----------
+
+@requires bot.window == none else fail ScreenBusy
+@ensures result.open
+@fails OutOfReach, NotOpened, WrongKind
+pub task open<K: Screen>(pos: BlockPos) -> Window<K> {
+    let face = bot.aim_face(pos) else fail OutOfReach(pos)
+    interact(pos, face)
+    wait until bot.window != none timeout 2s else fail NotOpened(pos)
+    let any = bot.window else fail NotOpened(pos)
+    let w = any.cast<K>() else {
+        close(any)
+        fail WrongKind(pos)
+    }
+    return w
+}
+
+// whole stacks until at least n moved or none remain; with exact, exactly min(n, available) (decision 71)
+@requires n > 0
+@ensures bot.inventory.count(item) == old(bot.inventory.count(item)) + result
+pub task withdraw(w: Window<impl HasContainer>, item: ItemFilter, n: Int, exact: Bool = false) -> Int {
+    let before = bot.inventory.count(item)
+    for s in w.container {
+        let moved = bot.inventory.count(item) - before
+        if moved >= n {
+            break
+        }
+        let st = w.slot(s) else { continue }
+        if !(st matches item) {
+            continue
+        }
+        if exact && moved + st.count > n {
+            let free = free_slot(w, w.player_slots) else { break }
+            atomic {
+                pick_up(w, s)
+                repeat st.count - (n - moved) {
+                    put(w, s, one = true)
+                }
+                put(w, free)
+            }
+        } else {
+            quick_move(w, s)
+        }
+    }
+    return bot.inventory.count(item) - before
+}
+
+// the reverse of withdraw
+@requires n > 0
+@ensures bot.inventory.count(item) == old(bot.inventory.count(item)) - result
+pub task deposit(w: Window<impl HasContainer>, item: ItemFilter, n: Int, exact: Bool = false) -> Int {
+    let before = bot.inventory.count(item)
+    for s in w.player_slots {
+        let moved = before - bot.inventory.count(item)
+        if moved >= n {
+            break
+        }
+        let st = w.slot(s) else { continue }
+        if !(st matches item) {
+            continue
+        }
+        if exact && moved + st.count > n {
+            let free = free_slot(w, w.container) else { break }
+            atomic {
+                pick_up(w, s)
+                repeat st.count - (n - moved) {
+                    put(w, s, one = true)
+                }
+                put(w, free)
+            }
+        } else {
+            quick_move(w, s)
+        }
+    }
+    return before - bot.inventory.count(item)
+}
+
+@ensures bot.inventory.count(f) == 0
+@fails ChestFull
+pub task stash(chest: BlockPos, f: ItemFilter) -> Int {
+    let have = bot.inventory.count(f)
+    if have == 0 {
+        return 0
+    }
+    goto(Goal.InReach(chest))
+    let w = open<Container>(chest)
+    defer close(w)
+    let n = deposit(w, f, have)
+    if bot.inventory.count(f) > 0 {
+        fail ChestFull(chest)
+    }
+    return n
+}
+
+// ---------- crafting ----------
+
+// moves exactly n items matching f from the player slots into slot, one stack at a time
+@requires n >= 0
+@ensures count_of(w.slot(slot)) == old(count_of(w.slot(slot))) + n
+@fails MissingIngredients
+task fill_slot<K: WindowKind>(w: Window<K>, slot: Int, f: ItemFilter, n: Int) {
+    var left = n
+    while left > 0 decreasing left {
+        let src = w.find(f) else fail MissingIngredients(f)
+        let take = min(left, count_of(w.slot(src)))
+        atomic {
+            pick_up(w, src)
+            repeat take {
+                put(w, slot, one = true)
+            }
+            if bot.cursor != none {
+                put(w, src)
+            }
+        }
+        left -= take
+    }
+}
+
+@requires times >= 1 && times <= 64
+@requires r.fits_grid(K.grid_width(), K.grid_height()) else fail NoRecipe(ItemFilter.of(r.result.item))
+@requires bot.inventory.satisfies(r, times) else fail MissingIngredients(ItemFilter.of(r.result.item))
+@ensures bot.inventory.count(ItemFilter.of(r.result.item)) == old(bot.inventory.count(ItemFilter.of(r.result.item))) + r.result.count * times
+@fails MissingIngredients
+pub task craft<K: CraftingStation>(station: Window<K>, r: CraftingRecipe, times: Int) {
+    let cells = bot.inventory.plan(r, times) else fail MissingIngredients(ItemFilter.of(r.result.item))
+    var c = 0
+    for cell in cells {
+        if let t = cell {
+            fill_slot(station, grid_slot(station, r, c), ItemFilter.of(t), times)
+        }
+        c += 1
+    }
+    quick_move(station, station.result_slot)    // every cell holds exactly `times`, so shift-click crafts `times`
+}
+
+@requires n > 0
+@ensures bot.inventory.count(item) >= n
+@fails NoRecipe, MissingIngredients
+pub task craft_item<K: CraftingStation>(station: Window<K>, item: ItemFilter, n: Int) {
+    while bot.inventory.count(item) < n decreasing n - bot.inventory.count(item) {
+        let rs = fitting(world.crafting_recipes_for(item), K.grid_width(), K.grid_height())
+        if rs.len == 0 {
+            fail NoRecipe(item)
+        }
+        let r = first_satisfiable(rs) else fail MissingIngredients(item)
+        craft(station, r, 1)
+    }
+}
+
+// concrete overload: the stonecutter has no grid (decision 33); slot 0 is input, slot 1 output
+@requires times >= 1 && times <= 64
+@ensures bot.inventory.count(ItemFilter.of(r.result.item)) == old(bot.inventory.count(ItemFilter.of(r.result.item))) + r.result.count * times
+@fails NoRecipe
+pub task craft(w: Window<Stonecutter>, r: StonecuttingRecipe, times: Int) {
+    fill_slot(w, 0, ingredient_filter(r.input), times)
+    let b = stonecutter_button(w, r) else fail NoRecipe(ItemFilter.of(r.result.item))
+    click_button(w, b)
+    quick_move(w, 1)
+}
+
+// ---------- smelting ----------
+
+@requires n > 0
+@ensures result <= n
+@fails SmelterBusy
+pub task load_smelter<K: Smelter>(pos: BlockPos, input: ItemFilter, n: Int, fuel: ItemFilter) -> Int {
+    goto(Goal.InReach(pos))
+    let w = open<K>(pos)
+    defer close(w)
+    if !(w.slot(w.input_slot) == none || w.slot(w.input_slot) matches input) {
+        fail SmelterBusy(pos)
+    }
+    let k = min(min(n, 64 - count_of(w.slot(w.input_slot))), bot.inventory.count(input))
+    if k == 0 {
+        return 0
+    }
+    fill_slot(w, w.input_slot, input, k)
+    if let s = w.find(fuel) {
+        let per = items_per_fuel(w.slot(s)?.item ?? minecraft:coal)
+        let needed = if per == 0 then 0 else (k + per - 1) / per - count_of(w.slot(w.fuel_slot))
+        if needed > 0 {
+            fill_slot(w, w.fuel_slot, fuel, min(needed, bot.inventory.count(fuel)))
+        }
+    }
+    return k
+}
+
+@ensures result >= 0                                  // decision 128: the output item is unknown when old() is evaluated
+pub task empty_smelter<K: Smelter>(pos: BlockPos) -> Int {
+    goto(Goal.InReach(pos))
+    let w = open<K>(pos)
+    defer close(w)
+    let out = w.slot(w.output_slot) else { return 0 }
+    let f = ItemFilter.of(out.item)
+    let before = bot.inventory.count(f)
+    quick_move(w, w.output_slot)
+    return bot.inventory.count(f) - before
+}
+
+// holds no resource while waiting, so reflexes run freely (decision 83)
+@requires n > 0
+@ensures bot.inventory.count(ItemFilter.of(r.result.item)) >= old(bot.inventory.count(ItemFilter.of(r.result.item))) + r.result.count * n
+@fails SmeltIncomplete
+pub task smelt<K: Smelter>(pos: BlockPos, r: ProcessingRecipe, n: Int, fuel: ItemFilter = DEFAULT_FUEL) {
+    let input = ingredient_filter(r.input)
+    var done = 0
+    repeat n {
+        if done >= n {
+            break
+        }
+        let k = load_smelter<K>(pos, input, n - done, fuel)
+        if k == 0 {
+            break
+        }
+        wait 1s                                       // the lit state follows loading by a tick or more
+        abort when !lit(pos) {
+            wait r.time * k + 10s
+        }
+        done += empty_smelter<K>(pos) / r.result.count
+    }
+    if done < n {
+        fail SmeltIncomplete(done)
+    }
+}
+
+@requires r.kind == ProcessingKind.Campfire && n >= 1 && n <= 4
+@ensures bot.inventory.count(ItemFilter.of(r.result.item)) >= old(bot.inventory.count(ItemFilter.of(r.result.item))) + r.result.count * n
+@fails OutOfReach, CookIncomplete
+pub task cook_campfire(pos: BlockPos, r: ProcessingRecipe, n: Int) {
+    let input = ingredient_filter(r.input)
+    goto(Goal.InReach(pos))
+    let face = bot.aim_face(pos) else fail OutOfReach(pos)
+    repeat n {
+        equip(input)
+        interact(pos, face)
+    }
+    wait r.time + 1s
+    let got = collect(ItemFilter.of(r.result.item), 4.0)
+    if got < r.result.count * n {
+        fail CookIncomplete(got)
+    }
+}

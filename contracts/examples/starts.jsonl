@@ -1,0 +1,14 @@
+{"action": 1, "call": {"primitive": "pathfind", "args": {"goal": {"InReach": {"pos": [5, 63, 5]}}, "limit": 2400, "opts": {"avoid": null}}}, "mode": "sync"}
+{"action": 2, "call": {"primitive": "dig", "args": {"pos": [5, 63, 5]}}, "mode": "sync"}
+{"action": 3, "call": {"primitive": "pathfind", "args": {"goal": {"Near": {"pos": [5, 63, 5], "radius": 1.0}}, "limit": 2400, "opts": {"avoid": null}}}, "mode": "sync"}
+{"action": 5, "call": {"primitive": "hold_use", "args": {"hand": "Main"}}, "mode": "sync"}
+{"action": 9, "call": {"primitive": "attack", "args": {"target": {"entity": 88}}}, "mode": "sync"}
+{"action": 10, "call": {"primitive": "pathfind", "args": {"goal": {"NearEntity": {"target": {"entity": 88}, "radius": 2.0}}, "limit": 2400, "opts": {"avoid": null}}}, "mode": "sync"}
+{"action": 13, "call": {"primitive": "interact(BlockPos,Face)", "args": {"pos": [10, 64, 4], "face": "South"}}, "mode": "sync"}
+{"action": 14, "call": {"primitive": "quick_move", "args": {"w": {"window": 3, "generation": 5}, "slot": 37}}, "mode": "sync"}
+{"action": 15, "call": {"primitive": "pick_up", "args": {"w": {"window": 3, "generation": 5}, "slot": 54, "half": false}}, "mode": "async"}
+{"action": 16, "call": {"primitive": "put", "args": {"w": {"window": 3, "generation": 5}, "slot": 3, "one": true}}, "mode": "async"}
+{"action": 17, "call": {"primitive": "swap_hotbar", "args": {"w": {"window": 0, "generation": 0}, "slot": 20, "hotbar": 0}}, "mode": "sync"}
+{"action": 18, "call": {"primitive": "close", "args": {"w": {"window": 3, "generation": 5}}}, "mode": "sync"}
+{"action": 19, "call": {"primitive": "pathfind_build", "args": {"goal": {"AllOf": {"goals": [{"InReach": {"pos": [6, 64, 9]}}, {"Clear": {"pos": [6, 64, 9]}}]}}, "limit": 2400, "opts": {"dig": true, "scaffold": {"tag": "minecraft:planks"}, "avoid": {"min": [0, 60, 0], "max": [8, 70, 8]}}}}, "mode": "sync"}
+{"action": 20, "call": {"primitive": "chat", "args": {"text": "logs stashed"}}, "mode": "sync"}

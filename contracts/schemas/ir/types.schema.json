@@ -1,0 +1,356 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/ir/types.schema.json",
+  "title": "Golem IR names, types and declarations",
+  "description": "§18.2 IR building blocks: qualified names, type references, source spans and the declarations of the types, failures and notices sections. The full grammars are in CONTRACTS.md ('Names' and 'Type references'); JSON Schema patterns here are coarse and scripts/check-ir.mjs parses every name and type exactly.",
+  "$defs": {
+    "QualifiedName": {
+      "description": "§6.4, §6.7, §18.2 PD-14 fully qualified name of a task, fn, const, type, failure, notice or activity after monomorphization: module path, optional receiver type for members, simple name, type arguments for instances of generic declarations (open<golem.windows.Container>), and a parameter-type signature when the name's overload set has more than one member (golem.core.goto(Goal,Int,PathOpts)). Prelude and built-in names have no module (Bot.food, min(Int,Int), Goal). Grammar in CONTRACTS.md 'Names'.",
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_.<>,()?]*$"
+    },
+    "TypeRef": {
+      "description": "§6.1-§6.4, §18.2 PD-15 type reference as a canonical string: a built-in or qualified declared type name, type arguments in <...> separated by ',' without spaces, and a trailing '?' for optionals, as in List<BlockPos>, Window<golem.windows.Container>?, Map<ItemType,Int>. Aliases are resolved (SlotRange is written Range). Grammar in CONTRACTS.md 'Type references'.",
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.<>,]*\\??$"
+    },
+    "Ident": {
+      "description": "§3.2 IDENT.",
+      "type": "string",
+      "pattern": "^[a-z_][A-Za-z0-9_]*$"
+    },
+    "TypeIdent": {
+      "description": "§3.2 TYPE_IDENT.",
+      "type": "string",
+      "pattern": "^[A-Z][A-Za-z0-9_]*$"
+    },
+    "LocalName": {
+      "description": "§10.1 PD-17 frame-local slot name: a source IDENT, renamed name~n when it shadows an earlier local of the same frame, or a compiler temporary $kind<n> ($t0 temporary, $i0 iterator, $c0 counter, $o0 optional binder, $v0 variant).",
+      "type": "string",
+      "pattern": "^([a-z_][A-Za-z0-9_]*(~[1-9][0-9]*)?|\\$[a-z]+(0|[1-9][0-9]*))$"
+    },
+    "Resource": {
+      "description": "§2, §13.3 physical resources, in canonical order legs, head, hands, stance, inventory, screen; resource sets are written in this order without duplicates.",
+      "enum": [
+        "legs",
+        "head",
+        "hands",
+        "stance",
+        "inventory",
+        "screen"
+      ]
+    },
+    "ResourceSet": {
+      "description": "§13.3 a set of resources in canonical order (check-ir enforces the order).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Resource"
+      },
+      "uniqueItems": true
+    },
+    "Span": {
+      "description": "§18.2 PD-16 compact source span of an IR node: [file, line, column, end_line, end_column], with file an index into header.sources, lines and columns 1-based, columns in Unicode code points, end exclusive.",
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        }
+      ],
+      "minItems": 5,
+      "items": false
+    },
+    "SourceFile": {
+      "description": "§18.2 header: one source file the bot reaches, with its content hash. Std modules use std/golem/<module>.golem (PD-36).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "Param": {
+      "description": "§9.9 parameter of a task, fn, job or activity: name, resolved type and, when declared, the default as a constant wire value (§6.3: defaults are constant expressions). A receiver is the parameter named self.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(self|[a-z_][A-Za-z0-9_]*)$"
+        },
+        "type": {
+          "$ref": "#/$defs/TypeRef"
+        },
+        "default": {
+          "$ref": "../wire.schema.json#/$defs/JsonValue"
+        }
+      }
+    },
+    "FieldDecl": {
+      "description": "§6.3 struct, variant, failure or notice field: name, resolved type and optional constant default in wire form.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Ident"
+        },
+        "type": {
+          "$ref": "#/$defs/TypeRef"
+        },
+        "default": {
+          "$ref": "../wire.schema.json#/$defs/JsonValue"
+        }
+      }
+    },
+    "TypeDecl": {
+      "description": "§18.2 types section entry: a struct (window kinds are empty structs with window_kind data) or an enum, monomorphized, with derived trait flags (§6.3).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/StructDecl"
+        },
+        {
+          "$ref": "#/$defs/EnumDecl"
+        }
+      ]
+    },
+    "DerivedTraits": {
+      "description": "§6.3, §6.6 which of Eq, Ord, Wire the type implements; each is derived independently.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eq",
+        "ord",
+        "wire"
+      ],
+      "properties": {
+        "eq": {
+          "type": "boolean"
+        },
+        "ord": {
+          "type": "boolean"
+        },
+        "wire": {
+          "type": "boolean"
+        }
+      }
+    },
+    "StructDecl": {
+      "description": "§6.3 struct with fields in declaration order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "fields",
+        "traits",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "struct"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldDecl"
+          }
+        },
+        "traits": {
+          "$ref": "#/$defs/DerivedTraits"
+        },
+        "window_kind": {
+          "$ref": "#/$defs/WindowKindInfo"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "WindowKindInfo": {
+      "description": "§17.4 window kind data of an empty kind struct: its menu types (WindowKind.menu_types()), the capability traits it implements and, for CraftingStation kinds, its grid size.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "menu_types",
+        "traits"
+      ],
+      "properties": {
+        "menu_types": {
+          "type": "array",
+          "items": {
+            "$ref": "../wire.schema.json#/$defs/ResourceId"
+          }
+        },
+        "traits": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "WindowKind",
+              "Screen",
+              "HasContainer",
+              "Smelter",
+              "HasButtons",
+              "CraftingStation"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "grid": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ],
+          "minItems": 2,
+          "items": false
+        }
+      }
+    },
+    "EnumDecl": {
+      "description": "§6.3 enum with variants in declaration order (the order Ord uses).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "variants",
+        "traits",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "enum"
+        },
+        "variants": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "fields"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/$defs/TypeIdent"
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/FieldDecl"
+                }
+              }
+            }
+          }
+        },
+        "traits": {
+          "$ref": "#/$defs/DerivedTraits"
+        },
+        "span": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "FailureDecl": {
+      "description": "§18.2 failures section entry: a user-declared failure with its wire name (the simple name used as type in reports, §16.2) and wire field types. Built-in failures (§16.1) are fixed by the spec and not listed.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wire_name",
+        "fields",
+        "span"
+      ],
+      "properties": {
+        "wire_name": {
+          "$ref": "#/$defs/TypeIdent"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldDecl"
+          }
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        }
+      }
+    },
+    "NoticeDecl": {
+      "description": "§18.2 notices section entry: a notice with its wire name (notice report name, §16.2) and wire field types.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wire_name",
+        "fields",
+        "span"
+      ],
+      "properties": {
+        "wire_name": {
+          "$ref": "#/$defs/TypeIdent"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FieldDecl"
+          }
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        }
+      }
+    }
+  }
+}

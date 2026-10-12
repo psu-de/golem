@@ -1,0 +1,4 @@
+[{"key": "inventory.cursor", "value": {"item": "minecraft:oak_log", "count": 12, "components": {}}}, {"key": "window.slot(54)", "value": null}, {"key": "inventory.slot(36)", "value": null}]
+[{"key": "window.slot(3)", "value": {"item": "minecraft:oak_log", "count": 1, "components": {}}}, {"key": "inventory.cursor", "value": {"item": "minecraft:oak_log", "count": 11, "components": {}}}]
+[{"key": "block(6,64,9)", "value": "minecraft:oak_planks"}, {"key": "inventory.slot(38)", "value": {"item": "minecraft:oak_planks", "count": 3, "components": {}}}]
+[]

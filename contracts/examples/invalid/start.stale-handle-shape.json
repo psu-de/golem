@@ -1,0 +1,12 @@
+{
+  "action": 1,
+  "call": {
+    "primitive": "close",
+    "args": {
+      "w": {
+        "window": 3
+      }
+    }
+  },
+  "mode": "sync"
+}

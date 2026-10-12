@@ -1,0 +1,11 @@
+{
+  "tick": 9007199254740992,
+  "infra": [],
+  "changes": [],
+  "events": [],
+  "reports": [],
+  "measurements": {
+    "path_progress": null,
+    "round_trip_ms": 40
+  }
+}

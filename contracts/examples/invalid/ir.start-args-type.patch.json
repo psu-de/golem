@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/bot/start/args/target",
+      "value": "64"
+    }
+  ]
+}

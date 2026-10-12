@@ -1,0 +1,6 @@
+{
+  "reply": "refused",
+  "command": "assign",
+  "job_id": "s-1",
+  "reason": "Timeout"
+}

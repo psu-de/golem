@@ -1,0 +1,338 @@
+[
+  {
+    "file": "report.missing-seq.json",
+    "against": "report.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "required",
+        "path": "",
+        "param": "seq"
+      }
+    },
+    "why": "§16.2: every message has seq"
+  },
+  {
+    "file": "report.unknown-type.json",
+    "against": "report.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "oneOf",
+        "path": ""
+      }
+    },
+    "why": "§16.2: type must be one of the report types"
+  },
+  {
+    "file": "report.failure-without-trace.json",
+    "against": "report.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "required",
+        "path": "/failure",
+        "param": "trace"
+      }
+    },
+    "why": "§16.2: failures in reports carry a trace"
+  },
+  {
+    "file": "report.notice-two-origins.json",
+    "against": "report.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "additionalProperties",
+        "path": "",
+        "param": "instance"
+      }
+    },
+    "why": "decision 94: a notice carries job_id, or instance and handler, not both"
+  },
+  {
+    "file": "report.seq-not-positive.json",
+    "against": "report.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "minimum",
+        "path": "/seq"
+      }
+    },
+    "why": "PD-24: seq starts at 1"
+  },
+  {
+    "file": "command.assign-without-job-id.json",
+    "against": "command.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "required",
+        "path": "",
+        "param": "job_id"
+      }
+    },
+    "why": "§16.3: assign {job, args, job_id}"
+  },
+  {
+    "file": "command.unknown.json",
+    "against": "command.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "oneOf",
+        "path": ""
+      }
+    },
+    "why": "§16.3: no restart command"
+  },
+  {
+    "file": "reply.unknown-reason.json",
+    "against": "reply.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "enum",
+        "path": "/reason"
+      }
+    },
+    "why": "§16.3: refusal reasons are fixed"
+  },
+  {
+    "file": "launch.inline-password.json",
+    "against": "launch.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "additionalProperties",
+        "path": "/auth",
+        "param": "password"
+      }
+    },
+    "why": "§12.2, question 7: secrets are never inline"
+  },
+  {
+    "file": "persistence.wrong-format.json",
+    "against": "persistence.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "const",
+        "path": "/format"
+      }
+    },
+    "why": "PD-31: the format tag is fixed"
+  },
+  {
+    "file": "persistence.set-out-of-order.json",
+    "against": "persistence.schema.json",
+    "expect": {
+      "semantic": "wire-value"
+    },
+    "why": "§6.9: a Set is ascending without duplicates"
+  },
+  {
+    "file": "diagnostic.unnamespaced-code.json",
+    "against": "diagnostic.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "pattern",
+        "path": "/code"
+      }
+    },
+    "why": "PD-33: codes are C<check>/<slug>"
+  },
+  {
+    "file": "diagnostic.info-severity.json",
+    "against": "diagnostic.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "enum",
+        "path": "/severity"
+      }
+    },
+    "why": "§13.1: only errors and warnings"
+  },
+  {
+    "file": "tick-input.malformed-key.json",
+    "against": "tick-input.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "pattern",
+        "path": "/changes/0/key"
+      }
+    },
+    "why": "PD-9: block keys have three coordinates"
+  },
+  {
+    "file": "tick-input.wrong-value-shape.json",
+    "against": "tick-input.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "type",
+        "path": "/changes/0/value"
+      }
+    },
+    "why": "§14.1: player.food is an Int"
+  },
+  {
+    "file": "tick-input.change-without-cause.json",
+    "against": "tick-input.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "required",
+        "path": "/changes/0",
+        "param": "cause"
+      }
+    },
+    "why": "§14.5: every change is attributed"
+  },
+  {
+    "file": "tick-input.int-out-of-range.json",
+    "against": "tick-input.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "maximum",
+        "path": "/tick"
+      }
+    },
+    "why": "decision 65: |n| <= 2^53 - 1"
+  },
+  {
+    "file": "tick-input.chunk-runs-short.json",
+    "against": "tick-input.schema.json",
+    "expect": {
+      "semantic": "chunk-runs"
+    },
+    "why": "PD-10: runs cover 16 x 16 x height positions"
+  },
+  {
+    "file": "tick-input.report-without-detail.json",
+    "against": "tick-input.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "required",
+        "path": "/reports/0",
+        "param": "detail"
+      }
+    },
+    "why": "§9.6: Rejected(detail)"
+  },
+  {
+    "file": "delta.duplicate-key.json",
+    "against": "delta.schema.json",
+    "expect": {
+      "semantic": "duplicate-key"
+    },
+    "why": "§14.3: one predicted value per key"
+  },
+  {
+    "file": "start.unknown-primitive.json",
+    "against": "backend-data.schema.json#StartRequest",
+    "expect": {
+      "schema": {
+        "keyword": "oneOf",
+        "path": "/call"
+      }
+    },
+    "why": "§17.1: 34 primitives"
+  },
+  {
+    "file": "start.stale-handle-shape.json",
+    "against": "backend-data.schema.json#StartRequest",
+    "expect": {
+      "schema": {
+        "keyword": "required",
+        "path": "/call/args/w",
+        "param": "generation"
+      }
+    },
+    "why": "PD-8: window handles carry the opening generation"
+  },
+  {
+    "file": "ir.extra-section.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "additionalProperties",
+        "path": "",
+        "param": "registries"
+      }
+    },
+    "why": "§18.2: exactly the listed sections; no embedded version data"
+  },
+  {
+    "file": "ir.malformed-state-id.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "schema": {
+        "keyword": "pattern",
+        "path": "/tasks/golem.core.fight/chart/states"
+      }
+    },
+    "why": "§18.3: region names are fixed"
+  },
+  {
+    "file": "ir.unknown-transition-target.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "state-unknown-target"
+    },
+    "why": "every transition target exists"
+  },
+  {
+    "file": "ir.unknown-call-target.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "unknown-target"
+    },
+    "why": "extern fns are referenced by name and listed in fns"
+  },
+  {
+    "file": "ir.call-arity.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "call-arity"
+    },
+    "why": "call states pass every parameter, defaults filled"
+  },
+  {
+    "file": "ir.uncatchable-catch.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "unknown-failure"
+    },
+    "why": "§10.5: Defect is uncatchable"
+  },
+  {
+    "file": "ir.local-type.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "type-mismatch"
+    },
+    "why": "locals are typed"
+  },
+  {
+    "file": "ir.unreachable-state.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "unreachable-state"
+    },
+    "why": "no state is unreachable"
+  },
+  {
+    "file": "ir.contracts-drift.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "contracts-mismatch"
+    },
+    "why": "§18.2: contracts mirror the tasks' clauses"
+  },
+  {
+    "file": "ir.start-args-type.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "wire-value"
+    },
+    "why": "§12.1: start args are wire-encoded"
+  },
+  {
+    "file": "ir.choice-guard.patch.json",
+    "against": "ir.schema.json",
+    "expect": {
+      "checkIr": "transition-shape"
+    },
+    "why": "only the last choice transition is unguarded"
+  }
+]

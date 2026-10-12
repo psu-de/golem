@@ -1,0 +1,29 @@
+{
+  "tick": 5,
+  "infra": [],
+  "changes": [
+    {
+      "chunk_load": {
+        "x": 0,
+        "z": 0,
+        "min_y": 0,
+        "height": 16,
+        "palette": [
+          "minecraft:air"
+        ],
+        "runs": [
+          [
+            0,
+            4095
+          ]
+        ]
+      }
+    }
+  ],
+  "events": [],
+  "reports": [],
+  "measurements": {
+    "path_progress": null,
+    "round_trip_ms": 40
+  }
+}

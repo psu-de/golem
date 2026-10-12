@@ -1,0 +1,1301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/ir/expr.schema.json",
+  "title": "Golem IR expressions",
+  "description": "§18.2 typed expression trees: a closed union covering every expression form of the §4.1 grammar and §7, plus four IR-only nodes (PD-17). Task calls never appear here (§9.9): they are statechart states.",
+  "$defs": {
+    "Expr": {
+      "description": "§4.1, §7 closed union of IR expression nodes, discriminated by kind. Every node carries its resolved type (TypeRef) and a source span (§18.2).",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ExprLit"
+        },
+        {
+          "$ref": "#/$defs/ExprInterp"
+        },
+        {
+          "$ref": "#/$defs/ExprLocal"
+        },
+        {
+          "$ref": "#/$defs/ExprParam"
+        },
+        {
+          "$ref": "#/$defs/ExprActivityParam"
+        },
+        {
+          "$ref": "#/$defs/ExprActivityVar"
+        },
+        {
+          "$ref": "#/$defs/ExprConst"
+        },
+        {
+          "$ref": "#/$defs/ExprSelf"
+        },
+        {
+          "$ref": "#/$defs/ExprAmbient"
+        },
+        {
+          "$ref": "#/$defs/ExprOld"
+        },
+        {
+          "$ref": "#/$defs/ExprResult"
+        },
+        {
+          "$ref": "#/$defs/ExprField"
+        },
+        {
+          "$ref": "#/$defs/ExprCall"
+        },
+        {
+          "$ref": "#/$defs/ExprOpt"
+        },
+        {
+          "$ref": "#/$defs/ExprCoalesce"
+        },
+        {
+          "$ref": "#/$defs/ExprUnary"
+        },
+        {
+          "$ref": "#/$defs/ExprBinary"
+        },
+        {
+          "$ref": "#/$defs/ExprLogic"
+        },
+        {
+          "$ref": "#/$defs/ExprIf"
+        },
+        {
+          "$ref": "#/$defs/ExprMatch"
+        },
+        {
+          "$ref": "#/$defs/ExprList"
+        },
+        {
+          "$ref": "#/$defs/ExprSetNew"
+        },
+        {
+          "$ref": "#/$defs/ExprMapNew"
+        },
+        {
+          "$ref": "#/$defs/ExprStruct"
+        },
+        {
+          "$ref": "#/$defs/ExprVariant"
+        },
+        {
+          "$ref": "#/$defs/ExprCopy"
+        },
+        {
+          "$ref": "#/$defs/ExprIndex"
+        },
+        {
+          "$ref": "#/$defs/ExprUnwrap"
+        },
+        {
+          "$ref": "#/$defs/ExprIsNone"
+        },
+        {
+          "$ref": "#/$defs/ExprIterMore"
+        }
+      ]
+    },
+    "ExprLit": {
+      "description": "§3.4, §6.8 literal with its value in the §6.9 wire form of its resolved type: INT, FLOAT, STRING, DURATION (ticks), ANGLE (radians), RESOURCE (id), TAG (#id), BLOCKSTATE, SELECTOR and RESOURCE/TAG typed as filters (the §8.4 filter tree), true/false, none (null with an optional type), and Goal-typed constants in the backend Goal encoding (PD-37). form const marks a compile-time-evaluated constant expression that is not a single literal: a filled parameter default such as PathOpts() or 2min, or a folded constant (§7.5). text keeps the source spelling.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "form",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "lit"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "form": {
+          "enum": [
+            "int",
+            "float",
+            "string",
+            "bool",
+            "duration",
+            "angle",
+            "resource",
+            "tag",
+            "blockstate",
+            "selector",
+            "none",
+            "unit",
+            "const"
+          ]
+        },
+        "value": {
+          "$ref": "../wire.schema.json#/$defs/JsonValue"
+        },
+        "text": {
+          "type": "string"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprInterp": {
+      "description": "§3.4, §7.3 interpolated string: literal text parts and expression parts converted with their Show impl.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "parts",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "interp"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "text"
+                ],
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "expr",
+                  "show"
+                ],
+                "properties": {
+                  "expr": {
+                    "$ref": "#/$defs/Expr"
+                  },
+                  "show": {
+                    "$ref": "types.schema.json#/$defs/QualifiedName"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprLocal": {
+      "description": "§5.4, §10.1 reference to a frame-local slot (let, var, pattern or catch binder, compiler temporary).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "name",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "local"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprParam": {
+      "description": "§5.4 reference to a parameter of the enclosing task, fn or job.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "name",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "param"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "types.schema.json#/$defs/Ident"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprActivityParam": {
+      "description": "§5.4, §11.1 reference to a parameter of the enclosing activity instance (bound in activities.<instance>.params).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "name",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "aparam"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "types.schema.json#/$defs/Ident"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprActivityVar": {
+      "description": "§11.2 read of an activity var of the enclosing instance.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "name",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "avar"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "types.schema.json#/$defs/Ident"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprConst": {
+      "description": "§7.5 reference to an entry of the consts section, or to a built-in associated const such as ItemFilter.ANY (§6.5).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "name",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "const"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprSelf": {
+      "description": "§6.5 the receiver self inside an impl member.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "self"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprAmbient": {
+      "description": "§7.6 the ambient bot or world; only ever the receiver of a member call (decision 49).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "which",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "ambient"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "which": {
+          "enum": [
+            "bot",
+            "world"
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprOld": {
+      "description": "§9.4 old(e): reads snapshot slot n of the frame (tasks.<t>.olds[n]), taken once after requires pass.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "slot",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "old"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "slot": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprResult": {
+      "description": "§9.4 result in an ensures of a task with a non-Unit return type.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "result"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprField": {
+      "description": "§6.3 struct field access (user structs and Entry, Region.min/max, BlockPos.x, ...).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "object",
+        "field",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "field"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "object": {
+          "$ref": "#/$defs/Expr"
+        },
+        "field": {
+          "$ref": "types.schema.json#/$defs/Ident"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprCall": {
+      "description": "§7.4, §6.7 call of a fn (extern fns by name, §18.2): target is the resolved overload's qualified name, which must be a key of fns. form records the source shape: a property (receiver only, no parentheses, decision 99), a method, a static fn on a type, or a free fn. args holds every parameter after the receiver, in parameter order, defaults filled.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "target",
+        "form",
+        "receiver",
+        "args",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "call"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "target": {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        },
+        "form": {
+          "enum": [
+            "free",
+            "static",
+            "method",
+            "property"
+          ]
+        },
+        "receiver": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Expr"
+          }
+        },
+        "order": {
+          "description": "Evaluation order as parameter indices, present only when it differs from parameter order (named arguments written out of order, §7.1, PD-18).",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprOpt": {
+      "description": "§7.2 optional chaining, decision 105: evaluate value; if none, the node is none; otherwise bind the unwrapped value to the local bind and evaluate then. The node's type is then's type made optional (never T??). IR-only shape (PD-17).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "value",
+        "bind",
+        "then",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "opt"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "value": {
+          "$ref": "#/$defs/Expr"
+        },
+        "bind": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "then": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprCoalesce": {
+      "description": "§7.2 a ?? b, short-circuiting.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "left",
+        "right",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "coalesce"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "left": {
+          "$ref": "#/$defs/Expr"
+        },
+        "right": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprUnary": {
+      "description": "§7.2 unary - or ! with its resolved target: a built-in operator signature such as -(Int) or !(ItemFilter), or the qualified name of a user Neg/Not impl fn.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "op",
+        "operand",
+        "target",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "unary"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "op": {
+          "enum": [
+            "-",
+            "!"
+          ]
+        },
+        "operand": {
+          "$ref": "#/$defs/Expr"
+        },
+        "target": {
+          "$ref": "#/$defs/OpTarget"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprBinary": {
+      "description": "§7.2 binary operator with its resolved target (built-in signature such as +(Duration,Duration), matches(BlockState?,BlockFilter), |(ItemFilter,ItemFilter), ..(Int,Int), or a user operator impl fn). Covers arithmetic, comparison, matches, in, filter combinators and ranges.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "op",
+        "left",
+        "right",
+        "target",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "binary"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "op": {
+          "enum": [
+            "+",
+            "-",
+            "*",
+            "/",
+            "%",
+            "==",
+            "!=",
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "matches",
+            "in",
+            "|",
+            "&",
+            "..",
+            "..="
+          ]
+        },
+        "left": {
+          "$ref": "#/$defs/Expr"
+        },
+        "right": {
+          "$ref": "#/$defs/Expr"
+        },
+        "target": {
+          "$ref": "#/$defs/OpTarget"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprLogic": {
+      "description": "§7.1 short-circuit && and || on Bool.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "op",
+        "left",
+        "right",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "logic"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "op": {
+          "enum": [
+            "&&",
+            "||"
+          ]
+        },
+        "left": {
+          "$ref": "#/$defs/Expr"
+        },
+        "right": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprIf": {
+      "description": "§4.1 if c then a else b, short-circuiting.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "cond",
+        "then",
+        "else",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "if"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "cond": {
+          "$ref": "#/$defs/Expr"
+        },
+        "then": {
+          "$ref": "#/$defs/Expr"
+        },
+        "else": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprMatch": {
+      "description": "§4.1 match expression, arms tried in order with optional guards; arms are expressions (decision 109).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "scrutinee",
+        "arms",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "match"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "scrutinee": {
+          "$ref": "#/$defs/Expr"
+        },
+        "arms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/MatchArm"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprList": {
+      "description": "§7.3 list literal [a, b, c].",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "items",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "list"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Expr"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprSetNew": {
+      "description": "§7.3, decision 133 Set(items): duplicates collapse, ascending order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "items",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "set"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "items": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprMapNew": {
+      "description": "§7.3, decision 133 Map(entries): duplicate keys raise Defect(InvalidArgument).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "entries",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "map"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "entries": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprStruct": {
+      "description": "§6.3 struct construction, including the built-in value types BlockPos(x, y, z), Vec3(x, y, z), Region(min, max), Range and Entry. fields holds every field in declaration order, defaults filled.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "fields",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "struct"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Expr"
+          }
+        },
+        "order": {
+          "description": "Evaluation order as parameter indices, present only when it differs from parameter order (named arguments written out of order, §7.1, PD-18).",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprVariant": {
+      "description": "§6.3 enum variant construction, e.g. Goal.At(p) or Face.Up; the enum is the node's type.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "variant",
+        "fields",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "variant"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "variant": {
+          "$ref": "types.schema.json#/$defs/TypeIdent"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Expr"
+          }
+        },
+        "order": {
+          "description": "Evaluation order as parameter indices, present only when it differs from parameter order (named arguments written out of order, §7.1, PD-18).",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprCopy": {
+      "description": "§6.3 generated s.copy(field = value, ...): object with the named fields replaced, evaluated in the listed order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "object",
+        "set",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "copy"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "object": {
+          "$ref": "#/$defs/Expr"
+        },
+        "set": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "field",
+              "value"
+            ],
+            "properties": {
+              "field": {
+                "$ref": "types.schema.json#/$defs/Ident"
+              },
+              "value": {
+                "$ref": "#/$defs/Expr"
+              }
+            }
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprIndex": {
+      "description": "§7.3 xs[i]; out of range raises Defect(IndexOutOfRange).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "object",
+        "index",
+        "target",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "index"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "object": {
+          "$ref": "#/$defs/Expr"
+        },
+        "index": {
+          "$ref": "#/$defs/Expr"
+        },
+        "target": {
+          "$ref": "#/$defs/OpTarget"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprUnwrap": {
+      "description": "§10.1, §10.2 IR-only (PD-17): the T inside a T? already tested non-none on every path that reaches this node; used to lower let ... else and if let.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "unwrap"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "value": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprIsNone": {
+      "description": "IR-only (PD-17): true when value is none; needs no Eq on T, unlike e == none (§6.2).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "is_none"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "value": {
+          "$ref": "#/$defs/Expr"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "ExprIterMore": {
+      "description": "§10.2 IR-only (PD-17): true while the iterator slot created by an iter_init action has elements left; the guard of lowered for loops.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "iter",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "iter_more"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "iter": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "OpTarget": {
+      "description": "§6.7 resolved operator target: a built-in operator signature op(T1,T2) / op(T), or the qualified name of a user operator impl fn.",
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^(\\+|-|\\*|/|%|==|!=|<|<=|>|>=|matches|in|\\||&|!|\\.\\.|\\.\\.=|\\[\\])\\([A-Za-z0-9_.<>,?]+\\)$"
+        },
+        {
+          "$ref": "types.schema.json#/$defs/QualifiedName"
+        }
+      ]
+    },
+    "MatchArm": {
+      "description": "§4.1 one match arm: pattern, optional guard, value.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pattern",
+        "guard",
+        "value"
+      ],
+      "properties": {
+        "pattern": {
+          "$ref": "#/$defs/Pattern"
+        },
+        "guard": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Expr"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/Expr"
+        }
+      }
+    },
+    "PWild": {
+      "description": "§4.1 pattern _.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "wild"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "PNone": {
+      "description": "§4.1 pattern none.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "none"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "PBind": {
+      "description": "§4.1 binder pattern IDENT; binds the local name with the pattern's type.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "name",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "bind"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "types.schema.json#/$defs/LocalName"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "PLit": {
+      "description": "§4.1 LiteralPat; value in wire form.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "value",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "lit"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "value": {
+          "$ref": "../wire.schema.json#/$defs/JsonValue"
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "PVariant": {
+      "description": "§4.1, decision 101 variant pattern: bare (fields null) matches any fields; otherwise one sub-pattern per field. type is the enum.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "variant",
+        "fields",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "variant"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "variant": {
+          "$ref": "types.schema.json#/$defs/TypeIdent"
+        },
+        "fields": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Pattern"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "PAlt": {
+      "description": "§4.1 alternatives A | B.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "type",
+        "alts",
+        "span"
+      ],
+      "properties": {
+        "kind": {
+          "const": "alt"
+        },
+        "type": {
+          "$ref": "types.schema.json#/$defs/TypeRef"
+        },
+        "alts": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/Pattern"
+          }
+        },
+        "span": {
+          "$ref": "types.schema.json#/$defs/Span"
+        }
+      }
+    },
+    "Pattern": {
+      "description": "§4.1 closed union of match patterns, discriminated by kind; each carries the type it matches and a span.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/PWild"
+        },
+        {
+          "$ref": "#/$defs/PNone"
+        },
+        {
+          "$ref": "#/$defs/PBind"
+        },
+        {
+          "$ref": "#/$defs/PLit"
+        },
+        {
+          "$ref": "#/$defs/PVariant"
+        },
+        {
+          "$ref": "#/$defs/PAlt"
+        }
+      ]
+    }
+  }
+}

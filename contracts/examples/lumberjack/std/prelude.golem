@@ -1,0 +1,15 @@
+pub enum Goal {
+    At(pos: BlockPos)                          // bot.feet == pos
+    Near(pos: BlockPos, radius: Float)         // distance from bot.pos to the centre of pos <= radius
+    XZ(x: Int, z: Int)                         // bot.feet.x == x && bot.feet.z == z
+    Y(y: Int)                                  // bot.feet.y == y
+    InReach(pos: BlockPos)                     // bot.in_reach(pos)
+    NearEntity(target: Entity, radius: Float)  // target.alive && distance <= radius
+    Away(center: Vec3, radius: Float)          // distance from bot.pos to center >= radius
+    AnyOf(goals: List<Goal>)                   // some goal is reached
+    AllOf(goals: List<Goal>)                   // every goal is reached at once
+    Clear(pos: BlockPos)                       // the bot's bounding box does not intersect the cell pos
+}
+
+pub struct PathOpts(avoid: Region? = none)
+pub struct BuildOpts(dig: Bool = false, scaffold: ItemFilter = ItemFilter.NOTHING, avoid: Region? = none)

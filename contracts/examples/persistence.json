@@ -1,0 +1,11 @@
+{
+  "format": "golem-state/0.1",
+  "bot": "Lumberjack",
+  "ir_hash": "sha256:60183267b6774a836c95d5bfb838a75e669eec33995c8ddcbafc5bdc80704c7c",
+  "instances": {
+    "auto_eat": { "activity": "golem.survival.auto_eat", "vars": {}, "handlers": [{ "handler": 0, "failures": 1, "remaining": 64 }] },
+    "auto_respawn": { "activity": "golem.survival.auto_respawn", "vars": {}, "handlers": [] },
+    "defend": { "activity": "golem.survival.defend", "vars": {}, "handlers": [] },
+    "stay_afloat": { "activity": "golem.survival.stay_afloat", "vars": {}, "handlers": [] }
+  }
+}

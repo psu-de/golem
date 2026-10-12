@@ -1,0 +1,10 @@
+{
+  "base": "../Lumberjack.golem-ir.json",
+  "patch": [
+    {
+      "op": "replace",
+      "path": "/tasks/golem.core.mine/chart/states/golem.core.mine#2/next/target",
+      "value": "golem.core.mine#3"
+    }
+  ]
+}

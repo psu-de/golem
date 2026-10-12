@@ -1,0 +1,962 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psu-de.github.io/golem/contracts/0.1/world.schema.json",
+  "title": "Golem world keys",
+  "description": "§14.1 world model: the canonical key-string grammar (proposed decision PD-9) and the value shape of every key family. Keys are the unit of change tracking (§14.5) and read tracking (§9.8) and appear on the wire as Interfered.key. A value of null means absent: an unloaded block, no open window, no item in a slot. Keys marked 'E-1' are read by §17.2 members and were added to §14.1 by escalation E-1 (errata v0.2.1 P1). Grammar (ABNF): see CONTRACTS.md 'World keys'.",
+  "$defs": {
+    "WorldKey": {
+      "description": "§14.1 canonical world-key string (PD-9). Integers are written in canonical decimal (no leading zeros, no '+', no '-0'); there is no whitespace.",
+      "type": "string",
+      "pattern": "^(block\\((0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*)\\)|light\\.(block|sky)\\((0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*)\\)|sign\\((0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*)\\)|player\\.(position|rotation|health|food|saturation|oxygen|effects|on_ground|in_water|in_lava|on_fire|sneaking|sprinting|using_item|sleeping|dead|dimension|held_slot|vehicle)|player\\.attribute\\([a-z0-9_.-]+:[a-z0-9_./-]+\\)|inventory\\.(slot\\(([0-9]|[1-3][0-9]|4[0-5])\\)|cursor)|window\\.(id|kind)|window\\.(slot|property)\\((0|[1-9][0-9]*)\\)|entity\\((0|-?[1-9][0-9]*)\\)\\.(type|position|name|health|equipment|passengers|alive|item|owner|biting)|world\\.(time_of_day|weather|recipes)|world\\.tag\\((item|block|entity_type),[a-z0-9_.-]+:[a-z0-9_./-]+\\))$"
+    },
+    "KeyValue": {
+      "description": "§14.1 one key with a value of its family's shape; the shared part of an attributed change (tick-input.schema.json) and a predicted delta entry (delta.schema.json). Uses unevaluatedProperties at the use site, so the branches leave additionalProperties open.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/BlockKeyValue"
+        },
+        {
+          "$ref": "#/$defs/LightKeyValue"
+        },
+        {
+          "$ref": "#/$defs/SignKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerPositionKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerRotationKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerFloatKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerIntKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerFlagKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerEffectsKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerDimensionKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerVehicleKeyValue"
+        },
+        {
+          "$ref": "#/$defs/PlayerAttributeKeyValue"
+        },
+        {
+          "$ref": "#/$defs/InventorySlotKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WindowIdKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WindowKindKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WindowSlotKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WindowPropertyKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityTypeKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityPositionKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityNameKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityHealthKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityEquipmentKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityPassengersKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityFlagKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityBitingKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityItemKeyValue"
+        },
+        {
+          "$ref": "#/$defs/EntityOwnerKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WorldTimeKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WorldWeatherKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WorldTagKeyValue"
+        },
+        {
+          "$ref": "#/$defs/WorldRecipesKeyValue"
+        }
+      ]
+    },
+    "BlockKeyValue": {
+      "description": "§14.1 Blocks family: block(x,y,z) for every loaded position; null when the position is not loaded (world.block returns none, §17.2).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^block\\((0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*)\\)$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/BlockState"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "LightKeyValue": {
+      "description": "§17.2 E-1, decision 81: light.block(x,y,z) and light.sky(x,y,z), 0-15, null if unloaded (world.block_light, world.sky_light).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^light\\.(block|sky)\\((0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*)\\)$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 15
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "SignKeyValue": {
+      "description": "§17.2 E-1: sign(x,y,z), the text of a sign's two sides (world.sign_text, edit_sign); null when the block holds no sign.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^sign\\((0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*),(0|-?[1-9][0-9]*)\\)$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "front",
+                "back"
+              ],
+              "properties": {
+                "front": {
+                  "$ref": "#/$defs/SignLines"
+                },
+                "back": {
+                  "$ref": "#/$defs/SignLines"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "SignLines": {
+      "description": "Four lines of sign text (edit_sign requires lines.len == 4, §17.1).",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "PlayerPositionKeyValue": {
+      "description": "§14.1 Player family: player.position, the bot's simulated feet position (§14.1: client-authoritative, replaced on server correction).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "player.position"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/Vec3"
+        }
+      }
+    },
+    "PlayerRotationKeyValue": {
+      "description": "§14.1 Player family: player.rotation, yaw and pitch (bot.yaw, bot.pitch).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "player.rotation"
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "yaw",
+            "pitch"
+          ],
+          "properties": {
+            "yaw": {
+              "$ref": "wire.schema.json#/$defs/Angle"
+            },
+            "pitch": {
+              "$ref": "wire.schema.json#/$defs/Angle"
+            }
+          }
+        }
+      }
+    },
+    "PlayerFloatKeyValue": {
+      "description": "§14.1 Player family: player.health and player.saturation.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "enum": [
+            "player.health",
+            "player.saturation"
+          ]
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/Float"
+        }
+      }
+    },
+    "PlayerIntKeyValue": {
+      "description": "§14.1 Player family: player.food (0-20), player.oxygen (0-300, §17.2) and player.held_slot (0-8).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "enum": [
+            "player.food",
+            "player.oxygen",
+            "player.held_slot"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 300
+        }
+      }
+    },
+    "PlayerFlagKeyValue": {
+      "description": "§14.1 Player family boolean keys: on-ground, in-water, in-lava, sneaking, sprinting, using-item, sleeping, dead; player.on_fire is E-1 (decision 82).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "enum": [
+            "player.on_ground",
+            "player.in_water",
+            "player.in_lava",
+            "player.on_fire",
+            "player.sneaking",
+            "player.sprinting",
+            "player.using_item",
+            "player.sleeping",
+            "player.dead"
+          ]
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/Bool"
+        }
+      }
+    },
+    "PlayerEffectsKeyValue": {
+      "description": "§14.1 Player family: player.effects, the active status effects in ascending effect-id order.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "player.effects"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Effect"
+          }
+        }
+      }
+    },
+    "Effect": {
+      "description": "§14.1 One active status effect: registry id, amplifier (0 = level I) and remaining duration in ticks, -1 for infinite.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect",
+        "amplifier",
+        "duration"
+      ],
+      "properties": {
+        "effect": {
+          "$ref": "wire.schema.json#/$defs/ResourceId"
+        },
+        "amplifier": {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        },
+        "duration": {
+          "$ref": "wire.schema.json#/$defs/Duration"
+        }
+      }
+    },
+    "PlayerDimensionKeyValue": {
+      "description": "§14.1 Player family: player.dimension, the dimension id (bot.dimension).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "player.dimension"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/ResourceId"
+        }
+      }
+    },
+    "PlayerVehicleKeyValue": {
+      "description": "§17.1, §17.2 E-1: player.vehicle, the entity id the bot rides or null (bot.riding, steer, dismount).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "player.vehicle"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/Int"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "PlayerAttributeKeyValue": {
+      "description": "E-1: player.attribute(id), an attribute's current value; the runtime reads minecraft:block_interaction_range and minecraft:entity_interaction_range for bot.block_reach and bot.entity_reach (§17.3).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^player\\.attribute\\([a-z0-9_.-]+:[a-z0-9_./-]+\\)$"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/Float"
+        }
+      }
+    },
+    "InventorySlotKeyValue": {
+      "description": "§14.1 Inventory family: inventory.slot(0..45) in vanilla player-window numbering (§17.4) and inventory.cursor.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^inventory\\.(slot\\(([0-9]|[1-3][0-9]|4[0-5])\\)|cursor)$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/ItemStack"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "WindowIdKeyValue": {
+      "description": "§14.1 Window family: window.id, the open non-inventory window as a WindowHandle (protocol id plus opening generation, PD-8), or null when none is open.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "window.id"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/WindowHandle"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "WindowKindKeyValue": {
+      "description": "§14.1 Window family: window.kind, the open window's menu type id (§17.4, with namespace), or null for the horse screen, which has no menu type, and when no window is open.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "window.kind"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/ResourceId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "WindowSlotKeyValue": {
+      "description": "§14.1 Window family: window.slot(i) of the open window, in that window's vanilla numbering. Slots in its player_slots range mirror inventory slots; the backend reports both keys.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^window\\.slot\\((0|[1-9][0-9]*)\\)$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/ItemStack"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "WindowPropertyKeyValue": {
+      "description": "§14.1 Window family: window.property(i), the window's numeric properties (furnace progress, enchantment seeds, ...).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^window\\.property\\((0|[1-9][0-9]*)\\)$"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/Int"
+        }
+      }
+    },
+    "EntityTypeKeyValue": {
+      "description": "§14.1 Entities family: entity(id).type.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.type$"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/EntityType"
+        }
+      }
+    },
+    "EntityPositionKeyValue": {
+      "description": "§14.1 Entities family: entity(id).position (feet).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.position$"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/Vec3"
+        }
+      }
+    },
+    "EntityNameKeyValue": {
+      "description": "§14.1 Entities family: entity(id).name, custom or player name, null if none.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.name$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/WireString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "EntityHealthKeyValue": {
+      "description": "§14.1 Entities family: entity(id).health if the server sends it, else null.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.health$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/Float"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "EntityEquipmentKeyValue": {
+      "description": "§14.1 Entities family: entity(id).equipment.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.equipment$"
+        },
+        "value": {
+          "$ref": "#/$defs/Equipment"
+        }
+      }
+    },
+    "Equipment": {
+      "description": "§14.1 An entity's six equipment slots.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mainhand",
+        "offhand",
+        "head",
+        "chest",
+        "legs",
+        "feet"
+      ],
+      "properties": {
+        "mainhand": {
+          "$ref": "#/$defs/OptionalItemStack"
+        },
+        "offhand": {
+          "$ref": "#/$defs/OptionalItemStack"
+        },
+        "head": {
+          "$ref": "#/$defs/OptionalItemStack"
+        },
+        "chest": {
+          "$ref": "#/$defs/OptionalItemStack"
+        },
+        "legs": {
+          "$ref": "#/$defs/OptionalItemStack"
+        },
+        "feet": {
+          "$ref": "#/$defs/OptionalItemStack"
+        }
+      }
+    },
+    "OptionalItemStack": {
+      "description": "ItemStack? in its §6.9 form.",
+      "anyOf": [
+        {
+          "$ref": "wire.schema.json#/$defs/ItemStack"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "EntityPassengersKeyValue": {
+      "description": "§14.1 Entities family: entity(id).passengers, entity ids in the order the server lists them.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.passengers$"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "wire.schema.json#/$defs/Int"
+          }
+        }
+      }
+    },
+    "EntityFlagKeyValue": {
+      "description": "§14.1 Entities family: entity(id).alive. A non-alive entity keeps its last values (§17.2).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.alive$"
+        },
+        "value": {
+          "$ref": "wire.schema.json#/$defs/Bool"
+        }
+      }
+    },
+    "EntityBitingKeyValue": {
+      "description": "§17.2 E-1, decision 75: entity(id).biting, the bite flag of a fishing hook, null for other entity types.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.biting$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/Bool"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "EntityItemKeyValue": {
+      "description": "§17.2 E-1, decision 123: entity(id).item, the stack of an item entity, null for other entities.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.item$"
+        },
+        "value": {
+          "$ref": "#/$defs/OptionalItemStack"
+        }
+      }
+    },
+    "EntityOwnerKeyValue": {
+      "description": "§17.2 E-1, decision 75: entity(id).owner, the owning entity id of a projectile or fishing hook (bot.bobber), else null.",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^entity\\((0|-?[1-9][0-9]*)\\)\\.owner$"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "wire.schema.json#/$defs/Int"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "WorldTimeKeyValue": {
+      "description": "§14.1 World family: world.time_of_day in ticks, 0-23999 (world.time_of_day).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "world.time_of_day"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 23999
+        }
+      }
+    },
+    "WorldWeatherKeyValue": {
+      "description": "§14.1 World family: world.weather (world.raining reads raining).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "world.weather"
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "raining",
+            "thundering"
+          ],
+          "properties": {
+            "raining": {
+              "type": "boolean"
+            },
+            "thundering": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "WorldTagKeyValue": {
+      "description": "§14.1 World family: tag contents, world.tag(registry,tag-id) with registry item, block or entity_type; the member ids ascending and duplicate-free (§8.3 uses the server's tag contents).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^world\\.tag\\((item|block|entity_type),[a-z0-9_.-]+:[a-z0-9_./-]+\\)$"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "wire.schema.json#/$defs/ResourceId"
+          }
+        }
+      }
+    },
+    "WorldRecipesKeyValue": {
+      "description": "§14.1 World family: world.recipes, the recipe ids the server announced, ascending and duplicate-free (§17.5: a backend MAY add recipes the server announces).",
+      "type": "object",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "const": "world.recipes"
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "wire.schema.json#/$defs/ResourceId"
+          }
+        }
+      }
+    },
+    "ChunkLoad": {
+      "description": "§14.1, §15.2 Proposed decision PD-10: bulk form of the block(...) key changes of one loaded chunk column, always attributed Outside. Expands to exactly the per-key changes it abbreviates: positions in order y (min_y upward), then z (0-15), then x (0-15), each taking palette[run.index] for run.count consecutive positions. Light runs (E-1) are optional and follow the same order.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chunk_load"
+      ],
+      "properties": {
+        "chunk_load": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x",
+            "z",
+            "min_y",
+            "height",
+            "palette",
+            "runs"
+          ],
+          "properties": {
+            "x": {
+              "$ref": "wire.schema.json#/$defs/Int"
+            },
+            "z": {
+              "$ref": "wire.schema.json#/$defs/Int"
+            },
+            "min_y": {
+              "$ref": "wire.schema.json#/$defs/Int"
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 16,
+              "maximum": 4064,
+              "multipleOf": 16
+            },
+            "palette": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "wire.schema.json#/$defs/BlockState"
+              }
+            },
+            "runs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/Run"
+              }
+            },
+            "block_light": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Run"
+              }
+            },
+            "sky_light": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Run"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Run": {
+      "description": "§14.1 PD-10 run-length entry [index, count]: index into the palette (or the light level 0-15), repeated count times.",
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "wire.schema.json#/$defs/NonNegInt"
+        },
+        {
+          "$ref": "wire.schema.json#/$defs/PosInt"
+        }
+      ],
+      "minItems": 2,
+      "items": false
+    },
+    "ChunkUnload": {
+      "description": "§14.1, §15.2 PD-10: bulk form setting every block(...) key of one chunk column (and its E-1 light and sign keys) to null, attributed Outside.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chunk_unload"
+      ],
+      "properties": {
+        "chunk_unload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x",
+            "z"
+          ],
+          "properties": {
+            "x": {
+              "$ref": "wire.schema.json#/$defs/Int"
+            },
+            "z": {
+              "$ref": "wire.schema.json#/$defs/Int"
+            }
+          }
+        }
+      }
+    }
+  }
+}

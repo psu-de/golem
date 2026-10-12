@@ -1,0 +1,18 @@
+{
+  "seq": 5,
+  "tick": 9,
+  "bot": "Lumberjack",
+  "type": "notice",
+  "name": "LogMined",
+  "fields": {
+    "pos": [
+      5,
+      63,
+      5
+    ]
+  },
+  "thread": 1,
+  "job_id": "s-1",
+  "instance": "auto_eat",
+  "handler": 0
+}
