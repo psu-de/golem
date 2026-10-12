@@ -469,7 +469,7 @@ Golem is statically and nominally typed; every value is immutable, and the only 
 | `Face`, `Hand` | enums `Down Up North South West East`; `Main Off` | yes | declaration order | yes |
 | `Region` | inclusive box `min`, `max: BlockPos` | yes | — | yes |
 | `Range`, `SlotRange` | half-open `Int` ranges with members `start` and `end: Int` (decision 117) | yes | — | yes |
-| `ItemType`, `BlockType`, `EntityType` | registry entries | yes | by id | yes |
+| `ItemType`, `BlockType`, `EntityType` | registry entries | yes | by id string, by code point | yes |
 | `BlockState` | block type plus properties | yes | — | yes |
 | `ItemStack` | item, count ≥ 1, components | yes | — | yes |
 | `Tag<T>` | tag of `ItemType`, `BlockType` or `EntityType` | yes | — | yes |
@@ -484,7 +484,7 @@ Golem is statically and nominally typed; every value is immutable, and the only 
 | `Set<T: Eq + Ord>` | distinct elements in ascending order | yes | — | if `T: Wire` |
 | `Map<K: Eq + Ord, V>` | distinct keys in ascending order | if `V: Eq` | — | if both `Wire` |
 | `Entry<K, V>` | one key and value, fields `key` and `value` | if both `Eq` | — | if both `Wire` |
-| `T?` | `none` or a `T` | if `T: Eq` | — | if `T: Wire` |
+| `T?` | `none` or a `T` | if `T: Eq` | — | if `T: Wire` and `T` is not `Unit` |
 
 `T??` is not a type. Set elements and map keys MUST implement both `Eq` and `Ord` (decision 132): `Ord` fixes the iteration order, so it is deterministic (decision 3), and `Eq` decides when two elements or keys are the same. `Set<Float>`, `Map<Angle, V>` and sets of structs with a `Float` field are therefore compile errors.
 
@@ -575,7 +575,9 @@ The JSON form of every wire type is normative (decision 94). A value that does n
 | other `Map<K, V>` | array of `[key, value]` pairs, ascending, without duplicate keys | `[[[0, 64, 0], 3]]` |
 | `T?` | `null` for `none`, else the form of `T` | `null` |
 
-A received set or map whose elements or keys repeat or are out of order is refused with `BadArgs`. Command replies are objects: `{"reply": "accepted", "job_id": "s-1"}` or `{"reply": "refused", "job_id": "s-2", "reason": "Busy"}` (§16.3).
+`Unit?` is not a wire type: its `none` and its value would both be `null`.
+
+A received set or map whose elements or keys repeat or are out of order is refused with `BadArgs`. Command replies are objects: `{"reply": "accepted", "command": "assign", "job_id": "s-1"}` or `{"reply": "refused", "command": "assign", "job_id": "s-2", "reason": "Busy"}`, plus `id` when the command carried one (§16.3).
 
 ## 7. Expressions and fns
 
@@ -653,7 +655,7 @@ A `fn` is a function with no effects (decision 26 as refined by 58):
 
 ### 7.5 Constant expressions
 
-Constant expressions may use literals, `const`s, operators, struct and enum construction, list literals, the `Set` and `Map` constructors and the members of §7.3, filter combinators and calls to view-independent non-extern fns. They are evaluated by the compiler; a defect during evaluation is a compile error. Constants are required for `const` initialisers, field and parameter defaults, `use` and `start` arguments, `config` values, activity `var` initialisers and handler options.
+Constant expressions may use literals, `const`s, operators, struct and enum construction, list literals, the `Set` and `Map` constructors and the members of §7.3, filter combinators and calls to view-independent non-extern fns. They are evaluated by the compiler; a defect during evaluation is a compile error. Constants are required for `const` initialisers, field and parameter defaults, `use` and `start` arguments, `config` values, activity `var` initialisers, handler options and debounce durations.
 
 ### 7.6 The ambient values `bot` and `world`
 
@@ -669,7 +671,7 @@ Filters are immutable data trees of three concrete types, combined with `|`, `&`
 | --- | --- | --- | --- |
 | `ItemFilter` | `ItemStack` or `ItemType` | the stack only | item, item tag, `ItemFilter.ANY`, `ItemFilter.NOTHING`, `damaged()`, `durability_at_least(n: Int)`, `ItemFilter.named(s: String)`, `has_component(id: String)`, `edible()`, `ItemFilter.of(t: ItemType)` |
 | `BlockFilter` | `BlockState` | the state only, never position or world | block, block state, block tag, `BlockFilter.ANY`, `BlockFilter.NOTHING`, `air()`, `liquid()`, `solid()`, `replaceable()`, `breakable()`, `prop(name: String, value: String)`, `BlockFilter.of(t: BlockType)`, `BlockFilter.of(s: BlockState)`, `BlockFilter.placed(s: BlockState)` |
-| `EntityFilter` | `Entity` | the entity and the observing bot | entity type, entity-type tag, selector, `EntityFilter.ANY`, `EntityFilter.NOTHING`, `within(d: Float)`, `EntityFilter.named(s: String)`, `is_player()`, `hostile_type()`, `in_region(r: Region)`, `near(center: Vec3, d: Float)` |
+| `EntityFilter` | `Entity` | the entity and the observing bot | entity type, entity-type tag, selector, `EntityFilter.ANY`, `EntityFilter.NOTHING`, `within(d: Float)`, `EntityFilter.named(s: String)`, `is_player()`, `hostile_type()`, `in_region(r: Region)`, `near(center: Vec3, d: Float)`, and the selector-only leaves `box` and `team` (§8.5) |
 
 Leaf fns live in `golem.filters`; `ItemFilter.named(s)` and `EntityFilter.named(s)` are static fns of their filter types, so no leaf is overloaded by return type (decision 67). When an `ItemFilter` is tested against an `ItemType`, the stack-dependent leaves (`damaged`, `durability_at_least`, `ItemFilter.named`, `has_component`) are false.
 
@@ -702,6 +704,8 @@ An `EntityFilter` is evaluated relative to the observing bot at the moment of ev
 
 A filter serialises as a JSON tree: `{"any":[…]}` for `|`, `{"all":[…]}` for `&`, `{"not":…}`, and one object per leaf, such as `{"item":"minecraft:oak_log"}`, `{"tag":"minecraft:logs"}` or `{"within":16.0}`. A supervisor can therefore send filters as job arguments. The runtime validates registry ids in a received filter and refuses the job with `BadArgs` if one is unknown (§16.3).
 
+The selector box serialises as `{"box": {"x": …, "y": …, "z": …, "dx": …, "dy": …, "dz": …}}` and `team=` as `{"team": "name"}`. A selector serialises as `{"all": […]}` of its argument leaves.
+
 `ItemFilter.of(t)` and `BlockFilter.of(t)` serialise as the literal leaf for `t`, and `BlockFilter.of(s)` as the leaf of its `BLOCKSTATE` literal. The new leaves serialise as `{"placed": "minecraft:oak_stairs[facing=east,half=bottom]"}` and `{"near": {"center": [0.5, 64.0, 0.5], "d": 8.0}}`; all other values use the forms of §6.9.
 
 ### 8.5 Selectors
@@ -713,8 +717,10 @@ A filter serialises as a JSON tree: `{"any":[…]}` for `|`, `{"all":[…]}` for
 | `type=` | `[!]RESOURCE` or `[!]TAG` | entity type or tag; `!` negates; may repeat only when negated |
 | `distance=` | number, or range `a..b`, `..b`, `a..` of numbers | `within(b)`, combined with `!within(a)` for a lower bound (strict) |
 | `name=` | `[!]"string"` | custom name or player name |
-| `x= y= z= dx= dy= dz=` | numbers | a box as in vanilla; all six MUST be given together |
-| `team=` | `[!]name` | scoreboard team as known to the client |
+| `x= y= z= dx= dy= dz=` | numbers | the leaf `box`, matching vanilla; all six MUST be given together |
+| `team=` | `[!]name` | the leaf `team`: scoreboard team as known to the client |
+
+A `distance=` value that is a single number `n` means `within(n)`, not vanilla's exact distance.
 
 Vanilla arguments the client cannot observe (`tag`, `scores`, `nbt`, `advancements`, `level`, `gamemode`) and selection arguments (`limit`, `sort`) are compile errors. Selection is explicit: `world.entities(f)` returns a snapshot list sorted by distance, then entity id, and `world.nearest(f)` returns one live handle or `none` (§17.2).
 
@@ -973,7 +979,7 @@ Trigger expressions are view-dependent `Bool` expressions evaluated on the confi
 | `on e(x, _) [if g]` | Once for each occurrence of event `e` from the catalog (§17.6), with fields bound positionally, when `g` holds. |
 | `on enter c` | In each tick where `c` is true and was false at the previous evaluation. The previous value starts as `false`, so it fires in the first tick if `c` holds then. |
 | `on exit c` | In each tick where `c` is false and was true at the previous evaluation. The previous value starts as `false`, so it never fires in the first tick. |
-| `when c [for D] [until u]` | Level trigger with debounce `D` (default `1t`) and hysteresis `u`; see §11.4. |
+| `when c [for D] [until u]` | Level trigger with debounce `D` (default `1t`) and hysteresis `u`; see §11.4. `D` is a constant expression that MAY use the activity's parameters and MUST be ≥ `1t`. |
 | `every D` | Once per period of `D` wall ticks, starting in the first tick; see §11.4. |
 
 Event names live in their own namespace, so `on chat(…)` does not clash with the `chat` task. The binder count MUST equal the event's field count.
@@ -1017,7 +1023,7 @@ Options are constant expressions; they may use the activity's parameters. `queue
 
 ### 11.6 Ordering
 
-Handlers are evaluated in a fixed order: activities in the order of their `use` lines, then handlers in declaration order. New threads created in one tick receive ascending thread ids in that order, which breaks priority ties deterministically (§15.3).
+Handlers are evaluated in a fixed order: activities in the order of their `use` lines, then handlers in declaration order. New threads created in one tick receive ascending thread ids in that order, which breaks priority ties deterministically (§15.3). A handler's index in its activity's declaration order is its identity in reports, snapshots and persistence.
 
 ### 11.7 Activities attached to jobs
 
@@ -1108,7 +1114,7 @@ Connection details (server address, account, authentication) are never in source
 
 `Disconnected`, `Kicked` and `Died` are handled by the runtime, not by tasks (decision 12). Each one cancels every thread at once, without running defers (decision 62), and reports the job as failed with that reason.
 
-- After `Disconnected` or `Kicked`, the runtime waits `reconnect_delay` and reconnects, up to `max_reconnects` consecutive failures. Activity state and handler backoff survive; the job does not, and is reassigned only by the supervisor or the `start` item.
+- After `Disconnected` or `Kicked`, the runtime waits `reconnect_delay` and reconnects, up to `max_reconnects` consecutive failures. Activity state and handler backoff survive; the job does not, and is reassigned only by the supervisor or the `start` item. When the limit is reached, the last `disconnected` report has `final` true and the session ends.
 - After `Died`, the bot stays connected and dead. The `died` event fires (§17.6). Leaving the death screen is policy: `golem.survival.auto_respawn` calls `respawn`. Without it, the bot stays dead and every job assignment is refused with `NotReady` (§16.3).
 
 ## 13. Static analysis
@@ -1131,8 +1137,8 @@ The compiler rejects any program that fails a check below; all of them run after
 | 10 | Ongoing tasks never reach their end; ongoing calls appear only where allowed. | §13.6 |
 | 11 | `match` is exhaustive; `let … else` blocks diverge. | §10.1, §10.2 |
 | 12 | Wire types are used where required. | §6.9 |
-| 13 | Handlers: events exist, binder counts match, options are constant, `queue` only on `on`. | §11 |
-| 14 | Bots: instance names unique, jobs valid, `start` in `jobs`, config keys known. | §12 |
+| 13 | Handlers: events exist, binder counts match, options and debounce durations are constant, `queue` only on `on`. | §11 |
+| 14 | Bots: instance names unique, jobs valid, `start` in `jobs`, config keys known; the user-declared failures, and the notices, that a bot reaches have distinct simple names, none equal to a built-in failure's name. | §12 |
 
 Warnings, not errors: catch arms for failures that cannot occur, unused imports, and `requires` clauses implied by a callee's own `requires`.
 
@@ -1158,7 +1164,7 @@ A block is *structurally bounded* if every statement in it is: a binding, assign
 
 ### 13.5 Failure inference
 
-The compiler computes, for every task, the set of failures a call may raise, and exports it in the IR (decision 10). It is the union of: the task's `fails` list; `else` failures of its clauses; implicit failures by condition (`Unmet` if some `requires` lacks `else`, `Broken` likewise for `invariant` and `maintains`, `Timeout` for `timeout`, `wait until` without `else`, and any body that may pin its thread (§15.3), `Stalled` for `progress`, `stalls_after` and `while … decreasing`, `Rejected` and `Unconfirmed` if it may call an extern task, `Interfered` if it or a callee has `ensures`, `WindowClosed` if it may use `screen`); and the inferred sets of its callees minus failures caught around each call.
+The compiler computes, for every task, the set of failures a call may raise, and exports it in the IR (decision 10). It is the union of: the task's `fails` list; `else` failures of its clauses; implicit failures by condition (`Unmet` if some `requires` lacks `else`, `Broken` likewise for `invariant` and `maintains`, `Timeout` for `timeout`, `wait until` without `else`, and any body that may pin its thread (§15.3), `Stalled` for `progress`, `stalls_after` and `while … decreasing`, `Rejected` and `Unconfirmed` if it is or directly calls an extern task, `Interfered` if it has `ensures`, `WindowClosed` if it may use `screen`); and the inferred sets of its callees minus failures caught around each call. Failures of callees reach the caller only through the callees' inferred sets minus the failures caught around each call.
 
 ### 13.6 Ongoing rules
 
@@ -1174,12 +1180,14 @@ The world model is a map from keys to values. Keys are the unit of change tracki
 
 | Family | Keys |
 | --- | --- |
-| Blocks | `block(pos)` for every loaded position |
-| Player | position, rotation, health, food, saturation, oxygen, effects, on-ground, in-water, in-lava, sneaking, sprinting, using-item, sleeping, dead, dimension, held slot |
+| Blocks | `block(pos)`, `block_light(pos)`, `sky_light(pos)` and the sign text at pos, for every loaded position |
+| Player | position, rotation, health, food, saturation, oxygen, effects, on-ground, in-water, in-lava, sneaking, sprinting, using-item, sleeping, dead, dimension, held slot, on-fire, vehicle, attributes (block\_interaction\_range, entity\_interaction\_range) |
 | Inventory | each player inventory slot 0–45 (vanilla numbering, §17.4), the cursor |
 | Window | the open window's id and kind, each of its slots, each of its properties |
-| Entities | per entity id: type, position, name, health if sent, equipment, passengers, alive |
+| Entities | per entity id: type, position, name, health if sent, equipment, passengers, alive, the stack of an item entity, the owner of a projectile or fishing hook, the bite flag of a fishing hook |
 | World | time of day, weather, tag contents, known recipes |
+
+`bot.path_progress` is not world state: the backend reports it with each tick's input (§18.4) and it is never attributed or read-tracked. The canonical string form of every key, as carried by `Interfered.key`, is fixed by the interface contracts.
 
 The bot's own position follows vanilla: the client is authoritative for movement and the server only corrects it. The confirmed position is therefore the backend's simulated position, replaced whenever a correction arrives.
 
@@ -1307,21 +1315,26 @@ User failures are declared with `failure Name(fields)`; fields MUST be wire type
 
 The runtime emits one JSON object per line. Every message has `seq` (per-bot counter), `tick`, `bot` and `type`; failures appear as `{"type": "NoPath", "fields": {…}, "trace": […]}`.
 
+Failure `type` and notice `name` are the declared simple names; §13.1 check 14 makes them unique per bot.
+
 | Type | Emitted when | Extra fields |
 | --- | --- | --- |
 | `hello` | after each connect | IR hash, Minecraft version, job signatures, activity instances |
 | `job_started` / `job_completed` / `job_failed` / `job_cancelled` | job lifecycle | `job_id`, `result` or `failure` |
 | `thread_started` / `thread_ended` | any thread | `thread`, `kind`, `priority`, outcome |
 | `frozen` / `resumed` | scheduling changes | `thread`, `by` (the thread that took the resources, or `pause`) |
-| `task_started` / `task_completed` / `task_failed` | every frame of a task marked `pub` | `thread`, `frame`, `task`, `failure` |
+| `task_started` / `task_completed` / `task_failed` / `task_cancelled` | every frame of a task marked `pub`; `task_cancelled` when a cancelled frame finishes unwinding | `thread`, `frame`, `task`, `failure` |
 | `progress` | a `progress` metric improves, at most once per second per frame | `frame`, `value` |
 | `rollback` | §14.4 | `thread`, `action`, `failure` |
 | `notice` | `notify` | `name`, `fields`, `thread`, and `job_id` from a job thread or `instance` and `handler` from a handler thread (decision 94) |
 | `handler_failed` / `handler_backoff` / `handler_disabled` / `event_dropped` | §11.4, §11.5 | `instance`, `handler` |
 | `defer_failed` | §10.6 | `frame`, `failure` |
-| `disconnected` / `reconnected` / `died` / `respawned` | infrastructure | `reason` |
+| `disconnected` / `reconnected` / `died` / `respawned` | infrastructure | `reason`; `disconnected` also `kind` (`Disconnected` or `Kicked`) and `final`, true when no reconnect will follow |
+| `state_not_restored` | §18.5, once per item, after the session's first `hello` | `instance`, `name` (a var name, or `handler:<index>`), `reason` (`missing`, `type_changed` or `instance_gone`) |
 
-The field types of these messages are fixed by the report schema of the interface contracts, which v0.2 does not yet include (review finding 2).
+The `handler` field is the handler's index (§11.6).
+
+The field types of these messages are fixed by the report schema of the interface contracts, `@golem/contracts` 0.1.0 (`contracts/`).
 
 ### 16.3 Supervisor commands
 
@@ -1334,6 +1347,10 @@ The supervisor sends JSON commands; each gets `accepted` or `refused` with a rea
 | `pause {job_id}` | Freezes the job until `resume` (§15.3). | `NoJob` |
 | `resume {job_id}` | Makes the job a candidate again. | `NoJob`, `NotPaused` |
 | `snapshot {}` | Returns the read-only machine state: threads, strands, frames with task, statechart state id (§18.3), elapsed ticks and wire-typed arguments. | none |
+
+Any command MAY carry `id`, a string of 1–128 characters chosen by the supervisor; its reply carries the same `id`. Without `id`, replies correlate with commands by order, since commands are applied and answered in arrival order. Every reply also carries `command`, the name of the command it answers.
+
+A line that is not a valid command (not JSON, an unknown `command`, a missing or mistyped field) is refused with `BadCommand`, carrying the readable `command` name or `""`. The runtime never closes the command stream because of one.
 
 There is no command that changes a running job's arguments or writes machine state. A supervisor changes parameters by cancelling and assigning again, which is safe because tasks are restartable (decision 19). The transport (WebSocket, stdio) is implementation-defined; the message formats are normative.
 
@@ -1514,7 +1531,7 @@ A shaped recipe lists `width × height` cells row-major; a shapeless one has `wi
 2. Build a flow network: source → each cell `c` with capacity 1; cell `c` → item type `t` with capacity 1 when `t ∈ c.items` and `t`'s maximum stack size is at least `n`; type `t` → sink with capacity `floor(count(t) / n)`.
 3. `satisfies` is true exactly when the maximum flow equals `|C|`.
 
-`plan(r, n)` returns the type assigned to each cell, or `none`. It runs augmenting paths by breadth-first search, visiting cells in index order and types in ascending registry id, so the plan is deterministic. A greedy match would fail on overlapping tags such as `#minecraft:planks`.
+`plan(r, n)` returns the type assigned to each cell, or `none`. It runs augmenting paths by breadth-first search, visiting cells in index order and types in ascending id (§6.1), so the plan is deterministic. A greedy match would fail on overlapping tags such as `#minecraft:planks`.
 
 **Recipe source.** `world.*_recipes_*` return the target version's vanilla recipes, supplied by the backend from its version data. A backend MAY add recipes the server announces. Datapack recipes the backend does not know are invisible, and crafting a recipe the server lacks fails with `Rejected`.
 
@@ -2681,7 +2698,7 @@ pub task cook_campfire(pos: BlockPos, r: ProcessingRecipe, n: Int) {
 
 ## 18. Compilation, IR and backends
 
-The compiler turns a project into one self-contained IR file per bot; a runtime loads it and drives a backend through a small interface, so Mineflayer can later be swapped for azalea without touching programs. The IR schema and the typed backend interface are the subject of the interface contracts (review finding 2) and are not yet part of v0.2.
+The compiler turns a project into one self-contained IR file per bot; a runtime loads it and drives a backend through a small interface, so Mineflayer can later be swapped for azalea without touching programs. The IR schema and the typed backend interface are defined by the interface contracts, `@golem/contracts` 0.1.0 (`contracts/`).
 
 ### 18.1 Compiler pipeline
 
@@ -2736,7 +2753,7 @@ The tick clock is the backend's physics tick at 20 Hz. **Mineflayer mapping (fir
 
 ### 18.5 Persistence and reload
 
-After every tick in which they changed, the runtime stores each activity instance's `var` values and each handler's backoff state, keyed by instance and name. On restart, a value is restored when the new IR has the same instance, name and type; otherwise the declared initial value is used and the mismatch is reported. Jobs are never persisted: tasks are restartable and the supervisor reassigns them.
+After every tick in which they changed, the runtime stores each activity instance's `var` values and each handler's backoff state, keyed by instance and var name or handler index (§11.6). On restart, a value is restored when the new IR has the same instance, name and type; otherwise the declared initial value is used and the mismatch is reported (`state_not_restored`, §16.2). Jobs are never persisted: tasks are restartable and the supervisor reassigns them.
 
 A new IR may be loaded only while no job and no handler thread is running; state carries over by the same rule. Reloading a bot in the middle of a job is out of scope.
 
