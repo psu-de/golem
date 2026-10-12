@@ -1,98 +1,98 @@
 {
   "experiment": "E1 clock and ingest",
   "clock": {
-    "minutes": 1,
-    "ticks": 1217,
-    "elapsed_ms": 60932.8,
-    "drift_ms": 132.8,
-    "drift_ppm": 2179,
+    "minutes": 10,
+    "ticks": 12017,
+    "elapsed_ms": 600891.1,
+    "drift_ms": 91.1,
+    "drift_ppm": 152,
     "ticks_by_source": {
-      "timer": 209,
-      "physics": 1008
+      "timer": 207,
+      "physics": 11810
     },
     "reentrant_calls": 0,
     "interval_all": {
-      "n": 1216,
-      "mean": 50.109,
-      "sd": 4.867,
-      "min": 0.641,
-      "p01": 47.591,
-      "p50": 50.144,
-      "p95": 51.311,
-      "p99": 55.826,
-      "max": 121.258
+      "n": 12016,
+      "mean": 50.008,
+      "sd": 5.236,
+      "min": 0.395,
+      "p01": 47.742,
+      "p50": 50.148,
+      "p95": 51.002,
+      "p99": 52.542,
+      "max": 148.627
     },
     "interval_physics": {
-      "n": 1005,
-      "mean": 50.043,
-      "sd": 4.778,
-      "min": 0.641,
-      "p01": 47.591,
-      "p50": 50.159,
-      "p95": 51.075,
-      "p99": 55.485,
-      "max": 100.375
+      "n": 11807,
+      "mean": 49.992,
+      "sd": 5.188,
+      "min": 0.395,
+      "p01": 47.742,
+      "p50": 50.149,
+      "p95": 50.995,
+      "p99": 52.468,
+      "max": 148.627
     },
     "interval_timer": {
-      "n": 206,
-      "mean": 49.999,
-      "sd": 1.468,
-      "min": 39.867,
-      "p01": 47.705,
-      "p50": 49.929,
-      "p95": 51.542,
-      "p99": 51.837,
-      "max": 61.817
+      "n": 204,
+      "mean": 50.047,
+      "sd": 1.321,
+      "min": 43.245,
+      "p01": 48.046,
+      "p50": 49.994,
+      "p95": 51.407,
+      "p99": 51.993,
+      "max": 60.784
     },
-    "intervals_under_25ms": 7,
-    "intervals_over_75ms": 4,
+    "intervals_under_25ms": 88,
+    "intervals_over_75ms": 45,
     "source_switches": [
       {
-        "tick": 3,
+        "tick": 2,
         "from": "timer",
         "to": "physics",
-        "ms": 68.3
+        "ms": 75.6
       },
       {
-        "tick": 416,
+        "tick": 3980,
         "from": "physics",
         "to": "timer",
-        "ms": 51.6
+        "ms": 51.3
       },
       {
-        "tick": 519,
+        "tick": 4083,
         "from": "timer",
         "to": "physics",
-        "ms": 121.3
+        "ms": 117.6
       },
       {
-        "tick": 810,
+        "tick": 7938,
         "from": "physics",
         "to": "timer",
-        "ms": 51.9
+        "ms": 52.6
       },
       {
-        "tick": 913,
+        "tick": 8040,
         "from": "timer",
         "to": "physics",
-        "ms": 46
+        "ms": 127.9
       }
     ],
     "timer_runs": [
       {
         "from": 0,
-        "n": 3,
-        "to": 2
+        "n": 2,
+        "to": 1
       },
       {
-        "from": 416,
+        "from": 3980,
         "n": 103,
-        "to": 518
+        "to": 4082
       },
       {
-        "from": 810,
-        "n": 103,
-        "to": 912
+        "from": 7938,
+        "n": 102,
+        "to": 8039
       }
     ],
     "drift_series": [
@@ -104,72 +104,117 @@
       {
         "tick": 1200,
         "minute": 1,
-        "drift_ms": 127
+        "drift_ms": 16.6
+      },
+      {
+        "tick": 2400,
+        "minute": 2,
+        "drift_ms": 18.2
+      },
+      {
+        "tick": 3600,
+        "minute": 3,
+        "drift_ms": 17.2
+      },
+      {
+        "tick": 4800,
+        "minute": 4,
+        "drift_ms": 78.6
+      },
+      {
+        "tick": 6000,
+        "minute": 5,
+        "drift_ms": 62.1
+      },
+      {
+        "tick": 7200,
+        "minute": 6,
+        "drift_ms": 46
+      },
+      {
+        "tick": 8400,
+        "minute": 7,
+        "drift_ms": 104.6
+      },
+      {
+        "tick": 9600,
+        "minute": 8,
+        "drift_ms": 107.5
+      },
+      {
+        "tick": 10800,
+        "minute": 9,
+        "drift_ms": 110.3
+      },
+      {
+        "tick": 12000,
+        "minute": 10,
+        "drift_ms": 86.2
       }
     ],
     "tick_cost_ms": {
-      "n": 1198,
-      "mean": 1.418,
-      "sd": 4.353,
-      "min": 0.138,
-      "p01": 0.188,
-      "p50": 0.649,
-      "p95": 2.858,
-      "p99": 28.57,
-      "max": 45.564
+      "n": 11998,
+      "mean": 0.715,
+      "sd": 1.719,
+      "min": 0.057,
+      "p01": 0.184,
+      "p50": 0.554,
+      "p95": 1.209,
+      "p99": 4.179,
+      "max": 55.975
     },
     "slowest_ticks": [
       {
-        "tick": 20,
-        "ms": 45.6
+        "tick": 4091,
+        "ms": 56
       },
       {
-        "tick": 913,
-        "ms": 38.9
+        "tick": 22,
+        "ms": 54.9
       },
       {
-        "tick": 28,
-        "ms": 36.5
+        "tick": 8054,
+        "ms": 49.5
       },
       {
-        "tick": 519,
-        "ms": 36.1
+        "tick": 4088,
+        "ms": 47.9
       },
       {
-        "tick": 530,
-        "ms": 35.7
+        "tick": 4096,
+        "ms": 46
       }
     ]
   },
   "replay": {
-    "recorded_ticks": 1217,
-    "live_decisions": 1286,
-    "live_ops": 69,
+    "recorded_ticks": 12017,
+    "live_decisions": 12711,
+    "live_ops": 694,
     "replay_identical": true,
     "first_difference": null,
     "control_perturbed_report_detected": true,
     "control_without_deltas_identical": false,
     "ops_by_kind": {
-      "pathfind": 18,
-      "place_block": 10,
-      "look_at": 10,
-      "sneak": 10,
-      "cancel": 9,
-      "dig": 10,
+      "pathfind": 199,
+      "place_block": 95,
+      "look_at": 95,
+      "sneak": 100,
+      "cancel": 108,
+      "dig": 95,
       "connect": 2
     },
     "final_program_state": {
       "phase": "run",
-      "step": 16,
-      "cur": 58,
-      "wait": 958,
-      "cycles": 8,
-      "outsideB": 0,
-      "rejected": 0,
+      "step": 192,
+      "cur": 584,
+      "wait": 11757,
+      "cycles": 98,
+      "outsideB": 9,
+      "rejected": 4,
       "failed": 0,
       "disc": null,
-      "paused": 1,
-      "predicted": 10,
+      "paused": 13,
+      "predicted": 95,
       "lookAlt": 0,
       "bootAt": 0,
       "lookAt": [
@@ -180,23 +225,24 @@
     }
   },
   "tickinput_inventory": {
-    "ticks": 1217,
-    "key_changes": 1374,
-    "own": 1043,
-    "outside": 331,
-    "chunk_load": 370,
-    "chunk_unload": 19,
+    "ticks": 12017,
+    "key_changes": 14811,
+    "own": 13334,
+    "outside": 1477,
+    "chunk_load": 383,
+    "chunk_unload": 32,
     "events": {
       "system": 1,
-      "entity_appeared": 23,
-      "chat": 2,
-      "entity_gone": 13,
-      "item_collected": 6
+      "entity_appeared": 199,
+      "chat": 14,
+      "entity_gone": 180,
+      "item_collected": 71
     },
     "reports": {
-      "Running": 893,
-      "Confirmed": 46,
-      "Issued": 19
+      "Running": 10692,
+      "Confirmed": 469,
+      "Issued": 187,
+      "Rejected": 4
     },
     "infra": {
       "connected": 3,
@@ -204,26 +250,26 @@
       "kicked": 1,
       "disconnected": 1
     },
-    "path_progress_non_null": 622,
-    "rtt_non_null": 1216,
+    "path_progress_non_null": 6647,
+    "rtt_non_null": 12015,
     "keys_by_family": {
-      "player": 1073,
-      "inventory": 159,
+      "player": 13316,
+      "inventory": 306,
       "window": 6,
       "world": 6,
-      "entity": 111,
-      "block": 19
+      "entity": 984,
+      "block": 193
     },
     "round_trip_ms": {
-      "n": 1216,
-      "mean": 1.41,
-      "sd": 1.817,
+      "n": 12015,
+      "mean": 0.786,
+      "sd": 1.592,
       "min": 0,
       "p01": 0,
       "p50": 1,
-      "p95": 3,
-      "p99": 10,
-      "max": 10
+      "p95": 2,
+      "p99": 4,
+      "max": 33
     }
   },
   "validation": {
@@ -237,19 +283,19 @@
         "invalid": 0
       },
       "tickInput": {
-        "valid": 1217,
+        "valid": 12017,
         "invalid": 0
       },
       "recordedTick": {
-        "valid": 1217,
+        "valid": 12017,
         "invalid": 0
       },
       "startRequest": {
-        "valid": 58,
+        "valid": 584,
         "invalid": 0
       },
       "delta": {
-        "valid": 10,
+        "valid": 95,
         "invalid": 0
       }
     },
@@ -257,39 +303,139 @@
   },
   "script_events": [
     {
-      "what": "kick",
-      "tick": 415,
-      "t": 19813.857973
+      "what": "rival chat pause",
+      "tick": 919,
+      "t": 45030.43395599999
     },
     {
-      "what": "reconnect",
-      "tick": 517,
-      "t": 24880.963857999996
-    },
-    {
-      "what": "connected",
-      "tick": 519,
-      "t": 24988.403416
-    },
-    {
-      "what": "socket destroyed",
-      "tick": 810,
-      "t": 39625.762951
-    },
-    {
-      "what": "reconnect",
-      "tick": 911,
-      "t": 44649.226978
-    },
-    {
-      "what": "connected",
-      "tick": 912,
-      "t": 44730.059654
+      "what": "console setblock B",
+      "tick": 1419,
+      "t": 70027.483309
     },
     {
       "what": "rival chat pause",
-      "tick": 918,
-      "t": 45016.936086999995
+      "tick": 1819,
+      "t": 90007.846911
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 2719,
+      "t": 135013.888404
+    },
+    {
+      "what": "console setblock B",
+      "tick": 2819,
+      "t": 140033.049608
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 3619,
+      "t": 180019.148793
+    },
+    {
+      "what": "kick",
+      "tick": 3979,
+      "t": 198024.411564
+    },
+    {
+      "what": "reconnect",
+      "tick": 4081,
+      "t": 203138.996372
+    },
+    {
+      "what": "connected",
+      "tick": 4083,
+      "t": 203207.500516
+    },
+    {
+      "what": "console setblock B",
+      "tick": 4218,
+      "t": 210004.490033
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 4518,
+      "t": 225042.52842000002
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 5419,
+      "t": 270034.23947000003
+    },
+    {
+      "what": "console setblock B",
+      "tick": 5619,
+      "t": 280041.721778
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 6319,
+      "t": 315041.74022700003
+    },
+    {
+      "what": "console setblock B",
+      "tick": 7018,
+      "t": 350021.592519
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 7218,
+      "t": 360008.015751
+    },
+    {
+      "what": "socket destroyed",
+      "tick": 7938,
+      "t": 396018.133937
+    },
+    {
+      "what": "reconnect",
+      "tick": 8039,
+      "t": 401042.244062
+    },
+    {
+      "what": "connected",
+      "tick": 8040,
+      "t": 401097.039907
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 8117,
+      "t": 405013.082582
+    },
+    {
+      "what": "console setblock B",
+      "tick": 8417,
+      "t": 420016.45032
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 9017,
+      "t": 450016.598771
+    },
+    {
+      "what": "console setblock B",
+      "tick": 9817,
+      "t": 490024.110126
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 9917,
+      "t": 495037.650465
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 10817,
+      "t": 540005.5519269999
+    },
+    {
+      "what": "console setblock B",
+      "tick": 11217,
+      "t": 560009.4063119999
+    },
+    {
+      "what": "rival chat pause",
+      "tick": 11717,
+      "t": 585036.381894
     }
   ]
 }
