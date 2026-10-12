@@ -20,7 +20,10 @@ cd spike
 npm ci                         # exact pins from package.json / package-lock.json
 ./scripts/fetch-server.sh      # server.jar 1.21.4 via Mojang's version manifest, SHA-1 verified
 ./scripts/datagen.sh           # vanilla data generator output into server/1.21.4/generated
+./scripts/extract-shapes.sh    # E6: shapes, hardness, item->block from server.jar via Mojang's mappings
 ```
+
+`fetch-server.sh` also fetches `server_mappings.txt` (SHA-1 verified), which only the E6 extractor uses. `extract-shapes.sh` needs a JDK (`javac`) and the libraries `datagen.sh` unpacks.
 
 ## Experiments
 
@@ -51,6 +54,7 @@ Each command starts its own server (fresh world under `server/run/<exp>/`), conn
 | `lib/server.mjs`, `lib/harness.mjs` | Server process, second player, result files |
 | `data/placement-table.json` | DRAFT v0.1 placement table (E6) |
 | `data/burn-times.json` | DRAFT v0.1 furnace burn-time table (E6) |
+| `tools/ShapeExtractor.java` | E6: reads outline/collision shapes, hardness, requires-correct-tool and item → block from the pinned server.jar by reflection through Mojang's published mappings |
 | `experiments/` | E0–E6 |
 
 ## Notes for reproducing numbers

@@ -18,6 +18,7 @@ Each entry gives the question, why it matters, the evidence, and the proposed an
 | SE-10 | Rotation convention of `player.rotation` (`Angle` radians, but which zero and sign?) | Vanilla convention in radians: yaw 0 = +z (south), clockwise; pitch positive looking down; yaw normalised to (−π, π]; the value is the rotation last sent to the server or set by it | §14.1 |
 | SE-11 | Is "immediate" flushing conforming? | Yes; determinism is defined at the ingest boundary (§15.5), but backends SHOULD defer (`flush: "deferred"`) | §15.2, §15.5, §18.4 |
 | SE-12 | Client-authoritative position: outside forces (knockback, pushing) during `pathfind` cannot be separated from own movement | Accept: position changes while a `pathfind` runs are Own unless they are a server correction; document the residual | §14.5 |
+| SE-13 | Is the S-3 change to `VersionDataSources` a 0.1.1 erratum (D3 clause) or 0.2 (additive field)? | 0.1.1 under the D3 clause: the definition is provisional and only the example produces it | contracts |
 
 ---
 
@@ -61,7 +62,7 @@ Each entry gives the question, why it matters, the evidence, and the proposed an
 **Evidence.** In the spike backend the confirmed view holds only server data; predictions live in the runtime's predicted view (§14.2).
 
 - E3 D3, D4, P2, P3, P4, A7 and A8 were refused. The server sent 1–2 block updates repeating the current value, and the confirmed view saw **no change**.
-- Mineflayer's own `bot.dig` writes its prediction into the world (`node_modules/mineflayer/lib/plugins/digging.js:155`, `bot._updateBlockState(block.position, 0)`). That is one reason the spike does not use it (E2).
+- Mineflayer's own `bot.dig` writes its prediction into the world (`node_modules/mineflayer/lib/plugins/digging.js:158`, `bot._updateBlockState(block.position, 0)`). That is one reason the spike does not use it (E2).
 
 **Proposed answer.** Rewrite the sentence: a refused action leaves the confirmed view unchanged. A server update that repeats a key's current value is not a change and is never attributed. The predicted view is discarded by rollback (§14.4).
 
@@ -153,6 +154,19 @@ Errata wording is in proposed-errata.md (§15.2 step 7, §15.5).
 
 - `pathfind`'s own `ensures` is `goal.reached`, which the pathfinder re-pursues after the push;
 - after the verdict, position changes are Outside under the refined rule.
+
+## SE-13: Versioning of the S-3 contract change
+
+**Question.** `contracts/CONTRACTS.md`, "Versioning and freeze policy", says two things:
+
+- any additive field is a contract version `0.2`;
+- "D3 outcomes may still change the provisional items listed in SPIKE_DEPENDENCIES.md … such a change is an erratum confined to those definitions."
+
+The S-3 outcome (proposed-errata.md C-5) replaces `physics`'s shape and adds a required `fuel` source to the provisional `VersionDataSources`.
+
+**Why it matters.** 0.2 means new `$id`s, `ir_format` and `protocol` across the whole package for a change confined to `launch.json`'s `data` object.
+
+**Proposed answer.** Treat it as 0.1.1 under the D3 clause. The definition is provisional, it is confined to `launch.json`, and no producer exists yet besides the example and one invalid fixture. Record it in the CONTRACTS.md versioning note as the one D3 shape change.
 
 ---
 

@@ -5,6 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 ./scripts/fetch-server.sh 1.21.4
 ./scripts/datagen.sh 1.21.4
+./scripts/extract-shapes.sh 1.21.4
 mkdir -p results/{e0,e1,e2,e3,e4,e5,e6}/raw
 node experiments/e0-versions.mjs              > results/e0/raw/run.log 2>&1
 node experiments/e1-clock.mjs --minutes 10    > results/e1/raw/run.log 2>&1

@@ -145,6 +145,46 @@ coverage.tool_speed_vs_datagen.by_material = Object.entries(speedDisagree.reduce
 save(exp, "inventory.json", { datagen: inventory, minecraft_data: coverage });
 console.log(JSON.stringify({ inventory: { ...inventory, recipe_types: inventory.recipe_types.length, item_components_present: inventory.item_components_present.length }, coverage: { ...coverage, data_paths: undefined } }, null, 1));
 
+// ------------------------------------------------------------------ A3. server.jar extractor vs minecraft-data
+// tools/ShapeExtractor.java (scripts/extract-shapes.sh) reads the pinned server.jar through Mojang's
+// mappings: outline and collision shape per state, hardness, requiresCorrectToolForDrops, item -> block.
+const EXTRACTED = join(SPIKE, "server", MC_VERSION, "extracted", "blocks-shapes.json");
+if (existsSync(EXTRACTED)) {
+  const ex = JSON.parse(readFileSync(EXTRACTED, "utf8"));
+  const norm = (boxes) => JSON.stringify([...boxes].map((b) => b.map((v) => Math.round(v * 1e5) / 1e5)).sort());
+  const vol = (boxes) => boxes.reduce((n, b) => n + (b[3] - b[0]) * (b[4] - b[1]) * (b[5] - b[2]), 0);
+  let colSame = 0, colSameVolume = 0, colDiff = [], outlineDiffers = 0, outlineDiffBlocks = new Set(), emptyCollisionWithOutline = new Set();
+  let hardSame = 0, hardDiff = [], reqSame = 0, reqDiff = [];
+  for (const [name, b] of Object.entries(ex.blocks)) {
+    const md = mcd.blocksByName[strip(name)];
+    if (Math.abs(md.hardness - b.hardness) < 1e-6) hardSame++; else hardDiff.push(`${strip(name)}: mc-data ${md.hardness}, server ${b.hardness}`);
+    if (!!md.harvestTools === b.requires_correct_tool) reqSame++; else reqDiff.push(`${strip(name)}: mc-data ${!!md.harvestTools}, server ${b.requires_correct_tool}`);
+    const mdShape = shapes.blocks[strip(name)];
+    for (const [sid, [outline, collision]] of Object.entries(b.states)) {
+      const i = +sid - md.minStateId;
+      const mdBoxes = shapes.shapes[Array.isArray(mdShape) ? mdShape[i] : mdShape] ?? [];
+      const exBoxes = ex.shapes[collision];
+      if (norm(mdBoxes) === norm(exBoxes)) colSame++;
+      else if (Math.abs(vol(mdBoxes) - vol(exBoxes)) < 1e-6) colSameVolume++;
+      else colDiff.push(`${strip(name)} state ${sid}`);
+      if (norm(ex.shapes[outline]) !== norm(exBoxes)) { outlineDiffers++; outlineDiffBlocks.add(strip(name)); }
+      if (exBoxes.length === 0 && ex.shapes[outline].length > 0) emptyCollisionWithOutline.add(strip(name));
+    }
+  }
+  const renamed = Object.entries(ex.items).filter(([k, v]) => k !== v.block || v.wall_block).map(([k, v]) => `${strip(k)} -> ${strip(v.block)}${v.wall_block ? ` / ${strip(v.wall_block)}` : ""}`);
+  coverage.server_jar_extractor = {
+    states: Object.values(ex.blocks).reduce((n, b) => n + Object.keys(b.states).length, 0), distinct_shapes: ex.shapes.length, block_items: Object.keys(ex.items).length,
+    collision_vs_minecraft_data: { identical: colSame, same_volume_different_split: colSameVolume, different: colDiff.length, examples: colDiff.slice(0, 15) },
+    hardness_vs_minecraft_data: { agree: hardSame, disagree: hardDiff.length, examples: hardDiff.slice(0, 10) },
+    requires_tool_vs_minecraft_data_harvestTools: { agree: reqSame, disagree: reqDiff.length, examples: reqDiff.slice(0, 10) },
+    outline_differs_from_collision: { states: outlineDiffers, blocks: outlineDiffBlocks.size, examples: [...outlineDiffBlocks].slice(0, 25) },
+    empty_collision_but_outline: { blocks: emptyCollisionWithOutline.size, examples: [...emptyCollisionWithOutline].slice(0, 25), lumberjack_relevant: ["oak_sapling", "torch", "wall_torch", "short_grass", "wheat"].filter((n) => emptyCollisionWithOutline.has(n)) },
+    items_placing_a_differently_named_block: { count: renamed.length, examples: renamed.slice(0, 40) },
+  };
+  save(exp, "inventory.json", { datagen: inventory, minecraft_data: coverage });
+  console.log(JSON.stringify(coverage.server_jar_extractor, null, 1));
+} else console.log("no extractor output: run scripts/extract-shapes.sh");
+
 export { toolRule, tag, blocks, items, mcd };
 if (process.argv.includes("--offline")) process.exit(0);
 
