@@ -2,7 +2,7 @@
 
 **Status: DRAFT, not applied.** Every change below is proposed for Paul to accept at decision point D3. Nothing under `docs/spec/` or `contracts/` has been edited. The evidence for each patch is in [REPORT.md](REPORT.md) (experiment E*n*) and the questions in [ESCALATIONS.md](ESCALATIONS.md) (SE-*n*).
 
-**Numbering.** Spec patches are SP-1 to SP-10, proposed as **spec errata v0.2.2**; v0.2.1 is already applied into `golem-spec-v0.2.md`, commit 5e71ece. Contract changes are C-1 to C-6, each classified under the versioning rule of `contracts/CONTRACTS.md` ("Versioning and freeze policy").
+**Numbering.** Spec patches are SP-1 to SP-11, proposed as **spec errata v0.2.2**; v0.2.1 is already applied into `golem-spec-v0.2.md`, commit 5e71ece. Contract changes are C-1 to C-6, each classified under the versioning rule of `contracts/CONTRACTS.md` ("Versioning and freeze policy").
 
 | Patch | § | Item | Summary |
 | --- | --- | --- | --- |
@@ -16,6 +16,7 @@
 | SP-8 | §17.1 | SE-9 | `pathfind`: when `NoPath` arrives |
 | SP-9 | §18.1 | S-3 | Version data sources |
 | SP-10 | §18.4 | S-1, S-5, SE-8 | Backend table and the Mineflayer mapping |
+| SP-11 | §5.1 | SE-14 | Which versions a project may name |
 | C-1 | `provisional.schema.json` `KeyCause` | S-2 | Description: the refined rule (0.1.1) |
 | C-2 | `provisional.schema.json` `FlushMode`, `BackendCapabilities` | S-1, S-2 | Descriptions: both modes conforming; `"affected-keys"` stays reserved (0.1.1) |
 | C-3 | `types/backend.d.ts` | S-1, SE-6, SE-8 | Doc comments on `start`, `cancel`, `flush`, `ingest` (0.1.1) |
@@ -213,6 +214,16 @@
 
 > … `place_block` sends a look at the clicked point and then one use-item-on-block packet for the clicked face, in the same flush and in that order (the server reads the rotation for stairs, chests and furnaces), without `bot.placeBlock`'s own wait, and reports the verdict from the ack and the block update (decision 92). …
 
+### SP-11: §5.1, supported versions (SE-14)
+
+**Old** (§5.1, after the `golem.toml` example):
+
+> Sources live in `src/`.
+
+**New:**
+
+> The version must be one the toolchain supports. A version is supported when it is 1.20.5 or later, the backend's libraries support it, its version data exists (§18.1), and the conformance suite passes on it (§18.4). The compiler refuses any other version. 1.21.4 is the reference version of v0.1. Sources live in `src/`.
+
 ---
 
 ## Contract changes
@@ -355,6 +366,6 @@ Also regenerate `types/provisional.d.ts` (`npm run generate-types`). Update `exa
 
 ### C-6: Documents (0.1.1)
 
-- `SPIKE_DEPENDENCIES.md`: add a "D3 outcome" line to each S-item (S-1 deferred go; S-2 refined rule, attribution stays `"backend"`; S-3 C-5; S-4 1.21.4 confirmed; S-5 go) and change "provisional until decision point D3" to the D3 date.
+- `SPIKE_DEPENDENCIES.md`: add a "D3 outcome" line to each S-item (S-1 deferred go; S-2 refined rule, attribution stays `"backend"`; S-3 C-5; S-4 1.21.4 as the reference version, other versions per SP-11; S-5 go) and change "provisional until decision point D3" to the D3 date.
 - `CONTRACTS.md` status paragraph and `ESCALATIONS.md` header and status lines: replace "errata v0.2.1 (`docs/spec/errata.md`), drafted and awaiting publication" with "errata v0.2.1, applied into `docs/spec/golem-spec-v0.2.md` (commit 5e71ece)". This also fixes the stale references to the deleted file.
 - No change to the IR schema, reports, commands, world keys or the Lumberjack IR: S-4 keeps 1.21.4 (E0).

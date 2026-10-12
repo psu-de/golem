@@ -19,6 +19,7 @@ Each entry gives the question, why it matters, the evidence, and the proposed an
 | SE-11 | Is "immediate" flushing conforming? | Yes; determinism is defined at the ingest boundary (§15.5), but backends SHOULD defer (`flush: "deferred"`) | §15.2, §15.5, §18.4 |
 | SE-12 | Client-authoritative position: outside forces (knockback, pushing) during `pathfind` cannot be separated from own movement | Accept: position changes while a `pathfind` runs are Own unless they are a server correction; document the residual | §14.5 |
 | SE-13 | Is the S-3 change to `VersionDataSources` a 0.1.1 erratum (D3 clause) or 0.2 (additive field)? | 0.1.1 under the D3 clause: the definition is provisional and only the example produces it | contracts |
+| SE-14 | Decision 46 fixes one version per project; which versions does the v0.1 toolchain support? | 1.21.4 is the reference version; any version ≥ 1.20.5 that the pinned libraries list, whose version data is produced and on which the conformance suite passes | §5.1 |
 
 ---
 
@@ -167,6 +168,24 @@ The S-3 outcome (proposed-errata.md C-5) replaces `physics`'s shape and adds a r
 **Why it matters.** 0.2 means new `$id`s, `ir_format` and `protocol` across the whole package for a change confined to `launch.json`'s `data` object.
 
 **Proposed answer.** Treat it as 0.1.1 under the D3 clause. The definition is provisional, it is confined to `launch.json`, and no producer exists yet besides the example and one invalid fixture. Record it in the CONTRACTS.md versioning note as the one D3 shape change.
+
+## SE-14: Supported Minecraft versions
+
+**Question.** Decision 46 says "One Minecraft version per project, set in `golem.toml`." That constrains a project, not the toolchain. The spec never says which versions the toolchain must support, and the spike's first draft read "pin 1.21.4" as Golem-wide.
+
+**Why it matters.**
+
+- Mineflayer supports 1.8.8 to 26.1, but the spec relies on 1.19+ protocol features (sequence acks), 1.19.4 (`entity_hurt`), 1.20 (`#all_signs`) and 1.20.5 data components (PD-4).
+- Each version needs its own version data and conformance run.
+
+**Evidence.** REPORT.md E0: E3 and E6 on 1.21.11 matched 1.21.4 in every verdict. The backend needed no version-specific change; the extractor ran unchanged.
+
+**Proposed answer.**
+
+- 1.21.4 is the v0.1 reference version.
+- The toolchain supports any version ≥ 1.20.5 that the pinned libraries list, for which the data generator output, the server-jar extract and reviewed placement and burn-time tables exist, and on which the conformance suite passes.
+- The compiler refuses a `golem.toml` naming any other version.
+- Text: proposed-errata.md SP-11.
 
 ---
 

@@ -40,6 +40,18 @@ Each command starts its own server (fresh world under `server/run/<exp>/`), conn
 | E6 version data | `node experiments/e6-data.mjs` (`--offline` for part A only) | 4 min | `results/e6/inventory.json`, `summary.json` |
 | all | `./scripts/run-all.sh` | 40 min | all of the above |
 
+## Other Minecraft versions
+
+1.21.4 is the reference version. To run against another version the libraries support (E3 and E6 were rerun on 1.21.11), pass the version to the scripts and set `GOLEM_MC_VERSION`. Results then go to `results/<exp>-<version>/`.
+
+```sh
+./scripts/fetch-server.sh 1.21.11 && ./scripts/datagen.sh 1.21.11 && ./scripts/extract-shapes.sh 1.21.11
+GOLEM_MC_VERSION=1.21.11 node experiments/e6-data.mjs
+GOLEM_MC_VERSION=1.21.11 node experiments/e3-verdicts.mjs
+```
+
+Check the version's Java requirement first: 26.x needs Java 25, and its unobfuscated jar needs a variant of the extractor.
+
 ## Layout
 
 | Path | What |

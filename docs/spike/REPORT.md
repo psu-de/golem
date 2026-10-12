@@ -2,7 +2,7 @@
 
 2026-10-12 · backend lead (agent) · for sign-off by Paul at decision point D3
 
-This spike tested the backend assumptions behind spec §14–§15 against a real vanilla 1.21.4 server with Mineflayer, as SPIKE_DEPENDENCIES.md S-1 to S-5 and review question 3 require. Every number below comes from a recorded run whose summary is committed under `spike/results/<experiment>/summary.json`. The harness and a one-command reproduction are in `spike/` (see `spike/README.md`). Spec questions raised are in [ESCALATIONS.md](ESCALATIONS.md) (SE-1 to SE-13). The drafted spec and contract text is in [proposed-errata.md](proposed-errata.md).
+This spike tested the backend assumptions behind spec §14–§15 against a real vanilla 1.21.4 server with Mineflayer, as SPIKE_DEPENDENCIES.md S-1 to S-5 and review question 3 require. Every number below comes from a recorded run whose summary is committed under `spike/results/<experiment>/summary.json`. The harness and a one-command reproduction are in `spike/` (see `spike/README.md`). Spec questions raised are in [ESCALATIONS.md](ESCALATIONS.md) (SE-1 to SE-14). The drafted spec and contract text is in [proposed-errata.md](proposed-errata.md).
 
 **Kinds of evidence.** Each claim is marked with where it comes from:
 
@@ -17,7 +17,7 @@ This spike tested the backend assumptions behind spec §14–§15 against a real
 | **S-1** packet flushing | **Go (deferred)** | E2: a write gate on `bot._client.write` held every play-state packet of 15 mappings to `flush()`. 0 escaped in 15 deferred runs; all succeeded. Mineflayer's high-level calls send outside phase 6: from timers, promise continuations and the physics step [run + source]. Cost: up to one tick of latency for packets produced between ticks (mean 49.6 ms) | Keep `flush: "deferred"`. Implement `dig`, `place_block` and window clicks as direct packets, not `bot.dig`/`bot.placeBlock`/`bot.clickWindow`. Wording errata for §15.2 step 7, §15.5 and §18.4 (SP-4, SP-5, SP-10) |
 | **S-2** attribution | **Conditional go (rule changes)** | E4: 529 labelled changes. The provisional rule gave 54 false Own; 24 of them were outside changes inside its post-verdict window, the harmful kind. The refined rule gave 30 false Own: 21 knockback, which no rule can label; 6 benign; 3 same-tick rollback, fixed by a runtime re-tag. Neither rule gave a false Outside. The runtime-side variant (no-go option) misses server corrections | Adopt the refined rule as normative §14.5 text. Attribution stays `"backend"`; no contract shape change. Errata SP-3, C-1 |
 | **S-3** version data | **Conditional go (sources change)** | E6. The data generator gives registries, states, tags, recipes and tool rules, but no hardness, shapes, burn times or item→block mapping. minecraft-data 3.117.0 matches the server on hardness and collision shapes. It has no outline shapes and no burn times, and gives wrong ore dig speeds (Mineflayer's dig time 91 vs 23 ticks observed). A server.jar extractor via Mojang's mappings supplies outline shapes; burn-time and placement tables were validated against the server | `physics` source becomes the server-jar extract; add a `fuel` table; a placement table with explicit v0.1 scope. Errata SP-9, C-5 |
-| **S-4 / Q3** version pin | **Go: 1.21.4, protocol 769** | E0: mineflayer 4.39.0, minecraft-protocol 1.68.0 and minecraft-data 3.117.0 list 1.21.4 as supported. mineflayer-pathfinder 2.4.5 is version-agnostic and worked on it in E5. Every experiment ran on 1.21.4 | No change to the contracts examples |
+| **S-4 / Q3** version | **Go: 1.21.4 as the v0.1 reference version; more versions supported per project** | E0: mineflayer 4.39.0, minecraft-protocol 1.68.0 and minecraft-data 3.117.0 list 1.21.4 (and versions up to 26.1). mineflayer-pathfinder 2.4.5 is version-agnostic. Every experiment ran on 1.21.4. E3 and E6 were rerun on **1.21.11** with identical verdicts, and the backend needed no version-specific change | Decision 46 is per project, not per toolchain: each project pins one version, and Golem supports every version that passes the checks in D3-12. No change to the contracts examples |
 | **S-5** pathfinder | **Go** | E5: cancel by `setGoal(null)` releases the controls in the same tick (10 of 10). The bot then slides 0.33 blocks over 7 ticks (vanilla momentum) with no input-driven movement. `path_progress` is readable every tick and never decreases, max 5 ticks between increments, across replans. `Goal.Clear` and `Goal.AllOf` work. `NoPath` appears only for an exhausted search (SE-9) | Keep `Measurements.path_progress`. Errata: cancel via `setGoal(null)`, `NoPath` wording (SP-8, SP-10) |
 
 **Nothing sends §14 or §15 back to spec work.** The structure survives. The changes are confined to:
@@ -34,7 +34,7 @@ The two places closest to a redesign are SE-7 (settle confirmation is unsound fo
 
 | Id | Decision | Rationale | Status |
 | --- | --- | --- | --- |
-| D3-1 | Pin Minecraft **1.21.4** (protocol 769), Java 21, mineflayer 4.39.0, mineflayer-pathfinder 2.4.5, minecraft-protocol 1.68.0, minecraft-data 3.117.0, exact versions with a lockfile | All four list or tolerate 1.21.4 (E0); every experiment ran on it; the contracts examples already use it | Proposed |
+| D3-1 | **1.21.4** (protocol 769) is the v0.1 **reference version**: the one the examples, the conformance suite and CI run against. Library pins: Java 21, mineflayer 4.39.0, mineflayer-pathfinder 2.4.5, minecraft-protocol 1.68.0, minecraft-data 3.117.0, exact versions with a lockfile | All four list or tolerate 1.21.4 (E0); every experiment ran on it; the contracts examples already use it. Each project still chooses its own version (decision 46, D3-12) | Proposed |
 | D3-2 | S-1: **deferred flush** through a write gate on `bot._client.write`; `cancel` drops still-queued packets; immediate flushing is also conforming | E2: 0 escaped, all mappings work; E4 S11b: a start and cancel in one tick never reaches the server. Determinism is at the ingest boundary (§15.5) | Proposed |
 | D3-3 | Implement `dig`, `place_block` and the window primitives as **direct packets**, not `bot.dig`/`bot.placeBlock`/`bot.clickWindow`; send the look before `use_item_on` in the same flush | E2: the high-level calls send from timers and continuations and write predictions into Mineflayer's world; E6: a look left to the physics step makes stairs face the old way | Proposed |
 | D3-4 | S-2: **refined attribution rule**, normative in §14.5 (live = start to verdict TickInput; value-consistent; server corrections Outside; same-value updates are not changes; runtime re-tags same-tick rollbacks); `capabilities.attribution` stays `"backend"` | E4: false Own 54 → 30, the harmful post-verdict class eliminated, 0 false Outside; runtime-side computation lacks the correction signal | Proposed |
@@ -44,7 +44,8 @@ The two places closest to a redesign are SE-7 (settle confirmation is unsound fo
 | D3-8 | Contracts: C-1 to C-4 and C-6 as **0.1.1** (descriptions only); C-5 (`VersionDataSources`) as **0.1.1 under the D3 clause** (SE-13) | Only provisional definitions change; no IR, report or command shape changes | Proposed |
 | D3-9 | S-5: keep `Measurements.path_progress` (cumulative nodes reached); cancel `pathfind` with `setGoal(null)`; `NoPath` only on an exhausted search, otherwise the `@progress` clause ends the call | E5 | Proposed |
 | D3-10 | `RecordedTick` stays as is; the Delta must be a pure function of (primitive, args, confirmed view, version data) so replay recomputes it | E1: replay is identical with the deltas and diverges without them (SE-6) | Proposed |
-| D3-11 | Accept the spec errata SP-1 to SP-10 as spec v0.2.2 | Wording only; no semantic redesign | Proposed |
+| D3-11 | Accept the spec errata SP-1 to SP-11 as spec v0.2.2 | Wording only; no semantic redesign | Proposed |
+| D3-12 | **Version support policy.** Golem supports a set of Minecraft versions; each project picks one in `golem.toml` (decision 46 unchanged). A version is supported when (a) the pinned mineflayer, minecraft-protocol and minecraft-data list it, (b) its version data is produced (data generator, server-jar extract, reviewed placement and burn-time tables), and (c) the conformance suite passes on it. Floor: **1.20.5** | The spec itself needs 1.19 (sequence acks), 1.19.4 (`entity_hurt`), 1.20 (`#all_signs`) and 1.20.5 (data components, PD-4). E3/E6 on 1.21.11 matched 1.21.4 with harness-only changes. 26.x needs Java 25 and an unobfuscated-jar variant of the extractor (not tried) | Proposed |
 
 ---
 
@@ -98,11 +99,37 @@ That is 18,979 TickInputs produced from live Mineflayer data, all valid against 
 - minecraft-data's 1.21.4 entry takes 10 data files from older versions (`attributes` 1.21.3, `foods` 1.21.1, `windows` 1.16.1, and others). None of them is one the runtime needs. The protocol, blocks, items, collision shapes and recipes are 1.21.4's own.
 - The server's version manifest requires Java 21.
 
-**Verdict: go, 1.21.4 (protocol 769).** Every library lists or tolerates it, and every experiment below ran on it. Newer versions (1.21.11, 26.1) are listed too, but the review's default holds and the contracts examples already use 1.21.4. The exact pins are in `spike/package.json` plus `package-lock.json`.
+**Verdict: go, 1.21.4 (protocol 769) as the reference version.** Every library lists or tolerates it, and every experiment below ran on it. The exact pins are in `spike/package.json` plus `package-lock.json`.
+
+The pin does not limit Golem to one version. Decision 46 fixes one version **per project** (`golem.toml`), so the toolchain can support many. The spike measures what an extra version costs.
+
+**Second version: 1.21.11 (protocol 774) [run].** Everything version-dependent is parameterised: `GOLEM_MC_VERSION=1.21.11`, with the scripts taking the version as an argument; results go to `results/<exp>-1.21.11/`.
+
+| Step | Result on 1.21.11 |
+| --- | --- |
+| Server fetch, Java | `server.jar` via the manifest; Java 21 suffices; mappings published |
+| Data generator | 1,166 blocks, 29,671 states, 1,505 items |
+| Server-jar extractor | ran **unchanged** (the mapped names it uses are stable): 29,671 states, 915 shapes, 1,025 block items |
+| minecraft-data cross-check | collision shapes 29,671 / 29,671 identical, hardness and requires-tool 1,166 / 1,166 agree, harvest tiers 14,616 / 14,616 agree. Tool speeds still disagree (993 pairs): the ore and obsidian defect persists |
+| E6 against the server | dig times within [0, 2] ticks of the model for 16 / 16, harvest 16 / 16, burn times 17 / 17, placement 17 / 19 (the same two known misses) |
+| E3 verdicts | the same verdict as on 1.21.4 in all 49 cases, including the W11 false Confirmed and the W13/W14 probe results; 2,305 TickInputs valid |
+| Changes needed | **none in the backend**. The menu ids now come from the data generator instead of a 1.21.4 list. In the test harness only: game rules were renamed to snake_case in 1.21.11 (`advance_time`, `random_tick_speed`, …) |
+
+The protocol differences between the two versions that matter to a backend are absorbed by Mineflayer (for example sneaking moved to the `player_input` packet in 1.21.6, `physics.js:262-270`) [source + run].
+
+**What limits the range.**
+
+- **Lower bound, set by the spec rather than Mineflayer.** Ack confirmation needs sequence numbers (1.19), `entity_hurt` 1.19.4 (decision 88), `#all_signs` 1.20 (decision 116), and `ItemStack.components` assumes data components (1.20.5, PD-4). So the floor is 1.20.5, even though Mineflayer goes back to 1.8.8.
+- **Upper bound, set by the libraries and the toolchain.** The pinned libraries go up to 26.1. 26.x requires Java 25, which this environment lacks, so it was not tried. It ships unobfuscated jars, so the extractor needs a variant without mappings.
+- **Cost per version.**
+  - The automated steps (fetch, data generator, extractor) take minutes.
+  - The hand-authored tables need a review.
+  - The conformance suite must pass.
+  - Mineflayer, protocol or vanilla changes that break the suite need backend work. None did between 1.21.4 and 1.21.11 for the exercised primitives.
 
 **Residual risk.**
 
-- mineflayer-pathfinder has not been released since 2023. It worked on 1.21.4 in every E5 case, but 1.21.4-specific blocks are untested in its movement costs (e.g. `pale_oak`).
+- mineflayer-pathfinder has not been released since 2023. It worked on 1.21.4 in every E5 case, but 1.21.4-specific blocks are untested in its movement costs (e.g. `pale_oak`). E1, E2, E4 and E5 were not rerun on 1.21.11.
 - A version bump re-runs the data generator and the extractor; nothing else in the contracts depends on the version.
 
 ## E1. Clock and ingest (PD-2, §15.5)
